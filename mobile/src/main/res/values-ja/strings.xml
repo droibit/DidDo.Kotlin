@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DidDo</string>
+    <string name="action_sort">ソート</string>
+    <string name="action_calendar">カレンダー</string>
+</resources>
