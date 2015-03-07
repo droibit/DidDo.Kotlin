@@ -5,8 +5,7 @@
               android:paddingLeft="@dimen/side_space"
               android:paddingRight="@dimen/side_space"
               android:background="?android:attr/activatedBackgroundIndicator"
-              android:minHeight="?android:attr/listPreferredItemHeightSmall"
-              android:clickable="true">
+              android:minHeight="?android:attr/listPreferredItemHeightSmall">
 
     <TextView android:id="@+id/elapsed"
               android:layout_width="wrap_content"
@@ -32,7 +31,7 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:text="@string/app_name"
-                  android:textSize="@dimen/text_size_xxlarge"
+                  android:textSize="@dimen/text_size_xlarge"
                   android:singleLine="true"
                   android:ellipsize="end" />
 
@@ -40,8 +39,8 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginTop="2dp"
-                  android:text="@string/app_name"
-                  android:textSize="@dimen/text_size_xlarge"
+                  android:text="@string/dummy_date"
+                  android:textSize="@dimen/text_size_large"
                   android:singleLine="true"
                   android:fontFamily="sans-serif-light"/>
     </LinearLayout>

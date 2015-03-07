@@ -19,6 +19,7 @@ import com.droibit.diddo
 import android.widget.ArrayAdapter
 import android.widget.AbsListView
 import com.droibit.diddo.models.dummy.DummyContent
+import com.droibit.diddo.views.adapters.ItemAdapter
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -92,10 +93,9 @@ public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION))
         }
 
-        mListView.setAdapter(ArrayAdapter(getActivity(),
-                R.layout.simple_list_item_activated_1,
-                R.id.text1,
-                DummyContent.ITEMS))
+        val adapter = ItemAdapter(getActivity())
+        adapter.addAll(DummyContent.ITEMS.map { it.content })
+        mListView.setAdapter(adapter)
         mListView.setOnItemClickListener(this)
     }
 

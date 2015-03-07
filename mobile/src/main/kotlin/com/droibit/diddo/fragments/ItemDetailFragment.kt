@@ -14,6 +14,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.droibit.diddo.R
+import com.droibit.diddo.views.adapters.ItemAdapter
+import android.widget.AdapterView
+import android.widget.Adapter
+import com.droibit.diddo.views.adapters.ItemDateAdapter
 
 /**
  * A fragment representing a single Item detail screen.
@@ -21,7 +25,7 @@ import com.droibit.diddo.R
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
-public class ItemDetailFragment: Fragment() {
+public class ItemDetailFragment: Fragment(), AdapterView.OnItemClickListener {
 
     class object {
         /**
@@ -44,7 +48,7 @@ public class ItemDetailFragment: Fragment() {
 
     /** {@inheritDoc} */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super<Fragment>.onCreate(savedInstanceState)
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
@@ -64,13 +68,17 @@ public class ItemDetailFragment: Fragment() {
         if (mItem != null) {
             //(rootView.findViewById(R.id.item_detail) as TextView).setText(mItem!!.content)
         }
-
         return rootView
     }
 
     /** {@inheritDoc} */
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        super<Fragment>.onViewCreated(view, savedInstanceState)
+
+        val adapter = ItemDateAdapter(getActivity())
+        adapter.addAll(DummyContent.ITEMS.map { it.content })
+        mListView.setAdapter(adapter)
+        mListView.setOnItemClickListener(this)
 
         mListView.setEmptyView(mEmptyView)
     }
@@ -82,6 +90,11 @@ public class ItemDetailFragment: Fragment() {
 
     /** {@inheritDoc} */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
+        return super<Fragment>.onOptionsItemSelected(item)
+    }
+
+    /** {@inheritDoc} */
+    override fun onItemClick(parent: AdapterView<out Adapter>, view: View, position: Int, id: Long) {
+        throw UnsupportedOperationException()
     }
 }
