@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.support.v7.app.ActionBarActivity
 import android.support.v4.app.NavUtils
 import android.view.MenuItem
+import android.support.v7.widget.Toolbar
+import android.view.Menu
+import com.droibit.diddo.fragments.ItemDetailFragment
 
 
 /**
@@ -18,11 +21,13 @@ import android.view.MenuItem
  */
 public class ItemDetailActivity : ActionBarActivity() {
 
+    /** {@inheritDoc} */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_detail)
 
-        // Show the Up button in the action bar.
+        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true)
 
         // savedInstanceState is non-null when there is fragment state
@@ -45,6 +50,7 @@ public class ItemDetailActivity : ActionBarActivity() {
         }
     }
 
+    /** {@inheritDoc} */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.getItemId()
         if (id == android.R.id.home) {

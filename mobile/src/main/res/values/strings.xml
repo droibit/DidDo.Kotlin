@@ -1,6 +1,20 @@
 <resources>
-    <string name="app_name" translatable="false">DidDo</string>
-    <string name="title_item_detail">Item Detail</string>
+    <string name="app_name" translatable="false">Did Do</string>
+    <string name="title_item_detail" translatable="false">Item Detail</string>
     <string name="action_sort">Sort</string>
     <string name="action_calendar">Calendar</string>
+    <string name="header_activity">Activity</string>
+    <string name="empty_activity">No activity</string>
+    <string name="empty_memo" translatable="false">---</string>
+    <string name="title_new_activity">New Activity</string>
+    <string name="title_new_activity_date">New Activity Date</string>
+    <string name="title_activity_modify">Modify Activity</string>
+    <string name="title_delete_activity">Delete Activity</string>
+    <string name="message_deleted_activity">Deleted the activity</string>
+    <string name="title_activity_name">Activity:</string>
+    <string name="text_empty_activity">Unnamed activity</string>
+    <string name="text_activity_memo">Memo (Option) :</string>
+    <string name="title_modify_activity_memo">Modify Memo</string>
+    <string name="dummy_date" translatable="false">2015/3/6 19:00</string>
+    <string name="database" translatable="false">data.db</string>
 </resources>

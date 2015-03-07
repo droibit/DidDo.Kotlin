@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.ActionBarActivity
+import android.support.v7.widget.Toolbar
+import com.droibit.diddo.fragments.ItemListFragment
+import com.droibit.diddo.fragments.ItemDetailFragment
 
 
 /**
@@ -30,9 +33,13 @@ public class ItemListActivity : ActionBarActivity(), ItemListFragment.Callbacks 
      */
     private var mTwoPane: Boolean = false
 
+    /** {@inheritDoc} */
     override fun onCreate(savedInstanceState: Bundle?) {
         super<ActionBarActivity>.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
+
+        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -48,6 +55,7 @@ public class ItemListActivity : ActionBarActivity(), ItemListFragment.Callbacks 
 
         // TODO: If exposing deep links into your app, handle intents here.
     }
+
 
     /**
      * Callback method from {@link ItemListFragment.Callbacks}
