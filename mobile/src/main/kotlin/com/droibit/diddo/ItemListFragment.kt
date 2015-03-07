@@ -10,6 +10,16 @@ import android.widget.ListView
 
 import com.droibit.diddo.dummy.DummyContent
 import android.widget.AbsListView
+import android.support.v4.app.Fragment
+import butterknife.bindView
+import com.melnykov.fab.FloatingActionButton
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Adapter
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -20,7 +30,7 @@ import android.widget.AbsListView
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ItemListFragment : ListFragment() {
+public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
 
 
     /**
@@ -46,27 +56,12 @@ public class ItemListFragment : ListFragment() {
         public fun onItemSelected(id: String)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val mListView: ListView by bindView(android.R.id.list)
+    private val mActionButton: FloatingActionButton by bindView(R.id.fab)
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(ArrayAdapter(getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS))
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Restore the previously serialized activated item position.
-        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION))
-        }
-    }
-
+    /** {@inheritDoc} */
     override fun onAttach(activity: Activity) {
-        super.onAttach(activity)
+        super<Fragment>.onAttach(activity)
 
         // Activities containing this fragment must implement its callbacks.
         if (!(activity is Callbacks)) {
@@ -76,23 +71,60 @@ public class ItemListFragment : ListFragment() {
         mCallbacks = activity
     }
 
+    /** {@inheritDoc} */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super<Fragment>.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+        setRetainInstance(true)
+    }
+
+    /** {@inheritDoc} */
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_item, container, false)
+    }
+
+    /** {@inheritDoc} */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super<Fragment>.onViewCreated(view, savedInstanceState)
+
+        // Restore the previously serialized activated item position.
+        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION))
+        }
+
+        mListView.setAdapter(ArrayAdapter(getActivity(),
+                android.R.layout.simple_list_item_activated_1,
+                android.R.id.text1,
+                DummyContent.ITEMS))
+        mListView.setOnItemClickListener(this)
+    }
+
+    /** {@inheritDoc} */
     override fun onDetach() {
-        super.onDetach()
+        super<Fragment>.onDetach()
 
         // Reset the active callbacks interface to the dummy implementation.
         mCallbacks = sDummyCallbacks
     }
 
-    override fun onListItemClick(listView: ListView, view: View, position: Int, id: Long) {
-        super.onListItemClick(listView, view, position, id)
+    /** {@inheritDoc} */
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.list, menu)
+    }
 
-        // Notify the active callbacks interface (the activity, if the
-        // fragment is attached to one) that an item has been selected.
+    /** {@inheritDoc} */
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return super<Fragment>.onOptionsItemSelected(item)
+    }
+
+    /** {@inheritDoc} */
+    override fun onItemClick(parent: AdapterView<out Adapter>, view: View, position: Int, id: Long) {
         mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+        super<Fragment>.onSaveInstanceState(outState)
         if (mActivatedPosition != INVALID_POSITION) {
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition)
@@ -106,7 +138,7 @@ public class ItemListFragment : ListFragment() {
     public fun setActivateOnItemClick(activateOnItemClick: Boolean) {
         // When setting CHOICE_MODE_SINGLE, ListView will automatically
         // give items the 'activated' state when touched.
-        getListView().setChoiceMode(if (activateOnItemClick)
+        mListView.setChoiceMode(if (activateOnItemClick)
             AbsListView.CHOICE_MODE_SINGLE
         else
             AbsListView.CHOICE_MODE_NONE)
@@ -114,9 +146,9 @@ public class ItemListFragment : ListFragment() {
 
     private fun setActivatedPosition(position: Int) {
         if (position == INVALID_POSITION) {
-            getListView().setItemChecked(mActivatedPosition, false)
+            mListView.setItemChecked(mActivatedPosition, false)
         } else {
-            getListView().setItemChecked(position, true)
+            mListView.setItemChecked(position, true)
         }
 
         mActivatedPosition = position

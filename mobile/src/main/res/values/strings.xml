@@ -3,4 +3,6 @@
     <string name="title_item_detail">Item Detail</string>
     <string name="action_sort">Sort</string>
     <string name="action_calendar">Calendar</string>
+    <string name="header_activity">Activity</string>
+    <string name="empty_activity">No activity</string>
 </resources>

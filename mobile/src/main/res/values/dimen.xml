@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="side_margin">16dp</dimen>
+
+    <dimen name="floating_action_margin">16dp</dimen>
+
+    <dimen name="text_size_xxxxlarge">45sp</dimen>
+    <dimen name="text_size_xlarge">16sp</dimen>
+</resources>
