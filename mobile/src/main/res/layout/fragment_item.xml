@@ -4,20 +4,32 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fastScrollEnabled="true"
-        android:scrollbars="vertical" />
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@android:id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        style="?android:progressBarStyleLarge" />
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="@dimen/header_height"
+                  android:paddingLeft="@dimen/side_space"
+                  android:gravity="center_vertical"
+                  android:text="@string/header_activity"
+                  android:textSize="@dimen/text_size_xlarge" />
+
+        <ListView android:id="@android:id/list"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:fastScrollEnabled="true"
+                  android:scrollbars="vertical" />
+
+
+        <ProgressBar android:id="@android:id/progress"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center"
+                     android:visibility="gone"
+                     style="?android:progressBarStyleLarge" />
+
+    </LinearLayout>
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/fab"

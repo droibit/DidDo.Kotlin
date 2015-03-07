@@ -1,4 +1,4 @@
-package com.droibit.diddo.dummy
+package com.droibit.diddo.models.dummy
 
 import java.util.ArrayList
 import java.util.HashMap

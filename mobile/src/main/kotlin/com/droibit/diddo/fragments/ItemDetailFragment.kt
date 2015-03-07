@@ -1,20 +1,19 @@
-package com.droibit.diddo
+package com.droibit.diddo.fragments
 
-import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-
-
-import com.droibit.diddo.dummy.DummyContent
 import butterknife.bindView
+import android.support.v4.app.Fragment
+import com.droibit.diddo.models.dummy.DummyContent
+import android.widget.TextView
 import com.melnykov.fab.FloatingActionButton
 import android.widget.ListView
+import android.view.View
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import com.droibit.diddo.R
 
 /**
  * A fragment representing a single Item detail screen.

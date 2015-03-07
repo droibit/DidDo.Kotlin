@@ -36,23 +36,24 @@
                   android:layout_weight="5"
                   android:orientation="horizontal">
 
-        <com.melnykov.fab.FloatingActionButton android:id="@+id/fab"
-                                               android:layout_width="wrap_content"
-                                               android:layout_height="wrap_content"
-                                               android:layout_margin="@dimen/floating_action_margin"
-                                               android:src="@drawable/ic_action_activity"
-                                               fab:fab_type="mini"
-                                               fab:fab_shadow="false"
-                                               fab:fab_colorNormal="@color/primary"
-                                               fab:fab_colorPressed="@color/primary_pressed"
-                                               fab:fab_colorRipple="@color/primary_100" />
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/floating_action_margin"
+            android:src="@drawable/ic_action_activity"
+            fab:fab_type="mini"
+            fab:fab_shadow="false"
+            fab:fab_colorNormal="@color/primary"
+            fab:fab_colorPressed="@color/primary_pressed"
+            fab:fab_colorRipple="@color/primary_100" />
 
         <ListView android:id="@android:id/list"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_marginTop="@dimen/side_margin"
+                  android:layout_marginTop="@dimen/side_space"
                   android:visibility="visible"
-                  android:layout_marginRight="@dimen/side_margin" />
+                  android:layout_marginRight="@dimen/side_space" />
 
         <TextView android:id="@android:id/empty"
                   android:layout_width="match_parent"

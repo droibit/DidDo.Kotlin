@@ -1,25 +1,24 @@
-package com.droibit.diddo
+package com.droibit.diddo.fragments
 
+import butterknife.bindView
+import android.support.v4.app.Fragment
+import android.widget.AdapterView
+import android.widget.ListView
+import com.melnykov.fab.FloatingActionButton
 import android.app.Activity
 import android.os.Bundle
-import android.support.v4.app.ListFragment
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.ListView
-
-
-import com.droibit.diddo.dummy.DummyContent
-import android.widget.AbsListView
-import android.support.v4.app.Fragment
-import butterknife.bindView
-import com.melnykov.fab.FloatingActionButton
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Adapter
+import android.view.View
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Adapter
+import android.R
+import com.droibit.diddo
+import android.widget.ArrayAdapter
+import android.widget.AbsListView
+import com.droibit.diddo.models.dummy.DummyContent
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -56,8 +55,8 @@ public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
         public fun onItemSelected(id: String)
     }
 
-    private val mListView: ListView by bindView(android.R.id.list)
-    private val mActionButton: FloatingActionButton by bindView(R.id.fab)
+    private val mListView: ListView by bindView(R.id.list)
+    private val mActionButton: FloatingActionButton by bindView(diddo.R.id.fab)
 
     /** {@inheritDoc} */
     override fun onAttach(activity: Activity) {
@@ -81,7 +80,7 @@ public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
 
     /** {@inheritDoc} */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_item, container, false)
+        return inflater.inflate(diddo.R.layout.fragment_item, container, false)
     }
 
     /** {@inheritDoc} */
@@ -94,8 +93,8 @@ public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
         }
 
         mListView.setAdapter(ArrayAdapter(getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
+                R.layout.simple_list_item_activated_1,
+                R.id.text1,
                 DummyContent.ITEMS))
         mListView.setOnItemClickListener(this)
     }
@@ -110,7 +109,7 @@ public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
 
     /** {@inheritDoc} */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.list, menu)
+        inflater.inflate(diddo.R.menu.list, menu)
     }
 
     /** {@inheritDoc} */

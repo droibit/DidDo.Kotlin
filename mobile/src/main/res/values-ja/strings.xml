@@ -3,6 +3,15 @@
     <string name="app_name">DidDo</string>
     <string name="action_sort">ソート</string>
     <string name="action_calendar">カレンダー</string>
-    <string name="header_activity">活動</string>
+    <string name="header_activity">アクティビティ</string>
     <string name="empty_activity">活動なし</string>
+    <string name="title_new_activity">新しいアクティビティ</string>
+    <string name="title_new_activity_date">新しい活動日</string>
+    <string name="title_activity_modify">アクティビティ名の修正</string>
+    <string name="title_delete_activity">アクティビティの削除</string>
+    <string name="message_deleted_activity">アクティビティを削除しました</string>
+    <string name="title_activity_name">アクティビティ名</string>
+    <string name="text_empty_activity">無名のアクティビティ</string>
+    <string name="text_activity_memo">メモ (オプション) :</string>
+    <string name="title_modify_activity_memo">メモの修正</string>
 </resources>
