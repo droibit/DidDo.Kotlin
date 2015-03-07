@@ -37,7 +37,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     wearApp project(':wear')
     compile 'com.android.support:appcompat-v7:21.0.+'
-    compile 'com.google.android.gms:play-services:6.5.+'
+    compile 'com.google.android.gms:play-services-wearable:6.5.+'
     compile 'com.melnykov:floatingactionbutton:1.2.+'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
