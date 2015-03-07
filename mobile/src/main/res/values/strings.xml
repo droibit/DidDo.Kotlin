@@ -16,4 +16,5 @@
     <string name="text_activity_memo">Memo (Option) :</string>
     <string name="title_modify_activity_memo">Modify Memo</string>
     <string name="dummy_date" translatable="false">2015/3/6 19:00</string>
+    <string name="database" translatable="false">data.db</string>
 </resources>
