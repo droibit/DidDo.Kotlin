@@ -24,8 +24,8 @@ import java.util.Date
  */
 public class ActivityDateDialogFragment: DialogFragment() {
     class object {
-        val TAG = javaClass<ActivityDateDialogFragment>().getSimpleName()
-        val ARG_SRC = "src"
+        private val TAG = javaClass<ActivityDateDialogFragment>().getSimpleName()
+        private val ARG_SRC = "src"
 
         /**
          * アクティビティ名が入力された時に呼ばれるコールバック
@@ -73,9 +73,9 @@ public class ActivityDateDialogFragment: DialogFragment() {
         if (containsSrc) {
             mMemoEdit!!.setText(getArguments().getString(ARG_SRC))
         }
+
         val titleRes = if (containsSrc) R.string.title_modify_activity_memo else R.string.title_new_activity_date
         val positiveRes = if (containsSrc) R.string.button_modify else R.string.button_create
-
         val dialog = AlertDialog.Builder(getActivity())
                 .setTitle(titleRes)
                 .setView(view)

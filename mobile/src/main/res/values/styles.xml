@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
@@ -10,6 +10,8 @@
         <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
 
         <item name="windowActionBar">false</item>
+
+        <!--<item name="android:alertDialogTheme">@style/AppTheme.Dialog</item>-->
     </style>
 
     <style name="AppTheme.Settings" parent="@style/AppTheme">
@@ -23,6 +25,10 @@
     <style name="AppTheme.ActionBar.TitleTextStyle"
            parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/primary</item>
     </style>
 
 </resources>

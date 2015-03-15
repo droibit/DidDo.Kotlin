@@ -6,17 +6,18 @@
     <string name="empty_activity">活動なし</string>
     <string name="title_new_activity">新しいアクティビティ</string>
     <string name="title_new_activity_date">新しい活動日</string>
-    <string name="title_activity_modify">アクティビティ名の修正</string>
+    <string name="title_activity_modify">アクティビティの修正</string>
     <string name="title_delete_activity">アクティビティの削除</string>
     <string name="message_deleted_activity">アクティビティを削除しました</string>
-    <string name="title_activity_name">アクティビティ名</string>
+    <string name="title_activity_name">アクティビティ名 :</string>
     <string name="text_empty_activity">無名のアクティビティ</string>
     <string name="text_activity_memo">メモ (オプション) :</string>
     <string name="title_modify_activity_memo">メモの修正</string>
     <string name="button_create">作成</string>
     <string name="button_modify">修正</string>
-    <string name="toast_create_activity">新しいアクティビティを作成しました</string>
+    <string name="toast_create_activity">アクティビティを作成しました</string>
     <string name="toast_modify_activity">アクティビティ名を修正しました</string>
     <string name="toast_create_activity_date">活動日を入力しました</string>
     <string name="toast_modify_activity_memo">活動日のメモを編集しました</string>
+    <string name="toast_delete_activity">アクティビティを削除しました</string>
 </resources>

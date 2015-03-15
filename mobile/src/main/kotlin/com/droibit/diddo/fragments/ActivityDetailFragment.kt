@@ -21,6 +21,8 @@ import com.droibit.diddo.views.adapters.ActivityDateAdapter
 import com.droibit.diddo.fragments.dialogs.ActivityDateDialogFragment
 import com.droibit.diddo.models.ActivityDate
 import android.widget.Toast
+import android.view.ContextMenu
+import com.droibit.diddo.models.UserActivity
 
 /**
  * A fragment representing a single Item detail screen.
@@ -41,7 +43,7 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
     /**
      * The dummy content this fragment is presenting.
      */
-    private var mItem: DummyContent.DummyItem? = null
+    private var mItem: UserActivity? = null
 
     private val mElapsedDateText: TextView by bindView(R.id.elapsed_date)
     private val mDateText: TextView by bindView(R.id.date)
@@ -66,11 +68,6 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
     /** {@inheritDoc} */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.fragment_item_detail, container, false)
-
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            //(rootView.findViewById(R.id.item_detail) as TextView).setText(mItem!!.content)
-        }
         return rootView
     }
 
@@ -79,7 +76,7 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
         super<Fragment>.onViewCreated(view, savedInstanceState)
 
         val adapter = ActivityDateAdapter(getActivity())
-        adapter.addAll(DummyContent.ITEMS.map { it.content })
+        adapter.addAll(DummyContent.DETAIL_ITEMS)
         mListView.setAdapter(adapter)
         mListView.setOnItemClickListener(this)
 
@@ -109,7 +106,9 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
     override fun onActivityDateEnterd(activityDate: ActivityDate) {
         val adapter = mListView.getAdapter() as ActivityDateAdapter
         if (activityDate.isNew) {
-            adapter.add("Item 4")
+            adapter.add(activityDate)
+        } else {
+            adapter.notifyDataSetChanged();
         }
 
         Toast.makeText(

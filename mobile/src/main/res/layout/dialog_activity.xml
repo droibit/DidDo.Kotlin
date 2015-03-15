@@ -24,7 +24,8 @@
               android:selectAllOnFocus="true"
               android:textSize="@dimen/text_size_xlarge"
               android:fontFamily="sans-serif-light"
-              android:maxLength="@integer/max_acitivity_length">
+              android:maxLength="@integer/max_acitivity_length"
+              android:singleLine="true">
               <requestFocus />
     </EditText>
 

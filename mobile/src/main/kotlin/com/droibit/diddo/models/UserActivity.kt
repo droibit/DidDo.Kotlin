@@ -35,6 +35,11 @@ public class UserActivity(): Model(), Serializable {
     /** 活動の詳細情報を取得する */
     public val details: List<ActivityDate>
     get() = getMany(javaClass<ActivityDate>(), ActivityDate.ACTIVITY)
+
+    /** {@inheritDoc} */
+    override fun toString(): String {
+        return name ?: ""
+    }
 }
 
 /**
@@ -44,4 +49,14 @@ public fun newUserActivity(init: UserActivity.() -> Unit): UserActivity {
     val userActivity = UserActivity()
     userActivity.init()
     return userActivity
+}
+
+/**
+ * ダミー用の[ActivityDate]インスタンスを作成する。
+ */
+public fun dummyActivity(name: String): UserActivity {
+    return newUserActivity {
+        this.name = name
+        this.recentlyDate = Date()
+    }
 }

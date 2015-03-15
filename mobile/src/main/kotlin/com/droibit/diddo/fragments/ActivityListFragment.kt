@@ -23,6 +23,7 @@ import android.widget.Toast
 import com.droibit.diddo.R
 import com.droibit.diddo.fragments.dialogs.ActivityDialogFragment
 import com.droibit.diddo.models.UserActivity
+import android.view.ContextMenu
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -42,8 +43,10 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
          * activated item position. Only used on tablets.
          */
         private val STATE_ACTIVATED_POSITION = "activated_position"
-
         private val INVALID_POSITION = -1
+        private val CONTEXT_MENU_MODIFY_ACTIVITY = 0;
+        private val CONTEXT_MENU_DELETE_ACTIVITY = 1;
+
 
         /**
          * A dummy implementation of the {@link Callbacks} interface that does
@@ -116,9 +119,11 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
         }
 
         val adapter = ActivityAdapter(getActivity())
-        adapter.addAll(DummyContent.ITEMS.map { it.content })
+        adapter.addAll(DummyContent.ITEMS)
         mListView.setAdapter(adapter)
         mListView.setOnItemClickListener(this)
+        // 項目長押しでコンテキストメニューを表示する。
+        registerForContextMenu(mListView)
 
         mActionButton.setOnClickListener {
             showNewActivityDialog()
@@ -144,6 +149,25 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
     }
 
     /** {@inheritDoc} */
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo) {
+        super<Fragment>.onCreateContextMenu(menu, v, menuInfo)
+
+        menu.add(Menu.NONE, CONTEXT_MENU_MODIFY_ACTIVITY, Menu.NONE, R.string.title_activity_modify)
+        menu.add(Menu.NONE, CONTEXT_MENU_DELETE_ACTIVITY, Menu.NONE, R.string.title_delete_activity)
+    }
+
+    /** {@inheritDoc} */
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val menuInfo = item.getMenuInfo() as AdapterView.AdapterContextMenuInfo
+        val activity = (mListView.getAdapter() as ActivityAdapter).getItem(menuInfo.position)
+        when (item.getItemId()) {
+            CONTEXT_MENU_MODIFY_ACTIVITY -> showModifyActivityDialog(activity)
+            CONTEXT_MENU_DELETE_ACTIVITY -> deleteActivity(activity)
+        }
+        return super<Fragment>.onContextItemSelected(item)
+    }
+
+    /** {@inheritDoc} */
     override fun onSaveInstanceState(outState: Bundle) {
         super<Fragment>.onSaveInstanceState(outState)
         if (mActivatedPosition != INVALID_POSITION) {
@@ -154,15 +178,16 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
 
     /** {@inheritDoc} */
     override fun onItemClick(parent: AdapterView<out Adapter>, view: View, position: Int, id: Long) {
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id)
+        mCallbacks.onItemSelected(position.toString())
     }
 
     /** {@inheritDoc} */
     override fun onActivityNameEnterd(activity: UserActivity) {
         val adapter = mListView.getAdapter() as ActivityAdapter
         if (activity.isNew) {
-            adapter.add(activity.name)
+            adapter.add(activity)
         } else {
+            adapter.notifyDataSetChanged();
         }
 
         Toast.makeText(
@@ -183,9 +208,9 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
         // When setting CHOICE_MODE_SINGLE, ListView will automatically
         // give items the 'activated' state when touched.
         mListView.setChoiceMode(if (activateOnItemClick)
-            AbsListView.CHOICE_MODE_SINGLE
-        else
-            AbsListView.CHOICE_MODE_NONE)
+                                    AbsListView.CHOICE_MODE_SINGLE
+                                else
+                                    AbsListView.CHOICE_MODE_NONE)
     }
 
     private fun setActivatedPosition(position: Int) {
@@ -194,7 +219,20 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
         } else {
             mListView.setItemChecked(position, true)
         }
-
         mActivatedPosition = position
+    }
+
+    // アクティビティ名を修正するためのダイアログを表示する。
+    private fun showModifyActivityDialog(activity: UserActivity) {
+        ActivityDialogFragment.newInstance(activity).show(this)
+    }
+
+    // 選択されたアクティビティを削除する。
+    private fun deleteActivity(activity: UserActivity) {
+        (mListView.getAdapter() as ActivityAdapter).remove(activity)
+
+        // TODO: DBからも削除
+
+        Toast.makeText(getActivity(), R.string.toast_delete_activity, Toast.LENGTH_SHORT).show()
     }
 }

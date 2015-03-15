@@ -27,8 +27,8 @@ import com.droibit.diddo.models.newUserActivity
 public class ActivityDialogFragment: DialogFragment() {
 
     class object {
-        val TAG = javaClass<ActivityDialogFragment>().getSimpleName()
-        val ARG_SRC = "src"
+        private val TAG = javaClass<ActivityDialogFragment>().getSimpleName()
+        private val ARG_SRC = "src"
 
         /**
          * アクティビティ名が入力された時に呼ばれるコールバック
@@ -90,10 +90,11 @@ public class ActivityDialogFragment: DialogFragment() {
         if (containsSrc) {
             val srcActivity = getArguments().getSerializable(ARG_SRC) as UserActivity
             mNameEdit!!.setText(srcActivity.name)
+            mNameEdit!!.selectAll();
         }
+
         val titleRes = if (containsSrc) R.string.title_activity_modify else R.string.title_new_activity
         val positiveRes = if (containsSrc) R.string.button_modify else R.string.button_create
-
         val dialog = AlertDialog.Builder(getActivity())
                             .setTitle(titleRes)
                             .setView(view)

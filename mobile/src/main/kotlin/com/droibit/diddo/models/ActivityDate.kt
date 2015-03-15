@@ -36,6 +36,11 @@ public class ActivityDate : Model(), Serializable {
     /** 新規作成された活動日かどうか */
     public val isNew: Boolean
         get() = getId() == null
+
+    /** {@inheritDoc} */
+    override fun toString(): String {
+        return memo ?: "---"
+    }
 }
 
 /**
