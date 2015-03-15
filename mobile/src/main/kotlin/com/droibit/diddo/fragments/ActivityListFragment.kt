@@ -14,12 +14,14 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Adapter
-import android.R
 import com.droibit.diddo
 import android.widget.ArrayAdapter
 import android.widget.AbsListView
 import com.droibit.diddo.models.dummy.DummyContent
-import com.droibit.diddo.views.adapters.ItemAdapter
+import com.droibit.diddo.views.adapters.ActivityAdapter
+import android.widget.Toast
+import com.droibit.diddo.R
+import com.droibit.diddo.fragments.dialogs.ActivityDialogFragment
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -30,8 +32,27 @@ import com.droibit.diddo.views.adapters.ItemAdapter
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
+public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener, ActivityDialogFragment.Callbacks {
 
+    class object {
+
+        /**
+         * The serialization (saved instance state) Bundle key representing the
+         * activated item position. Only used on tablets.
+         */
+        private val STATE_ACTIVATED_POSITION = "activated_position"
+
+        private val INVALID_POSITION = -1
+
+        /**
+         * A dummy implementation of the {@link Callbacks} interface that does
+         * nothing. Used only when this fragment is not attached to an activity.
+         */
+        private val sDummyCallbacks = object : Callbacks {
+            override fun onItemSelected(id: String) {
+            }
+        }
+    }
 
     /**
      * The fragment's current callback object, which is notified of list item
@@ -56,7 +77,7 @@ public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
         public fun onItemSelected(id: String)
     }
 
-    private val mListView: ListView by bindView(R.id.list)
+    private val mListView: ListView by bindView(android.R.id.list)
     private val mActionButton: FloatingActionButton by bindView(diddo.R.id.fab)
 
     /** {@inheritDoc} */
@@ -93,10 +114,14 @@ public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION))
         }
 
-        val adapter = ItemAdapter(getActivity())
+        val adapter = ActivityAdapter(getActivity())
         adapter.addAll(DummyContent.ITEMS.map { it.content })
         mListView.setAdapter(adapter)
         mListView.setOnItemClickListener(this)
+
+        mActionButton.setOnClickListener {
+            showNewActivityDialog()
+        }
     }
 
     /** {@inheritDoc} */
@@ -118,16 +143,36 @@ public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
     }
 
     /** {@inheritDoc} */
-    override fun onItemClick(parent: AdapterView<out Adapter>, view: View, position: Int, id: Long) {
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super<Fragment>.onSaveInstanceState(outState)
         if (mActivatedPosition != INVALID_POSITION) {
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition)
         }
+    }
+
+    /** {@inheritDoc} */
+    override fun onItemClick(parent: AdapterView<out Adapter>, view: View, position: Int, id: Long) {
+        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id)
+    }
+
+    /** {@inheritDoc} */
+    override fun onActivityNameEnterd(activityName: String, isNew: Boolean) {
+        val adapter = mListView.getAdapter() as ActivityAdapter
+        if (isNew) {
+            adapter.add(activityName)
+        } else {
+
+        }
+
+        Toast.makeText(
+                getActivity(),
+                if (isNew) R.string.toast_create_activity else R.string.toast_modify_activity,
+                Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showNewActivityDialog() {
+        ActivityDialogFragment.newInstance(null).show(this)
     }
 
     /**
@@ -151,25 +196,5 @@ public class ItemListFragment : Fragment(), AdapterView.OnItemClickListener {
         }
 
         mActivatedPosition = position
-    }
-
-    class object {
-
-        /**
-         * The serialization (saved instance state) Bundle key representing the
-         * activated item position. Only used on tablets.
-         */
-        private val STATE_ACTIVATED_POSITION = "activated_position"
-
-        private val INVALID_POSITION = -1
-
-        /**
-         * A dummy implementation of the {@link Callbacks} interface that does
-         * nothing. Used only when this fragment is not attached to an activity.
-         */
-        private val sDummyCallbacks = object : Callbacks {
-            override fun onItemSelected(id: String) {
-            }
-        }
     }
 }

@@ -14,10 +14,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.droibit.diddo.R
-import com.droibit.diddo.views.adapters.ItemAdapter
+import com.droibit.diddo.views.adapters.ActivityAdapter
 import android.widget.AdapterView
 import android.widget.Adapter
-import com.droibit.diddo.views.adapters.ItemDateAdapter
+import com.droibit.diddo.views.adapters.ActivityDateAdapter
 
 /**
  * A fragment representing a single Item detail screen.
@@ -25,7 +25,7 @@ import com.droibit.diddo.views.adapters.ItemDateAdapter
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
-public class ItemDetailFragment: Fragment(), AdapterView.OnItemClickListener {
+public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListener {
 
     class object {
         /**
@@ -75,7 +75,7 @@ public class ItemDetailFragment: Fragment(), AdapterView.OnItemClickListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super<Fragment>.onViewCreated(view, savedInstanceState)
 
-        val adapter = ItemDateAdapter(getActivity())
+        val adapter = ActivityDateAdapter(getActivity())
         adapter.addAll(DummyContent.ITEMS.map { it.content })
         mListView.setAdapter(adapter)
         mListView.setOnItemClickListener(this)

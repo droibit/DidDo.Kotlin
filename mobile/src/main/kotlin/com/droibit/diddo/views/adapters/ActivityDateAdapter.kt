@@ -10,6 +10,6 @@ import com.droibit.diddo.R
  * @auther kumagai
  * @since 15/03/07
  */
-public class ItemDateAdapter(context: Context): ArrayAdapter<String>(context, R.layout.list_item_detail, android.R.id.text1) {
+public class ActivityDateAdapter(context: Context): ArrayAdapter<String>(context, R.layout.list_item_detail, android.R.id.text1) {
 
 }
