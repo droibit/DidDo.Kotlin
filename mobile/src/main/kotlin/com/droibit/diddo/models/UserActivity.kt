@@ -4,6 +4,7 @@ import com.activeandroid.Model
 import com.activeandroid.annotation.Column
 import com.activeandroid.annotation.Table
 import java.util.Date
+import java.io.Serializable
 
 /**
  * ユーザ定義の活動情報を格納するクラス
@@ -12,7 +13,7 @@ import java.util.Date
  * @since 15/03/07
  */
 Table(name = UserActivity.TABLE)
-public class UserActivity(): Model() {
+public class UserActivity(): Model(), Serializable {
 
     class object {
         val TABLE = "activity";
