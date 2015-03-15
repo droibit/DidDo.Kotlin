@@ -13,8 +13,8 @@ import com.activeandroid.annotation.Column
  * @auther kumagai
  * @since 15/03/07
  */
-Table(name = ActivityDetail.TABLE)
-public class ActivityDetail: Model(), Serializable {
+Table(name = ActivityDate.TABLE)
+public class ActivityDate : Model(), Serializable {
 
     class object {
         val TABLE = "activity_detail"
@@ -32,4 +32,17 @@ public class ActivityDetail: Model(), Serializable {
     /** 親のアクティビティ */
     Column(name = ACTIVITY)
     public var activity: UserActivity? = null
+
+    /** 新規作成された活動日かどうか */
+    public val isNew: Boolean
+        get() = getId() == null
+}
+
+/**
+ * 新しい[ActivityDate]インスタンスを作成するためのヘルパー関数。
+ */
+public fun newActivityDate(init: ActivityDate.() -> Unit): ActivityDate {
+    val activityDate = ActivityDate()
+    activityDate.init()
+    return activityDate
 }

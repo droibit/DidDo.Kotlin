@@ -28,7 +28,20 @@ public class UserActivity(): Model(), Serializable {
     Column(name = RECENTLY_DATE)
     public var recentlyDate: Date? = null
 
+    /** 新規作成されたアクティビティかどうか */
+    public val isNew: Boolean
+        get() = getId() == null
+
     /** 活動の詳細情報を取得する */
-    public val details: List<ActivityDetail>
-    get() = getMany(javaClass<ActivityDetail>(), ActivityDetail.ACTIVITY)
+    public val details: List<ActivityDate>
+    get() = getMany(javaClass<ActivityDate>(), ActivityDate.ACTIVITY)
+}
+
+/**
+ * 新しい[ActivityDate]インスタンスを作成するためのヘルパー関数。
+ */
+public fun newUserActivity(init: UserActivity.() -> Unit): UserActivity {
+    val userActivity = UserActivity()
+    userActivity.init()
+    return userActivity
 }

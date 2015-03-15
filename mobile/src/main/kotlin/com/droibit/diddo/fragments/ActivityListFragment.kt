@@ -22,6 +22,7 @@ import com.droibit.diddo.views.adapters.ActivityAdapter
 import android.widget.Toast
 import com.droibit.diddo.R
 import com.droibit.diddo.fragments.dialogs.ActivityDialogFragment
+import com.droibit.diddo.models.UserActivity
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -157,17 +158,16 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
     }
 
     /** {@inheritDoc} */
-    override fun onActivityNameEnterd(activityName: String, isNew: Boolean) {
+    override fun onActivityNameEnterd(activity: UserActivity) {
         val adapter = mListView.getAdapter() as ActivityAdapter
-        if (isNew) {
-            adapter.add(activityName)
+        if (activity.isNew) {
+            adapter.add(activity.name)
         } else {
-
         }
 
         Toast.makeText(
                 getActivity(),
-                if (isNew) R.string.toast_create_activity else R.string.toast_modify_activity,
+                if (activity.isNew) R.string.toast_create_activity else R.string.toast_modify_activity,
                 Toast.LENGTH_SHORT).show()
     }
 

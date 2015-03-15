@@ -18,6 +18,9 @@ import com.droibit.diddo.views.adapters.ActivityAdapter
 import android.widget.AdapterView
 import android.widget.Adapter
 import com.droibit.diddo.views.adapters.ActivityDateAdapter
+import com.droibit.diddo.fragments.dialogs.ActivityDateDialogFragment
+import com.droibit.diddo.models.ActivityDate
+import android.widget.Toast
 
 /**
  * A fragment representing a single Item detail screen.
@@ -25,7 +28,7 @@ import com.droibit.diddo.views.adapters.ActivityDateAdapter
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
-public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListener {
+public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListener, ActivityDateDialogFragment.Callbacks {
 
     class object {
         /**
@@ -81,6 +84,10 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
         mListView.setOnItemClickListener(this)
 
         mListView.setEmptyView(mEmptyView)
+
+        mActionButton.setOnClickListener {
+            showActivityDateDialog()
+        }
     }
 
     /** {@inheritDoc} */
@@ -96,5 +103,22 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
     /** {@inheritDoc} */
     override fun onItemClick(parent: AdapterView<out Adapter>, view: View, position: Int, id: Long) {
         throw UnsupportedOperationException()
+    }
+
+    /** {@inheritDoc} */
+    override fun onActivityDateEnterd(activityDate: ActivityDate) {
+        val adapter = mListView.getAdapter() as ActivityDateAdapter
+        if (activityDate.isNew) {
+            adapter.add("Item 4")
+        }
+
+        Toast.makeText(
+                getActivity(),
+                if (activityDate.isNew) R.string.toast_create_activity_date else R.string.toast_modify_activity_memo,
+                Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showActivityDateDialog() {
+        ActivityDateDialogFragment.newInstance(null).show(this)
     }
 }

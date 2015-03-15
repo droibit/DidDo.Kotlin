@@ -3,7 +3,9 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_margin="@dimen/dialog_side_space" >
+              android:paddingTop="@dimen/dialog_side_space"
+              android:paddingLeft="@dimen/dialog_side_space"
+              android:paddingRight="@dimen/dialog_side_space">
 
     <TextView android:text="@string/title_activity_name"
               android:textAppearance="?android:attr/textAppearanceMedium"
@@ -12,13 +14,16 @@
               android:id="@android:id/text1"
               android:layout_marginTop="8dp"
               android:layout_marginLeft="4dp"
-              android:layout_marginBottom="8dp"/>
+              android:layout_marginBottom="8dp"
+              android:textSize="@dimen/text_size_xlarge"
+              android:fontFamily="sans-serif-light" />
 
     <EditText android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:id="@+id/edit_activity"
               android:selectAllOnFocus="true"
-              android:text="@string/empty_activity"
+              android:textSize="@dimen/text_size_xlarge"
+              android:fontFamily="sans-serif-light"
               android:maxLength="@integer/max_acitivity_length">
               <requestFocus />
     </EditText>

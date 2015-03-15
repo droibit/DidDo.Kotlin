@@ -17,4 +17,10 @@
     <string name="title_modify_activity_memo">Modify Memo</string>
     <string name="dummy_date" translatable="false">2015/3/6 19:00</string>
     <string name="database" translatable="false">data.db</string>
+    <string name="button_create">Create</string>
+    <string name="button_modify">Modify</string>
+    <string name="toast_create_activity">Created the new activity</string>
+    <string name="toast_modify_activity">Modified the activity</string>
+    <string name="toast_create_activity_date">Entered the activity date</string>
+    <string name="toast_modify_activity_memo">modified the memo of activity date</string>
 </resources>

@@ -15,6 +15,8 @@ import com.droibit.diddo.R
 import android.view.View
 import android.view.WindowManager
 import android.content.DialogInterface
+import com.droibit.diddo.models.UserActivity
+import com.droibit.diddo.models.newUserActivity
 
 /**
  * アクティビティの作成および編集をするためのダイアログ
@@ -26,7 +28,7 @@ public class ActivityDialogFragment: DialogFragment() {
 
     class object {
         val TAG = javaClass<ActivityDialogFragment>().getSimpleName()
-        val ARG_NAME = "name"
+        val ARG_SRC = "src"
 
         /**
          * アクティビティ名が入力された時に呼ばれるコールバック
@@ -36,16 +38,16 @@ public class ActivityDialogFragment: DialogFragment() {
             /**
              * 新しいアクティビティ名が入力された時に呼ばれる処理
              */
-            fun onActivityNameEnterd(activityName: String, isNew: Boolean)
+            fun onActivityNameEnterd(activity: UserActivity)
         }
 
         /**
          * 新しいインスタンスを作成する
          */
-        fun newInstance(activityName: String?): ActivityDialogFragment {
+        fun newInstance(activity: UserActivity?): ActivityDialogFragment {
             val args = Bundle(1)
-            if (activityName != null) {
-                args.putString(ARG_NAME, activityName)
+            if (activity != null) {
+                args.putSerializable(ARG_SRC, activity)
             }
 
             val f = ActivityDialogFragment()
@@ -80,13 +82,14 @@ public class ActivityDialogFragment: DialogFragment() {
 
     /** {@inheritDoc} */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = View.inflate(getActivity(), R.layout.dialog_new_item, null)
+        val view = View.inflate(getActivity(), R.layout.dialog_activity, null)
 
         mNameEdit = view.findViewById(R.id.edit_activity) as EditText
-
-        val containsSrc = getArguments().containsKey(ARG_NAME)
+        mNameEdit!!.addTextChangedListener(mNameWather)
+        val containsSrc = getArguments().containsKey(ARG_SRC)
         if (containsSrc) {
-            mNameEdit!!.setText(getArguments().getString(ARG_NAME))
+            val srcActivity = getArguments().getSerializable(ARG_SRC) as UserActivity
+            mNameEdit!!.setText(srcActivity.name)
         }
         val titleRes = if (containsSrc) R.string.title_activity_modify else R.string.title_new_activity
         val positiveRes = if (containsSrc) R.string.button_modify else R.string.button_create
@@ -95,9 +98,7 @@ public class ActivityDialogFragment: DialogFragment() {
                             .setTitle(titleRes)
                             .setView(view)
                             .setPositiveButton(positiveRes) { (dialog, whitch) ->
-                                // 空文字の時はOKボタンを押せないのでコールバックするだけ。
-                                mCallbacks?.onActivityNameEnterd(activityName = mNameEdit!!.getText().toString(),
-                                                                 isNew        = !getArguments().containsKey(ARG_NAME))
+                                onDialogOk()
                             }.setNegativeButton(android.R.string.cancel, null)
                             .create()
 
@@ -119,5 +120,20 @@ public class ActivityDialogFragment: DialogFragment() {
     public fun show(srcFragment: Fragment) {
         setTargetFragment(srcFragment, 0)
         show(srcFragment.getFragmentManager(), TAG)
+    }
+
+    private fun onDialogOk() {
+        val srcActivity = getArguments().getSerializable(ARG_SRC) as? UserActivity
+        if (srcActivity != null) {
+            srcActivity.name = mNameEdit!!.getText().toString()
+            mCallbacks?.onActivityNameEnterd(srcActivity)
+            return
+        }
+
+        val newActivity = newUserActivity {
+            name = mNameEdit!!.getText().toString()
+        }
+        mCallbacks?.onActivityNameEnterd(newActivity)
+
     }
 }
