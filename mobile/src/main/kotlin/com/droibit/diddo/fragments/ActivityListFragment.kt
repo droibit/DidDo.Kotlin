@@ -24,6 +24,8 @@ import com.droibit.diddo.R
 import com.droibit.diddo.fragments.dialogs.ActivityDialogFragment
 import com.droibit.diddo.models.UserActivity
 import android.view.ContextMenu
+import com.droibit.diddo.fragments.dialogs.SortActivityDialogFragment
+import java.util.Comparator
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -34,7 +36,8 @@ import android.view.ContextMenu
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener, ActivityDialogFragment.Callbacks {
+public class ActivityListFragment : Fragment(),
+        ActivityDialogFragment.Callbacks, SortActivityDialogFragment.Callbacks {
 
     class object {
 
@@ -46,7 +49,6 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
         private val INVALID_POSITION = -1
         private val CONTEXT_MENU_MODIFY_ACTIVITY = 0;
         private val CONTEXT_MENU_DELETE_ACTIVITY = 1;
-
 
         /**
          * A dummy implementation of the {@link Callbacks} interface that does
@@ -92,7 +94,6 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
         if (!(activity is Callbacks)) {
             throw IllegalStateException("Activity must implement fragment's callbacks.")
         }
-
         mCallbacks = activity
     }
 
@@ -121,10 +122,13 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
         val adapter = ActivityAdapter(getActivity())
         adapter.addAll(DummyContent.ITEMS)
         mListView.setAdapter(adapter)
-        mListView.setOnItemClickListener(this)
+        mListView.setOnItemClickListener { (adapterView, view, position, l) ->
+            mCallbacks.onItemSelected(position.toString())
+        }
         // 項目長押しでコンテキストメニューを表示する。
         registerForContextMenu(mListView)
 
+        // アクションボタン押下で新規にアクティビティを作成する。
         mActionButton.setOnClickListener {
             showNewActivityDialog()
         }
@@ -144,7 +148,16 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
     }
 
     /** {@inheritDoc} */
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            R.id.action_sort -> {
+                showSortDialog()
+                return true
+            }
+            R.id.action_settings -> {
+                return true
+            }
+        }
         return super<Fragment>.onOptionsItemSelected(item)
     }
 
@@ -177,11 +190,6 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
     }
 
     /** {@inheritDoc} */
-    override fun onItemClick(parent: AdapterView<out Adapter>, view: View, position: Int, id: Long) {
-        mCallbacks.onItemSelected(position.toString())
-    }
-
-    /** {@inheritDoc} */
     override fun onActivityNameEnterd(activity: UserActivity) {
         val adapter = mListView.getAdapter() as ActivityAdapter
         if (activity.isNew) {
@@ -196,8 +204,10 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
                 Toast.LENGTH_SHORT).show()
     }
 
-    private fun showNewActivityDialog() {
-        ActivityDialogFragment.newInstance(null).show(this)
+    /** {@inheritDoc} */
+    override fun onSortChoiced(sort: Int) {
+        val adapter = mListView.getAdapter() as ActivityAdapter
+        adapter.sort(UserActivity.getComparator(sort))
     }
 
     /**
@@ -222,6 +232,11 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
         mActivatedPosition = position
     }
 
+    // アクティビティを作成する為のダイアログを表示する。
+    private fun showNewActivityDialog() {
+        ActivityDialogFragment.newInstance(null).show(this)
+    }
+
     // アクティビティ名を修正するためのダイアログを表示する。
     private fun showModifyActivityDialog(activity: UserActivity) {
         ActivityDialogFragment.newInstance(activity).show(this)
@@ -234,5 +249,10 @@ public class ActivityListFragment : Fragment(), AdapterView.OnItemClickListener,
         // TODO: DBからも削除
 
         Toast.makeText(getActivity(), R.string.toast_delete_activity, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showSortDialog() {
+        // TODO: ソート順の保存
+        SortActivityDialogFragment.newInstance(0).show(this)
     }
 }

@@ -31,10 +31,6 @@ public class ActivityDateDialogFragment: DialogFragment() {
          * アクティビティ名が入力された時に呼ばれるコールバック
          */
         trait Callbacks {
-
-            /**
-             * 活動日が入力/編集された時に呼ばれる処理
-             */
             fun onActivityDateEnterd(activityDate: ActivityDate)
         }
 

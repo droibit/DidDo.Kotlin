@@ -5,6 +5,7 @@ import com.activeandroid.annotation.Column
 import com.activeandroid.annotation.Table
 import java.util.Date
 import java.io.Serializable
+import java.util.Comparator
 
 /**
  * ユーザ定義の活動情報を格納するクラス
@@ -19,6 +20,35 @@ public class UserActivity(): Model(), Serializable {
         val TABLE = "activity";
         val NAME = "name";
         val RECENTLY_DATE = "recently_date";
+
+        val SORT_NAME = 0
+        val SORT_ACTIVITY_DATE = 1
+
+
+        /**
+         * アクティビティ名でソートする
+         */
+        class NameComarator: Comparator<UserActivity> {
+            override fun compare(lhs: UserActivity, rhs: UserActivity): Int = lhs.name!!.compareTo(rhs.name!!)
+        }
+
+        /**
+         * 日付でソートする
+         */
+        class DateComarator: Comparator<UserActivity> {
+            override fun compare(lhs: UserActivity, rhs: UserActivity): Int = lhs.recentlyDate.compareTo(rhs.recentlyDate)
+        }
+
+        /**
+         * ソートするための[Comparator]インスタンスを取得する
+         */
+        fun getComparator(type: Int): Comparator<UserActivity>? {
+            when (type) {
+                SORT_NAME          -> return NameComarator()
+                SORT_ACTIVITY_DATE -> return DateComarator()
+                else               -> return null
+            }
+        }
     }
 
     /** 活動名 */
@@ -26,7 +56,7 @@ public class UserActivity(): Model(), Serializable {
     public var name: String? = null
     /** 最新の活動日 */
     Column(name = RECENTLY_DATE)
-    public var recentlyDate: Date? = null
+    public var recentlyDate: Date = Date()
 
     /** 新規作成されたアクティビティかどうか */
     public val isNew: Boolean

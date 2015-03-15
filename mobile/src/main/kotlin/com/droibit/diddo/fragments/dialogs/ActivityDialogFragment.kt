@@ -28,18 +28,14 @@ public class ActivityDialogFragment: DialogFragment() {
 
     class object {
         private val TAG = javaClass<ActivityDialogFragment>().getSimpleName()
-        private val ARG_SRC = "src"
-
         /**
          * アクティビティ名が入力された時に呼ばれるコールバック
          */
         trait Callbacks {
-
-            /**
-             * 新しいアクティビティ名が入力された時に呼ばれる処理
-             */
             fun onActivityNameEnterd(activity: UserActivity)
         }
+
+        private val ARG_SRC = "src"
 
         /**
          * 新しいインスタンスを作成する

@@ -24,4 +24,5 @@
     <string name="toast_create_activity_date">Entered the activity date</string>
     <string name="toast_modify_activity_memo">modified the memo of activity date</string>
     <string name="toast_delete_activity">Deleted the activity</string>
+    <string name="action_settings">Settings</string>
 </resources>

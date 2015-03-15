@@ -21,8 +21,8 @@ public class DummyContent {
          */
         public val ITEMS: MutableList<UserActivity> = arrayListOf(
                 dummyActivity("Item 1"),
-                dummyActivity("Item 2"),
-                dummyActivity("Item 3")
+                dummyActivity("Item 3"),
+                dummyActivity("Item 2")
         )
 
         public val DETAIL_ITEMS: MutableList<ActivityDate> = arrayListOf(
