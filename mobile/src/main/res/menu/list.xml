@@ -6,4 +6,8 @@
           android:title="@string/action_sort"
           android:icon="@drawable/ic_action_sort"
           app:showAsAction="always" />
+
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          app:showAsAction="never" />
 </menu>

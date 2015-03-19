@@ -2,6 +2,9 @@ package com.droibit.diddo.models.dummy
 
 import java.util.ArrayList
 import java.util.HashMap
+import com.droibit.diddo.models.UserActivity
+import com.droibit.diddo.models.dummyActivity
+import com.droibit.diddo.models.ActivityDate
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -11,34 +14,30 @@ import java.util.HashMap
  */
 public class DummyContent {
 
-    /**
-     * A dummy item representing a piece of content.
-     */
-    public class DummyItem(public var id: String, public var content: String) {
-
-        override fun toString(): String {
-            return content
-        }
-    }
-
     class object {
 
         /**
          * An array of sample (dummy) items.
          */
-        public val ITEMS: MutableList<DummyItem> = arrayListOf(
-                DummyItem("1", "Item 1"),
-                DummyItem("2", "Item 2"),
-                DummyItem("3", "Item 3")
+        public val ITEMS: MutableList<UserActivity> = arrayListOf(
+                dummyActivity("Item 1"),
+                dummyActivity("Item 3"),
+                dummyActivity("Item 2")
+        )
+
+        public val DETAIL_ITEMS: MutableList<ActivityDate> = arrayListOf(
+                ActivityDate(),
+                ActivityDate(),
+                ActivityDate()
         )
 
         /**
          * A map of sample (dummy) items, by ID.
          */
-        public var ITEM_MAP: MutableMap<String, DummyItem> = hashMapOf(
-                "1" to DummyItem("1", "Item 1"),
-                "2" to DummyItem("2", "Item 2"),
-                "3" to DummyItem("3", "Item 3")
+        public var ITEM_MAP: MutableMap<String, UserActivity> = hashMapOf(
+                "1" to dummyActivity("Item 1"),
+                "2" to dummyActivity("Item 2"),
+                "3" to dummyActivity("Item 3")
         )
     }
 }

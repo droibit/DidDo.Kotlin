@@ -12,15 +12,16 @@
                   android:layout_height="@dimen/header_height"
                   android:paddingLeft="@dimen/side_space"
                   android:gravity="center_vertical"
+                  android:background="@color/primary"
                   android:text="@string/header_activity"
-                  android:textSize="@dimen/text_size_xlarge" />
+                  android:textSize="@dimen/text_size_xlarge"
+                  android:textColor="@android:color/white" />
 
         <ListView android:id="@android:id/list"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:fastScrollEnabled="true"
                   android:scrollbars="vertical" />
-
 
         <ProgressBar android:id="@android:id/progress"
                      android:layout_width="wrap_content"

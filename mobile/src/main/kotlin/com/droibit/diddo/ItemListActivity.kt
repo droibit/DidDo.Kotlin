@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.ActionBarActivity
 import android.support.v7.widget.Toolbar
-import com.droibit.diddo.fragments.ItemListFragment
-import com.droibit.diddo.fragments.ItemDetailFragment
+import com.droibit.diddo.fragments.ActivityListFragment
+import com.droibit.diddo.fragments.ActivityDetailFragment
 
 
 /**
@@ -25,7 +25,7 @@ import com.droibit.diddo.fragments.ItemDetailFragment
  * {@link ItemListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class ItemListActivity : ActionBarActivity(), ItemListFragment.Callbacks {
+public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callbacks {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -39,6 +39,7 @@ public class ItemListActivity : ActionBarActivity(), ItemListFragment.Callbacks 
         setContentView(R.layout.activity_item_list)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
+        toolbar.getBackground().setAlpha(255)
         setSupportActionBar(toolbar)
 
         if (findViewById(R.id.item_detail_container) != null) {
@@ -50,7 +51,7 @@ public class ItemListActivity : ActionBarActivity(), ItemListFragment.Callbacks 
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            (getSupportFragmentManager().findFragmentById(R.id.item_list) as ItemListFragment).setActivateOnItemClick(true)
+            (getSupportFragmentManager().findFragmentById(R.id.item_list) as ActivityListFragment).setActivateOnItemClick(true)
         }
 
         // TODO: If exposing deep links into your app, handle intents here.
@@ -67,8 +68,8 @@ public class ItemListActivity : ActionBarActivity(), ItemListFragment.Callbacks 
             // adding or replacing the detail fragment using a
             // fragment transaction.
             val arguments = Bundle()
-            arguments.putString(ItemDetailFragment.ARG_ITEM_ID, id)
-            val fragment = ItemDetailFragment()
+            arguments.putString(ActivityDetailFragment.ARG_ITEM_ID, id)
+            val fragment = ActivityDetailFragment()
             fragment.setArguments(arguments)
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
@@ -78,7 +79,7 @@ public class ItemListActivity : ActionBarActivity(), ItemListFragment.Callbacks 
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             val detailIntent = Intent(this, javaClass<ItemDetailActivity>())
-            detailIntent.putExtra(ItemDetailFragment.ARG_ITEM_ID, id)
+            detailIntent.putExtra(ActivityDetailFragment.ARG_ITEM_ID, id)
             startActivity(detailIntent)
         }
     }

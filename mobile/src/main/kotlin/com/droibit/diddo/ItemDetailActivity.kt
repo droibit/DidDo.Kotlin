@@ -7,7 +7,8 @@ import android.support.v4.app.NavUtils
 import android.view.MenuItem
 import android.support.v7.widget.Toolbar
 import android.view.Menu
-import com.droibit.diddo.fragments.ItemDetailFragment
+import com.droibit.diddo.fragments.ActivityDetailFragment
+import com.droibit.easycreator.activity.compat.navigateUpTo
 
 
 /**
@@ -27,6 +28,7 @@ public class ItemDetailActivity : ActionBarActivity() {
         setContentView(R.layout.activity_item_detail)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
+        toolbar.setBackgroundResource(R.drawable.toolbar_shadow)
         setSupportActionBar(toolbar)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true)
 
@@ -43,8 +45,8 @@ public class ItemDetailActivity : ActionBarActivity() {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             val arguments = Bundle()
-            arguments.putString(ItemDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID))
-            val fragment = ItemDetailFragment()
+            arguments.putString(ActivityDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(ActivityDetailFragment.ARG_ITEM_ID))
+            val fragment = ActivityDetailFragment()
             fragment.setArguments(arguments)
             getSupportFragmentManager().beginTransaction().add(R.id.item_detail_container, fragment).commit()
         }
@@ -61,7 +63,7 @@ public class ItemDetailActivity : ActionBarActivity() {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, Intent(this, javaClass<ItemListActivity>()))
+            navigateUpTo(javaClass<ItemListActivity>())
             return true
         }
         return super.onOptionsItemSelected(item)
