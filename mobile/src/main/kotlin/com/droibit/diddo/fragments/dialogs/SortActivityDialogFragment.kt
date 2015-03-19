@@ -7,6 +7,7 @@ import android.app.Dialog
 import android.app.AlertDialog
 import com.droibit.diddo.R
 import android.app.Activity
+import com.droibit.easycreator.alertDialog
 
 /**
  * アクティビティをソートするためのダイアログ
@@ -51,15 +52,11 @@ public class SortActivityDialogFragment : DialogFragment() {
     /** {@inheritDoc} */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
         val position = getArguments().getInt(ARG_POSITION)
-        return AlertDialog.Builder(getActivity())
-                    .setSingleChoiceItems(R.array.sort_activity_labels, position) { (d, which) ->
-                        mCallbacks?.onSortChoiced(which)
-                        dismiss()
-                    }.create()
-    }
-
-    public fun show(srcFragment: Fragment) {
-        setTargetFragment(srcFragment, 0)
-        show(srcFragment.getFragmentManager(), TAG)
+        return alertDialog(getActivity()) {
+                setSingleChoiceItems(R.array.sort_activity_labels, position) { (d, which) ->
+                    mCallbacks?.onSortChoiced(which)
+                    dismiss()
+                }
+            }
     }
 }

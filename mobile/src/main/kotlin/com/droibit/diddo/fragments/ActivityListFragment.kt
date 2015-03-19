@@ -26,6 +26,9 @@ import com.droibit.diddo.models.UserActivity
 import android.view.ContextMenu
 import com.droibit.diddo.fragments.dialogs.SortActivityDialogFragment
 import java.util.Comparator
+import com.droibit.easycreator
+import com.droibit.easycreator.showToast
+import com.droibit.easycreator.fragment.compat.show
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -54,7 +57,7 @@ public class ActivityListFragment : Fragment(),
          * A dummy implementation of the {@link Callbacks} interface that does
          * nothing. Used only when this fragment is not attached to an activity.
          */
-        private val sDummyCallbacks = object : Callbacks {
+        private val sDummyCallbacks = object: Callbacks {
             override fun onItemSelected(id: String) {
             }
         }
@@ -198,10 +201,12 @@ public class ActivityListFragment : Fragment(),
             adapter.notifyDataSetChanged();
         }
 
-        Toast.makeText(
-                getActivity(),
-                if (activity.isNew) R.string.toast_create_activity else R.string.toast_modify_activity,
-                Toast.LENGTH_SHORT).show()
+        val messageRes = if (activity.isNew)
+                            R.string.toast_create_activity
+                        else
+                            R.string.toast_modify_activity
+        
+        showToast(getActivity(), messageRes, Toast.LENGTH_SHORT)
     }
 
     /** {@inheritDoc} */
@@ -248,7 +253,7 @@ public class ActivityListFragment : Fragment(),
 
         // TODO: DBからも削除
 
-        Toast.makeText(getActivity(), R.string.toast_delete_activity, Toast.LENGTH_SHORT).show()
+        showToast(getActivity(), R.string.toast_delete_activity, Toast.LENGTH_SHORT)
     }
 
     private fun showSortDialog() {

@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment
 import android.text.TextUtils
 import com.droibit.diddo.models.newActivityDate
 import java.util.Date
+import com.droibit.easycreator.alertDialog
 
 /**
  * アクティビティの活動日の作成及び編集をするためのダイアログ
@@ -72,14 +73,12 @@ public class ActivityDateDialogFragment: DialogFragment() {
 
         val titleRes = if (containsSrc) R.string.title_modify_activity_memo else R.string.title_new_activity_date
         val positiveRes = if (containsSrc) R.string.button_modify else R.string.button_create
-        val dialog = AlertDialog.Builder(getActivity())
-                .setTitle(titleRes)
-                .setView(view)
-                .setPositiveButton(positiveRes) { (dialog, whitch) ->
-                    onDialogOk()
-                }.setNegativeButton(android.R.string.cancel, null)
-                .create()
-
+        val dialog = alertDialog(getActivity()) {
+                setTitle(titleRes)
+                setView(view)
+                setPositiveButton(positiveRes) { (dialog, whitch) -> onDialogOk() }
+                setNegativeButton(android.R.string.cancel, null)
+        }
         // ダイアログを表示した際にキーボード表示する。
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         return dialog
@@ -98,11 +97,5 @@ public class ActivityDateDialogFragment: DialogFragment() {
             date = Date()
         }
         mCallbacks?.onActivityDateEnterd(newActivityDate)
-    }
-
-    // フラグメントを表示するためのヘルパーメソッド
-    public fun show(srcFragment: Fragment) {
-        setTargetFragment(srcFragment, 0)
-        show(srcFragment.getFragmentManager(), TAG)
     }
 }

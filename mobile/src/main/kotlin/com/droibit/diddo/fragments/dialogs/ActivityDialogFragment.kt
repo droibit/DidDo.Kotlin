@@ -17,6 +17,7 @@ import android.view.WindowManager
 import android.content.DialogInterface
 import com.droibit.diddo.models.UserActivity
 import com.droibit.diddo.models.newUserActivity
+import com.droibit.easycreator.alertDialog
 
 /**
  * アクティビティの作成および編集をするためのダイアログ
@@ -91,16 +92,15 @@ public class ActivityDialogFragment: DialogFragment() {
 
         val titleRes = if (containsSrc) R.string.title_activity_modify else R.string.title_new_activity
         val positiveRes = if (containsSrc) R.string.button_modify else R.string.button_create
-        val dialog = AlertDialog.Builder(getActivity())
-                            .setTitle(titleRes)
-                            .setView(view)
-                            .setPositiveButton(positiveRes) { (dialog, whitch) ->
-                                onDialogOk()
-                            }.setNegativeButton(android.R.string.cancel, null)
-                            .create()
+        val dialog = alertDialog(getActivity()) {
+                setTitle(titleRes)
+                setView(view)
+                setPositiveButton(positiveRes) { (dialog, whitch) -> onDialogOk() }
+                setNegativeButton(android.R.string.cancel, null)
+        }
 
         // ダイアログを表示した際にキーボード表示する。
-       dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         return dialog
     }
 
@@ -111,12 +111,6 @@ public class ActivityDialogFragment: DialogFragment() {
         val dialog = getDialog() as AlertDialog
         mPositiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
         mPositiveButton?.setEnabled(!TextUtils.isEmpty(mNameEdit!!.getText()))
-    }
-
-    // フラグメントを表示するためのヘルパーメソッド
-    public fun show(srcFragment: Fragment) {
-        setTargetFragment(srcFragment, 0)
-        show(srcFragment.getFragmentManager(), TAG)
     }
 
     private fun onDialogOk() {

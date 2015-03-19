@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import com.droibit.diddo.fragments.ActivityDetailFragment
+import com.droibit.easycreator.activity.compat.navigateUpTo
 
 
 /**
@@ -62,7 +63,7 @@ public class ItemDetailActivity : ActionBarActivity() {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, Intent(this, javaClass<ItemListActivity>()))
+            navigateUpTo(javaClass<ItemListActivity>())
             return true
         }
         return super.onOptionsItemSelected(item)

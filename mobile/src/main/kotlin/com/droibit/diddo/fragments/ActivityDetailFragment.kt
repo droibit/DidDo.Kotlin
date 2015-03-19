@@ -23,6 +23,9 @@ import com.droibit.diddo.models.ActivityDate
 import android.widget.Toast
 import android.view.ContextMenu
 import com.droibit.diddo.models.UserActivity
+import com.droibit.easycreator.fragment.compat.fragment
+import com.droibit.easycreator.fragment.compat.show
+import com.droibit.easycreator.showToast
 
 /**
  * A fragment representing a single Item detail screen.
@@ -37,7 +40,16 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
          * The fragment argument representing the item ID that this fragment
          * represents.
          */
-        public val ARG_ITEM_ID: String = "item_id"
+        val ARG_ITEM_ID: String = "item_id"
+
+        /**
+         * 新しいインスタンスを作成する。
+         */
+        fun newInstance(activityId: Long): ActivityDetailFragment {
+           return fragment(javaClass<ActivityDetailFragment>()) { (args) ->
+                args.putLong(ARG_ITEM_ID, activityId)
+            }
+        }
     }
 
     /**
@@ -111,10 +123,12 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
             adapter.notifyDataSetChanged();
         }
 
-        Toast.makeText(
-                getActivity(),
-                if (activityDate.isNew) R.string.toast_create_activity_date else R.string.toast_modify_activity_memo,
-                Toast.LENGTH_SHORT).show()
+        val messageRes = if (activityDate.isNew)
+                            R.string.toast_create_activity_date
+                        else
+                            R.string.toast_modify_activity_memo
+
+        showToast(getActivity(), messageRes, Toast.LENGTH_SHORT)
     }
 
     private fun showActivityDateDialog() {
