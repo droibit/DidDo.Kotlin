@@ -57,6 +57,9 @@ public class UserActivity(): Model(), Serializable {
     /** 最新の活動日 */
     Column(name = RECENTLY_DATE)
     public var recentlyDate: Date = Date()
+    /** 最新の活動日をミリ秒で取得する */
+    public val recentlyDateMillis: Long
+    get() = recentlyDate.getTime()
 
     /** 新規作成されたアクティビティかどうか */
     public val isNew: Boolean
@@ -84,9 +87,9 @@ public fun newUserActivity(init: UserActivity.() -> Unit): UserActivity {
 /**
  * ダミー用の[ActivityDate]インスタンスを作成する。
  */
-public fun dummyActivity(name: String): UserActivity {
+public fun dummyActivity(name: String, date: Date = Date()): UserActivity {
     return newUserActivity {
         this.name = name
-        this.recentlyDate = Date()
+        this.recentlyDate = date
     }
 }

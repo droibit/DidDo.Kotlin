@@ -5,6 +5,7 @@ import java.util.HashMap
 import com.droibit.diddo.models.UserActivity
 import com.droibit.diddo.models.dummyActivity
 import com.droibit.diddo.models.ActivityDate
+import java.util.Date
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -20,9 +21,9 @@ public class DummyContent {
          * An array of sample (dummy) items.
          */
         public val ITEMS: MutableList<UserActivity> = arrayListOf(
-                dummyActivity("Item 1"),
-                dummyActivity("Item 3"),
-                dummyActivity("Item 2")
+                dummyActivity("Item 1", Date(1420038000000)),   // 2015/01/01
+                dummyActivity("Item 3", Date(1420124400000)),   // 2015/02/01
+                dummyActivity("Item 2", Date(1388502000000))    // 2014/01/01
         )
 
         public val DETAIL_ITEMS: MutableList<ActivityDate> = arrayListOf(
@@ -35,9 +36,9 @@ public class DummyContent {
          * A map of sample (dummy) items, by ID.
          */
         public var ITEM_MAP: MutableMap<String, UserActivity> = hashMapOf(
-                "1" to dummyActivity("Item 1"),
-                "2" to dummyActivity("Item 2"),
-                "3" to dummyActivity("Item 3")
+                "1" to dummyActivity("Item 1", Date(1420038000000)),
+                "2" to dummyActivity("Item 2", Date(1420124400000)),
+                "3" to dummyActivity("Item 3", Date(1388502000000))
         )
     }
 }
