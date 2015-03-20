@@ -1,6 +1,5 @@
 package com.droibit.diddo.fragments
 
-import butterknife.bindView
 import android.support.v4.app.Fragment
 import com.droibit.diddo.models.dummy.DummyContent
 import android.widget.TextView
@@ -18,14 +17,15 @@ import com.droibit.diddo.views.adapters.ActivityAdapter
 import android.widget.AdapterView
 import android.widget.Adapter
 import com.droibit.diddo.views.adapters.ActivityDateAdapter
-import com.droibit.diddo.fragments.dialogs.ActivityDateDialogFragment
+import com.droibit.diddo.fragments.dialogs.ActivityMemoDialogFragment
 import com.droibit.diddo.models.ActivityDate
 import android.widget.Toast
 import android.view.ContextMenu
 import com.droibit.diddo.models.UserActivity
-import com.droibit.easycreator.fragment.compat.fragment
-import com.droibit.easycreator.fragment.compat.show
+import com.droibit.easycreator.compat.fragment
+import com.droibit.easycreator.compat.show
 import com.droibit.easycreator.showToast
+import com.droibit.diddo.extension.bindView
 
 /**
  * A fragment representing a single Item detail screen.
@@ -33,9 +33,9 @@ import com.droibit.easycreator.showToast
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
-public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListener, ActivityDateDialogFragment.Callbacks {
+public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Companion.Callbacks {
 
-    class object {
+    companion object {
         /**
          * The fragment argument representing the item ID that this fragment
          * represents.
@@ -46,7 +46,7 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
          * 新しいインスタンスを作成する。
          */
         fun newInstance(activityId: Long): ActivityDetailFragment {
-           return fragment(javaClass<ActivityDetailFragment>()) { (args) ->
+           return fragment<ActivityDetailFragment>() { args ->
                 args.putLong(ARG_ITEM_ID, activityId)
             }
         }
@@ -90,12 +90,20 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
         val adapter = ActivityDateAdapter(getActivity())
         adapter.addAll(DummyContent.DETAIL_ITEMS)
         mListView.setAdapter(adapter)
-        mListView.setOnItemClickListener(this)
-
         mListView.setEmptyView(mEmptyView)
 
+        mListView.setOnItemClickListener { adapterView, view, position, l ->
+            // クリックされたらメモの内容をトー鳥栖で表示する。
+            showMemoToast(adapter.getItem(position))
+        }
+        mListView.setOnItemLongClickListener { adapterView, view, position, l ->
+            // 長押しで編集用のダイアログを表示する。
+            showActivityMemoDialog(adapter.getItem(position))
+            true
+        }
+
         mActionButton.setOnClickListener {
-            showActivityDateDialog()
+            showActivityMemoDialog()
         }
     }
 
@@ -107,11 +115,6 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
     /** {@inheritDoc} */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return super<Fragment>.onOptionsItemSelected(item)
-    }
-
-    /** {@inheritDoc} */
-    override fun onItemClick(parent: AdapterView<out Adapter>, view: View, position: Int, id: Long) {
-        throw UnsupportedOperationException()
     }
 
     /** {@inheritDoc} */
@@ -131,7 +134,15 @@ public class ActivityDetailFragment : Fragment(), AdapterView.OnItemClickListene
         showToast(getActivity(), messageRes, Toast.LENGTH_SHORT)
     }
 
-    private fun showActivityDateDialog() {
-        ActivityDateDialogFragment.newInstance(null).show(this)
+    // アクティビティのメモ編集用のダイアログを表示する。
+    private fun showActivityMemoDialog(srcActivityDate: ActivityDate? = null) {
+        ActivityMemoDialogFragment.newInstance(srcActivityDate).show(this)
+    }
+
+    // アクティビティのメモをトーストで表示する。
+    private fun showMemoToast(activityDate: ActivityDate) {
+        if (activityDate.memo != null) {
+            showToast(getActivity(), activityDate.memo!!, Toast.LENGTH_LONG)
+        }
     }
 }

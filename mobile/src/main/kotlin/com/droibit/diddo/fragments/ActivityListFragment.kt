@@ -1,6 +1,5 @@
 package com.droibit.diddo.fragments
 
-import butterknife.bindView
 import android.support.v4.app.Fragment
 import android.widget.AdapterView
 import android.widget.ListView
@@ -28,21 +27,22 @@ import com.droibit.diddo.fragments.dialogs.SortActivityDialogFragment
 import java.util.Comparator
 import com.droibit.easycreator
 import com.droibit.easycreator.showToast
-import com.droibit.easycreator.fragment.compat.show
+import com.droibit.easycreator.compat.show
+import com.droibit.diddo.extension.bindView
 
 /**
  * A list fragment representing a list of Items. This fragment
  * also supports tablet devices by allowing list items to be given an
  * 'activated' state upon selection. This helps indicate which item is
- * currently being viewed in a {@link ItemDetailFragment}.
+ * currently being viewed in a [ItemDetailFragment].
  * <p/>
- * Activities containing this fragment MUST implement the {@link Callbacks}
+ * Activities containing this fragment MUST implement the [Callbacks]
  * interface.
  */
 public class ActivityListFragment : Fragment(),
-        ActivityDialogFragment.Callbacks, SortActivityDialogFragment.Callbacks {
+        ActivityDialogFragment.Companion.Callbacks, SortActivityDialogFragment.Companion.Callbacks {
 
-    class object {
+    companion object {
 
         /**
          * The serialization (saved instance state) Bundle key representing the
@@ -50,11 +50,11 @@ public class ActivityListFragment : Fragment(),
          */
         private val STATE_ACTIVATED_POSITION = "activated_position"
         private val INVALID_POSITION = -1
-        private val CONTEXT_MENU_MODIFY_ACTIVITY = 0;
-        private val CONTEXT_MENU_DELETE_ACTIVITY = 1;
+        private val CONTEXT_MENU_MODIFY_ACTIVITY = 0
+        private val CONTEXT_MENU_DELETE_ACTIVITY = 1
 
         /**
-         * A dummy implementation of the {@link Callbacks} interface that does
+         * A dummy implementation of the [Callbacks] interface that does
          * nothing. Used only when this fragment is not attached to an activity.
          */
         private val sDummyCallbacks = object: Callbacks {
@@ -125,7 +125,7 @@ public class ActivityListFragment : Fragment(),
         val adapter = ActivityAdapter(getActivity())
         adapter.addAll(DummyContent.ITEMS)
         mListView.setAdapter(adapter)
-        mListView.setOnItemClickListener { (adapterView, view, position, l) ->
+        mListView.setOnItemClickListener { adapterView, view, position, l ->
             mCallbacks.onItemSelected(position.toString())
         }
         // 項目長押しでコンテキストメニューを表示する。

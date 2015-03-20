@@ -7,7 +7,7 @@ import com.activeandroid.annotation.Table
 import com.activeandroid.annotation.Column
 
 /**
- * {@link UserActivity}の詳細情報。
+ * [[UserActivity]]の詳細情報。
  * 活動記録とそのコメント情報を格納する。
  *
  * @auther kumagai
@@ -16,7 +16,7 @@ import com.activeandroid.annotation.Column
 Table(name = ActivityDate.TABLE)
 public class ActivityDate : Model(), Serializable {
 
-    class object {
+    companion object {
         val TABLE = "activity_detail"
         val ACTIVITY = "activity"
         val DATE = "date"
@@ -44,10 +44,19 @@ public class ActivityDate : Model(), Serializable {
 }
 
 /**
- * 新しい[ActivityDate]インスタンスを作成するためのヘルパー関数。
+ * 新しい[[ActivityDate]]インスタンスを作成するためのヘルパー関数。
  */
 public fun newActivityDate(init: ActivityDate.() -> Unit): ActivityDate {
     val activityDate = ActivityDate()
     activityDate.init()
     return activityDate
+}
+
+/**
+ * ダミー用の[[ActivityDate]]インスタンスを作成するためのヘルパー関数。
+ */
+public fun dummyActivityDate(date: Date): ActivityDate {
+    return newActivityDate {
+        this.date = date
+    }
 }

@@ -8,6 +8,7 @@ import android.app.AlertDialog
 import com.droibit.diddo.R
 import android.app.Activity
 import com.droibit.easycreator.alertDialog
+import com.droibit.easycreator.compat.fragment
 
 /**
  * アクティビティをソートするためのダイアログ
@@ -17,7 +18,7 @@ import com.droibit.easycreator.alertDialog
  */
 public class SortActivityDialogFragment : DialogFragment() {
 
-    class object {
+    companion  object {
         private val TAG = javaClass<SortActivityDialogFragment>().getSimpleName()
         private val ARG_POSITION = "position"
 
@@ -32,12 +33,9 @@ public class SortActivityDialogFragment : DialogFragment() {
          * 新しいインスタンスを作成する。
          */
         fun newInstance(position: Int): SortActivityDialogFragment {
-            val args = Bundle(1)
-            args.putInt(ARG_POSITION, position)
-
-            val f = SortActivityDialogFragment()
-            f.setArguments(args)
-            return f
+            return fragment { args ->
+                args.putInt(ARG_POSITION, position)
+            }
         }
     }
 

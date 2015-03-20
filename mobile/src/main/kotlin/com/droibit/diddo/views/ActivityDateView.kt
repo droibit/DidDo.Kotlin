@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import android.widget.TextView
-import butterknife.bindView
+import com.droibit.diddo.extension.bindView
 
 /**
  * アクティビティの活動日を表示するためのビュー

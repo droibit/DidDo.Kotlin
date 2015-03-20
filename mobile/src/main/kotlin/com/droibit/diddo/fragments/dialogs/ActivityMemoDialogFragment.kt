@@ -16,6 +16,7 @@ import android.text.TextUtils
 import com.droibit.diddo.models.newActivityDate
 import java.util.Date
 import com.droibit.easycreator.alertDialog
+import com.droibit.easycreator.compat.fragment
 
 /**
  * アクティビティの活動日の作成及び編集をするためのダイアログ
@@ -23,9 +24,10 @@ import com.droibit.easycreator.alertDialog
  * @auther kumagai
  * @since 15/03/15
  */
-public class ActivityDateDialogFragment: DialogFragment() {
+public class ActivityMemoDialogFragment : DialogFragment() {
+
     class object {
-        private val TAG = javaClass<ActivityDateDialogFragment>().getSimpleName()
+        private val TAG = javaClass<ActivityMemoDialogFragment>().getSimpleName()
         private val ARG_SRC = "src"
 
         /**
@@ -38,15 +40,12 @@ public class ActivityDateDialogFragment: DialogFragment() {
         /**
          * 新しいインスタンスを作成する
          */
-        fun newInstance(activityDate: ActivityDate?): ActivityDateDialogFragment {
-            val args = Bundle(1)
-            if (activityDate != null) {
-                args.putSerializable(ARG_SRC, activityDate)
+        fun newInstance(activityDate: ActivityDate?): ActivityMemoDialogFragment {
+            return fragment { args ->
+                if (activityDate != null) {
+                    args.putSerializable(ARG_SRC, activityDate)
+                }
             }
-
-            val f = ActivityDateDialogFragment()
-            f.setArguments(args)
-            return f
         }
     }
 
@@ -76,7 +75,7 @@ public class ActivityDateDialogFragment: DialogFragment() {
         val dialog = alertDialog(getActivity()) {
                 setTitle(titleRes)
                 setView(view)
-                setPositiveButton(positiveRes) { (dialog, whitch) -> onDialogOk() }
+                setPositiveButton(positiveRes) { dialog, whitch -> onDialogOk() }
                 setNegativeButton(android.R.string.cancel, null)
         }
         // ダイアログを表示した際にキーボード表示する。

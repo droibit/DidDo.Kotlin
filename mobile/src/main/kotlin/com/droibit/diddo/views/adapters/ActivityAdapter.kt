@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.view.LayoutInflater
-import butterknife.bindView
 import android.text.format.DateUtils
 import android.text.format.DateFormat
 import com.droibit.diddo.views.UserActivityView

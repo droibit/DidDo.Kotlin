@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.content.Context
 import android.widget.TextView
 import com.droibit.diddo.R
-import butterknife.bindView
+import com.droibit.diddo.extension.bindView
 
 /**
  * リストビューにアクティビティ情報を表示するためのビュー

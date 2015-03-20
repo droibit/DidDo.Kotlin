@@ -16,14 +16,13 @@ import java.util.Comparator
 Table(name = UserActivity.TABLE)
 public class UserActivity(): Model(), Serializable {
 
-    class object {
+    companion object {
         val TABLE = "activity";
         val NAME = "name";
         val RECENTLY_DATE = "recently_date";
 
         val SORT_NAME = 0
         val SORT_ACTIVITY_DATE = 1
-
 
         /**
          * アクティビティ名でソートする
@@ -67,7 +66,7 @@ public class UserActivity(): Model(), Serializable {
 
     /** 活動の詳細情報を取得する */
     public val details: List<ActivityDate>
-    get() = getMany(javaClass<ActivityDate>(), ActivityDate.ACTIVITY)
+        get() = getMany(javaClass<ActivityDate>(), ActivityDate.ACTIVITY)
 
     /** {@inheritDoc} */
     override fun toString(): String {

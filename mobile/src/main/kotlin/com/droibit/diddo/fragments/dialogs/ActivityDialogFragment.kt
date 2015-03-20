@@ -18,6 +18,7 @@ import android.content.DialogInterface
 import com.droibit.diddo.models.UserActivity
 import com.droibit.diddo.models.newUserActivity
 import com.droibit.easycreator.alertDialog
+import com.droibit.easycreator.compat.fragment
 
 /**
  * アクティビティの作成および編集をするためのダイアログ
@@ -42,14 +43,11 @@ public class ActivityDialogFragment: DialogFragment() {
          * 新しいインスタンスを作成する
          */
         fun newInstance(activity: UserActivity?): ActivityDialogFragment {
-            val args = Bundle(1)
-            if (activity != null) {
-                args.putSerializable(ARG_SRC, activity)
+            return fragment { args ->
+                if (activity != null) {
+                    args.putSerializable(ARG_SRC, activity)
+                }
             }
-
-            val f = ActivityDialogFragment()
-            f.setArguments(args)
-            return f
         }
     }
 
@@ -95,7 +93,7 @@ public class ActivityDialogFragment: DialogFragment() {
         val dialog = alertDialog(getActivity()) {
                 setTitle(titleRes)
                 setView(view)
-                setPositiveButton(positiveRes) { (dialog, whitch) -> onDialogOk() }
+                setPositiveButton(positiveRes) { dialog, whitch -> onDialogOk() }
                 setNegativeButton(android.R.string.cancel, null)
         }
 
