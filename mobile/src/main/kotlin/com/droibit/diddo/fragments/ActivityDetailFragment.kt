@@ -33,7 +33,7 @@ import com.droibit.diddo.extension.bindView
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
-public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Companion.Callbacks {
+public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Callbacks {
 
     companion object {
         /**

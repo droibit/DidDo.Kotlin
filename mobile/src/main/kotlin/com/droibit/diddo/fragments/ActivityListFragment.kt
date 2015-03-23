@@ -40,7 +40,7 @@ import com.droibit.diddo.extension.bindView
  * interface.
  */
 public class ActivityListFragment : Fragment(),
-        ActivityDialogFragment.Companion.Callbacks, SortActivityDialogFragment.Companion.Callbacks {
+        ActivityDialogFragment.Callbacks, SortActivityDialogFragment.Callbacks {
 
     companion object {
 

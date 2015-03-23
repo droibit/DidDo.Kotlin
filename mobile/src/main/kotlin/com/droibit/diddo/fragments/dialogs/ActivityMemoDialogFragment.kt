@@ -26,15 +26,12 @@ import com.droibit.easycreator.compat.fragment
  */
 public class ActivityMemoDialogFragment : DialogFragment() {
 
-    class object {
+    companion object {
         private val TAG = javaClass<ActivityMemoDialogFragment>().getSimpleName()
         private val ARG_SRC = "src"
-
-        /**
-         * アクティビティ名が入力された時に呼ばれるコールバック
-         */
-        trait Callbacks {
-            fun onActivityDateEnterd(activityDate: ActivityDate)
+        private val sDummyCallbacks = object: Callbacks {
+            override fun onActivityDateEnterd(activityDate: ActivityDate) {
+            }
         }
 
         /**
@@ -49,14 +46,23 @@ public class ActivityMemoDialogFragment : DialogFragment() {
         }
     }
 
+    /**
+     * アクティビティ名が入力された時に呼ばれるコールバック
+     */
+    trait Callbacks {
+        fun onActivityDateEnterd(activityDate: ActivityDate)
+    }
+
     private var mMemoEdit: EditText? = null
-    private var mCallbacks: Callbacks? = null
+    private var mCallbacks: Callbacks = sDummyCallbacks
 
     /** {@inheritDoc} */
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
 
-        mCallbacks = getTargetFragment() as? Callbacks
+        if (getTargetFragment() is Callbacks) {
+            mCallbacks = getTargetFragment() as Callbacks
+        }
     }
 
     /** {@inheritDoc} */
@@ -87,7 +93,7 @@ public class ActivityMemoDialogFragment : DialogFragment() {
         val srcActivityDate = getArguments().getSerializable(ARG_SRC) as? ActivityDate
         if (srcActivityDate != null) {
             srcActivityDate.memo = mMemoEdit!!.getText().toString()
-            mCallbacks?.onActivityDateEnterd(srcActivityDate)
+            mCallbacks.onActivityDateEnterd(srcActivityDate)
             return
         }
 
@@ -95,6 +101,6 @@ public class ActivityMemoDialogFragment : DialogFragment() {
             memo = mMemoEdit!!.getText().toString()
             date = Date()
         }
-        mCallbacks?.onActivityDateEnterd(newActivityDate)
+        mCallbacks.onActivityDateEnterd(newActivityDate)
     }
 }

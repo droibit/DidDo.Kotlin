@@ -28,16 +28,13 @@ import com.droibit.easycreator.compat.fragment
  */
 public class ActivityDialogFragment: DialogFragment() {
 
-    class object {
+    companion object {
         private val TAG = javaClass<ActivityDialogFragment>().getSimpleName()
-        /**
-         * アクティビティ名が入力された時に呼ばれるコールバック
-         */
-        trait Callbacks {
-            fun onActivityNameEnterd(activity: UserActivity)
-        }
-
         private val ARG_SRC = "src"
+        private val sDummyCallbacks = object: Callbacks {
+            override fun onActivityNameEnterd(activity: UserActivity) {
+            }
+        }
 
         /**
          * 新しいインスタンスを作成する
@@ -51,9 +48,16 @@ public class ActivityDialogFragment: DialogFragment() {
         }
     }
 
+    /**
+     * アクティビティ名が入力された時に呼ばれるコールバック
+     */
+    trait Callbacks {
+        fun onActivityNameEnterd(activity: UserActivity)
+    }
+
     private var mPositiveButton: Button? = null
     private var mNameEdit: EditText? = null
-    private var mCallbacks: Callbacks? = null
+    private var mCallbacks: Callbacks = sDummyCallbacks
 
     private val mNameWather: TextWatcher = object: TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -72,7 +76,9 @@ public class ActivityDialogFragment: DialogFragment() {
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
 
-        mCallbacks = getTargetFragment() as? Callbacks
+        if (getTargetFragment() is Callbacks) {
+            mCallbacks = getTargetFragment() as Callbacks
+        }
     }
 
     /** {@inheritDoc} */
@@ -115,14 +121,14 @@ public class ActivityDialogFragment: DialogFragment() {
         val srcActivity = getArguments().getSerializable(ARG_SRC) as? UserActivity
         if (srcActivity != null) {
             srcActivity.name = mNameEdit!!.getText().toString()
-            mCallbacks?.onActivityNameEnterd(srcActivity)
+            mCallbacks.onActivityNameEnterd(srcActivity)
             return
         }
 
         val newActivity = newUserActivity {
             name = mNameEdit!!.getText().toString()
         }
-        mCallbacks?.onActivityNameEnterd(newActivity)
+        mCallbacks.onActivityNameEnterd(newActivity)
 
     }
 }
