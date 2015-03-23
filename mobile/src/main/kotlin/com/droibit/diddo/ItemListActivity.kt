@@ -57,7 +57,6 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
-
     /**
      * Callback method from {@link ItemListFragment.Callbacks}
      * indicating that the item with the given ID was selected.
