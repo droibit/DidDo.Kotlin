@@ -14,7 +14,7 @@ import com.activeandroid.annotation.Column
  * @since 15/03/07
  */
 Table(name = ActivityDate.TABLE)
-public class ActivityDate : Model(), Serializable {
+public data class ActivityDate : Model(), Serializable {
 
     companion object {
         val TABLE = "activity_detail"

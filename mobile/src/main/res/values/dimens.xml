@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="side_space">16dp</dimen>
+    <dimen name="side_long_spce">32dp</dimen>
     <dimen name="dialog_side_space">20dp</dimen>
-    <dimen name="header_height">48dp</dimen>
+    <dimen name="list_header_height">48dp</dimen>
     <dimen name="item_height">72dp</dimen>
     <dimen name="top_icon_size">40dp</dimen>
     <dimen name="floating_action_margin">16dp</dimen>
@@ -10,4 +11,6 @@
     <dimen name="text_size_xxlarge">24sp</dimen>
     <dimen name="text_size_xlarge">16sp</dimen>
     <dimen name="text_size_large">13sp</dimen>
+    <dimen name="content_margin">8dp</dimen>
+    <dimen name="content_header_height">184dp</dimen>
 </resources>

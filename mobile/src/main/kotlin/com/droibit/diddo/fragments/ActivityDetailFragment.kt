@@ -46,7 +46,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
          * 新しいインスタンスを作成する。
          */
         fun newInstance(activityId: Long): ActivityDetailFragment {
-           return fragment<ActivityDetailFragment>() { args ->
+           return fragment() { args ->
                 args.putLong(ARG_ITEM_ID, activityId)
             }
         }
@@ -102,8 +102,8 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
             true
         }
 
-        mActionButton.setOnClickListener {
-            showActivityMemoDialog()
+        mActionButton.setOnClickListener { v ->
+            showActivityMemoDialog(null)
         }
     }
 
@@ -135,7 +135,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     }
 
     // アクティビティのメモ編集用のダイアログを表示する。
-    private fun showActivityMemoDialog(srcActivityDate: ActivityDate? = null) {
+    private fun showActivityMemoDialog(srcActivityDate: ActivityDate?) {
         ActivityMemoDialogFragment.newInstance(srcActivityDate).show(this)
     }
 

@@ -20,7 +20,7 @@ import android.text.TextUtils
 public class ActivityDateAdapter(context: Context): ArrayAdapter<ActivityDate>(context, R.layout.list_item_detail, android.R.id.text1) {
 
     /** {@inheritDoc} */
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = if (convertView == null)
                         LayoutInflater.from(getContext()).inflate(R.layout.list_item_detail, parent, false) as ActivityDateView
                    else

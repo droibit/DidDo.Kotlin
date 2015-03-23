@@ -132,7 +132,7 @@ public class ActivityListFragment : Fragment(),
         registerForContextMenu(mListView)
 
         // アクションボタン押下で新規にアクティビティを作成する。
-        mActionButton.setOnClickListener {
+        mActionButton.setOnClickListener { v ->
             showNewActivityDialog()
         }
     }

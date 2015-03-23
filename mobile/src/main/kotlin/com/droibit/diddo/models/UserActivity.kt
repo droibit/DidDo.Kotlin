@@ -14,7 +14,7 @@ import java.util.Comparator
  * @since 15/03/07
  */
 Table(name = UserActivity.TABLE)
-public class UserActivity(): Model(), Serializable {
+public data class UserActivity(): Model(), Serializable {
 
     companion object {
         val TABLE = "activity";

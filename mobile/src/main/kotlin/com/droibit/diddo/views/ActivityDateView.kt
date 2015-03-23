@@ -3,6 +3,7 @@ package com.droibit.diddo.views
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.droibit.diddo.extension.bindView
 
@@ -12,7 +13,7 @@ import com.droibit.diddo.extension.bindView
  * @auther kumagai
  * @since 15/03/18
  */
-public class ActivityDateView(context: Context, attrs: AttributeSet): LinearLayout(context, attrs) {
+public class ActivityDateView(context: Context, attrs: AttributeSet): RelativeLayout(context, attrs) {
     val dateView: TextView by bindView(android.R.id.text1)
     val memoView: TextView by bindView(android.R.id.text2)
 }
