@@ -5,7 +5,7 @@
     <string name="action_calendar">Calendar</string>
     <string name="header_activity">Activity</string>
     <string name="empty_activity">No activity</string>
-    <string name="empty_memo" translatable="false">---</string>
+    <string name="empty_text" translatable="false">---</string>
     <string name="title_new_activity">New Activity</string>
     <string name="title_new_activity_date">New Activity Date</string>
     <string name="title_activity_modify">Modify Activity</string>
@@ -25,4 +25,7 @@
     <string name="toast_modify_activity_memo">modified the memo of activity date</string>
     <string name="toast_delete_activity">Deleted the activity</string>
     <string name="action_settings">Settings</string>
+    <string name="text_today">Today</string>
+    <string name="text_over" translatable="false">99+</string>
+    <string name="text_elapsed_format">%1$s days ago</string>
 </resources>

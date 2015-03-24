@@ -30,7 +30,8 @@ public class DummyContent {
         public val DETAIL_ITEMS: MutableList<ActivityDate> = arrayListOf(
                 dummyActivityDate(Date(1420038000000)),
                 dummyActivityDate(Date(1420124400000)),
-                dummyActivityDate(Date(1388502000000))
+                dummyActivityDate(Date(1388502000000)),
+                dummyActivityDate(Date(1389452400000))
         )
 
         /**

@@ -7,6 +7,8 @@ import com.melnykov.fab.FloatingActionButton
 import android.widget.ListView
 import android.view.View
 import android.os.Bundle
+import android.os.Handler
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.Menu
@@ -105,6 +107,8 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         mActionButton.setOnClickListener { v ->
             showActivityMemoDialog(null)
         }
+
+        updateElapsedViews()
     }
 
     /** {@inheritDoc} */
@@ -126,12 +130,17 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
             adapter.notifyDataSetChanged();
         }
 
-        val messageRes = if (activityDate.isNew)
-                            R.string.toast_create_activity_date
-                        else
-                            R.string.toast_modify_activity_memo
+        runOnUiThread {
+            val messageRes = if (activityDate.isNew)
+                R.string.toast_create_activity_date
+            else
+                R.string.toast_modify_activity_memo
 
-        showToast(getActivity(), messageRes, Toast.LENGTH_SHORT)
+            showToast(getActivity(), messageRes, Toast.LENGTH_SHORT)
+
+            // 日をまたいで活動日を追加した場合のために画面を更新する。
+            updateElapsedViews()
+        }
     }
 
     // アクティビティのメモ編集用のダイアログを表示する。
@@ -145,4 +154,21 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
             showToast(getActivity(), activityDate.memo!!, Toast.LENGTH_LONG)
         }
     }
+
+    private fun updateElapsedViews() {
+        if (mListView.getAdapter().isEmpty()) {
+            mElapsedDateText.setText(R.string.empty_text)
+            mDateText.setText(R.string.empty_text)
+            return
+        }
+
+        val recentlyActivityDate = (mListView.getAdapter() as ActivityDateAdapter).getLastItem()!!
+        mElapsedDateText.setText(recentlyActivityDate.getElapsedDateFromNow(getActivity()))
+        mDateText.setText(DateFormat.getDateFormat(getActivity()).format(recentlyActivityDate.date))
+
+    }
+}
+
+fun Fragment.runOnUiThread(action: ()->Unit) {
+    getActivity()?.runOnUiThread(action)
 }

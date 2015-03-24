@@ -36,7 +36,7 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginTop="2dp"
-                  tools:text="@string/empty_memo"
+                  tools:text="@string/empty_text"
                   android:textSize="@dimen/text_size_large"
                   android:singleLine="true"
                   android:fontFamily="sans-serif-light"/>

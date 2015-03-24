@@ -31,8 +31,18 @@ public class ActivityDateAdapter(context: Context): ArrayAdapter<ActivityDate>(c
         view.memoView.setText(if (!TextUtils.isEmpty(item.memo))
                                     item.memo
                               else
-                                    getContext().getString(R.string.empty_memo)
+                                    getContext().getString(R.string.empty_text)
                               )
         return view
+    }
+
+    /**
+     * 末尾の[ActivityDate]オブジェクトを取得する。
+     */
+    public fun getLastItem(): ActivityDate? {
+        return if (isEmpty())
+                    null
+               else
+                    getItem(getCount()-1)
     }
 }
