@@ -28,4 +28,6 @@
     <string name="text_today">Today</string>
     <string name="text_over" translatable="false">99+</string>
     <string name="text_elapsed_format">%1$s days ago</string>
+    <string name="transition_date" translatable="false">activity_date</string>
+    <string name="tag_list" translatable="false">list</string>
 </resources>

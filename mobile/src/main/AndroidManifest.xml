@@ -24,6 +24,7 @@
         <activity
             android:name=".ItemDetailActivity"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme.Detail"
             android:parentActivityName=".ItemListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

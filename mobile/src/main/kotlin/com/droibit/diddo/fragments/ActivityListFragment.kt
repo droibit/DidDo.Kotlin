@@ -5,6 +5,7 @@ import android.widget.AdapterView
 import android.widget.ListView
 import com.melnykov.fab.FloatingActionButton
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -23,12 +24,15 @@ import com.droibit.diddo.R
 import com.droibit.diddo.fragments.dialogs.ActivityDialogFragment
 import com.droibit.diddo.models.UserActivity
 import android.view.ContextMenu
+import com.droibit.diddo.ItemListActivity
 import com.droibit.diddo.fragments.dialogs.SortActivityDialogFragment
 import java.util.Comparator
 import com.droibit.easycreator
 import com.droibit.easycreator.showToast
 import com.droibit.easycreator.compat.show
 import com.droibit.diddo.extension.bindView
+import com.droibit.diddo.utils.PauseHandler
+import com.droibit.easycreator.sendMessage
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -58,9 +62,21 @@ public class ActivityListFragment : Fragment(),
          * nothing. Used only when this fragment is not attached to an activity.
          */
         private val sDummyCallbacks = object: Callbacks {
-            override fun onItemSelected(id: String) {
+            override fun onItemSelected(id: String, sharedView: View) {
             }
         }
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public trait Callbacks {
+        /**
+         * Callback for when an item has been selected.
+         */
+        public fun onItemSelected(id: String, sharedView: View)
     }
 
     /**
@@ -74,20 +90,9 @@ public class ActivityListFragment : Fragment(),
      */
     private var mActivatedPosition = INVALID_POSITION
 
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
-    public trait Callbacks {
-        /**
-         * Callback for when an item has been selected.
-         */
-        public fun onItemSelected(id: String)
-    }
-
     private val mListView: ListView by bindView(android.R.id.list)
     private val mActionButton: FloatingActionButton by bindView(diddo.R.id.fab)
+    private val mPauseHandler = PauseHandler()
 
     /** {@inheritDoc} */
     override fun onAttach(activity: Activity) {
@@ -117,24 +122,50 @@ public class ActivityListFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super<Fragment>.onViewCreated(view, savedInstanceState)
 
+        val adapter = ActivityAdapter(getActivity())
+        adapter.addAll(DummyContent.ITEMS)
+        mListView.setAdapter(adapter)
+        mListView.setOnItemClickListener { adapterView, view, position, l ->
+            mCallbacks.onItemSelected(position.toString(), view.findViewById(android.R.id.text2))
+        }
+        // 項目長押しでコンテキストメニューを表示する。
+        registerForContextMenu(mListView)
+
         // Restore the previously serialized activated item position.
         if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION))
         }
 
-        val adapter = ActivityAdapter(getActivity())
-        adapter.addAll(DummyContent.ITEMS)
-        mListView.setAdapter(adapter)
-        mListView.setOnItemClickListener { adapterView, view, position, l ->
-            mCallbacks.onItemSelected(position.toString())
-        }
-        // 項目長押しでコンテキストメニューを表示する。
-        registerForContextMenu(mListView)
-
         // アクションボタン押下で新規にアクティビティを作成する。
         mActionButton.setOnClickListener { v ->
             showNewActivityDialog()
         }
+    }
+
+    /** {@inheritDoc} */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode != ItemListActivity.REQUEST_ACTIVITY ||
+            resultCode  != Activity.RESULT_OK) {
+            return
+        }
+
+        mPauseHandler.sendMessage() { msg ->
+            msg.obj = Runnable { (mListView.getAdapter() as ActivityAdapter).notifyDataSetChanged() }
+        }
+    }
+
+    /** {@inheritDoc} */
+    override fun onResume() {
+        super<Fragment>.onResume()
+
+        mPauseHandler.resume()
+    }
+
+    /** {@inheritDoc} */
+    override fun onPause() {
+        super<Fragment>.onPause()
+
+        mPauseHandler.pause()
     }
 
     /** {@inheritDoc} */

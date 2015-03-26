@@ -58,7 +58,7 @@ public class SortActivityDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
         val position = getArguments().getInt(ARG_POSITION)
         return alertDialog(getActivity()) {
-                setSingleChoiceItems(R.array.sort_activity_labels, position) { (d, which) ->
+                setSingleChoiceItems(R.array.sort_activity_labels, position) { d, which ->
                     mCallbacks.onSortChoiced(which)
                     dismiss()
                 }

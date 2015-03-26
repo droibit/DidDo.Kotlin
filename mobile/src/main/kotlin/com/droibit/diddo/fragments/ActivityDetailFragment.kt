@@ -1,5 +1,7 @@
 package com.droibit.diddo.fragments
 
+import android.app.Activity
+import android.os.Build
 import android.support.v4.app.Fragment
 import com.droibit.diddo.models.dummy.DummyContent
 import android.widget.TextView
@@ -8,6 +10,7 @@ import android.widget.ListView
 import android.view.View
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.view.ViewCompat
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -23,11 +26,13 @@ import com.droibit.diddo.fragments.dialogs.ActivityMemoDialogFragment
 import com.droibit.diddo.models.ActivityDate
 import android.widget.Toast
 import android.view.ContextMenu
+import android.view.animation.AnimationUtils
 import com.droibit.diddo.models.UserActivity
 import com.droibit.easycreator.compat.fragment
 import com.droibit.easycreator.compat.show
 import com.droibit.easycreator.showToast
 import com.droibit.diddo.extension.bindView
+import com.droibit.diddo.utils.ViewAnimationUtils
 
 /**
  * A fragment representing a single Item detail screen.
@@ -35,7 +40,7 @@ import com.droibit.diddo.extension.bindView
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
-public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Callbacks {
+public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Callbacks, View.OnLayoutChangeListener {
 
     companion object {
         /**
@@ -75,19 +80,29 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
             // to load content from a content provider.
             mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID))
         }
-        setHasOptionsMenu(true)
         setRetainInstance(true)
+
+        // TODO: カレンダー表示は保留
+        //setHasOptionsMenu(true)
     }
 
     /** {@inheritDoc} */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.fragment_item_detail, container, false)
+
+        // Android5.0以上の場合はヘッダにリップルエフェクトを適用する。
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            rootView.addOnLayoutChangeListener(this)
+        }
         return rootView
     }
 
     /** {@inheritDoc} */
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super<Fragment>.onViewCreated(view, savedInstanceState)
+
+        // 日付テキストをアニメーション表示する。
+        ViewCompat.setTransitionName(mDateText, getString(R.string.transition_date))
 
         val adapter = ActivityDateAdapter(getActivity())
         adapter.addAll(DummyContent.DETAIL_ITEMS)
@@ -95,13 +110,12 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         mListView.setEmptyView(mEmptyView)
 
         mListView.setOnItemClickListener { adapterView, view, position, l ->
-            // クリックされたらメモの内容をトー鳥栖で表示する。
+            // クリックされたらメモの内容をトーストで表示する。
             showMemoToast(adapter.getItem(position))
         }
         mListView.setOnItemLongClickListener { adapterView, view, position, l ->
             // 長押しで編集用のダイアログを表示する。
             showActivityMemoDialog(adapter.getItem(position))
-            true
         }
 
         mActionButton.setOnClickListener { v ->
@@ -141,11 +155,22 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
             // 日をまたいで活動日を追加した場合のために画面を更新する。
             updateElapsedViews()
         }
+        // TODO: 削除した時も
+        getActivity()?.setResult(Activity.RESULT_OK)
+    }
+
+    override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+        v.removeOnLayoutChangeListener(this)
+
+        val header = v.findViewById(R.id.header)
+        ViewAnimationUtils.animationCircularReveal(header, getResources().getInteger(R.integer.medium_animation_millis).toLong())
+        ViewAnimationUtils.animationScaleUp(mActionButton, getResources().getInteger(R.integer.short_animation_millis).toLong())
     }
 
     // アクティビティのメモ編集用のダイアログを表示する。
-    private fun showActivityMemoDialog(srcActivityDate: ActivityDate?) {
+    private fun showActivityMemoDialog(srcActivityDate: ActivityDate?): Boolean {
         ActivityMemoDialogFragment.newInstance(srcActivityDate).show(this)
+        return true
     }
 
     // アクティビティのメモをトーストで表示する。
@@ -165,7 +190,6 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         val recentlyActivityDate = (mListView.getAdapter() as ActivityDateAdapter).getLastItem()!!
         mElapsedDateText.setText(recentlyActivityDate.getElapsedDateFromNow(getActivity()))
         mDateText.setText(DateFormat.getDateFormat(getActivity()).format(recentlyActivityDate.date))
-
     }
 }
 
