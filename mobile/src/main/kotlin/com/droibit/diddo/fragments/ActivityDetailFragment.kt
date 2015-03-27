@@ -32,7 +32,9 @@ import com.droibit.easycreator.compat.fragment
 import com.droibit.easycreator.compat.show
 import com.droibit.easycreator.showToast
 import com.droibit.diddo.extension.bindView
+import com.droibit.diddo.fragments.dialogs.CalendarDialogFragment
 import com.droibit.diddo.utils.ViewAnimationUtils
+import java.util.ArrayList
 
 /**
  * A fragment representing a single Item detail screen.
@@ -83,7 +85,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         setRetainInstance(true)
 
         // TODO: カレンダー表示は保留
-        //setHasOptionsMenu(true)
+        setHasOptionsMenu(true)
     }
 
     /** {@inheritDoc} */
@@ -132,6 +134,12 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
 
     /** {@inheritDoc} */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            R.id.action_calendar -> {
+                showActivityDateCalendar()
+                return true
+            }
+        }
         return super<Fragment>.onOptionsItemSelected(item)
     }
 
@@ -190,6 +198,15 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         val recentlyActivityDate = (mListView.getAdapter() as ActivityDateAdapter).getLastItem()!!
         mElapsedDateText.setText(recentlyActivityDate.getElapsedDateFromNow(getActivity()))
         mDateText.setText(DateFormat.getDateFormat(getActivity()).format(recentlyActivityDate.date))
+    }
+
+    private fun showActivityDateCalendar() {
+        if (mListView.getAdapter().isEmpty()) {
+            // TODO: トースト表示
+            return
+        }
+        val activityDate = DummyContent.DETAIL_ITEMS as ArrayList<ActivityDate>
+        CalendarDialogFragment.newInstance(activityDate).show(this)
     }
 }
 
