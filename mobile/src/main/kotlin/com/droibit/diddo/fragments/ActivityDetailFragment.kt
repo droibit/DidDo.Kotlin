@@ -18,7 +18,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.droibit.diddo.R
-import com.droibit.diddo.views.adapters.ActivityAdapter
+import com.droibit.diddo.views.adapters.UserActivityAdapter
 import android.widget.AdapterView
 import android.widget.Adapter
 import com.droibit.diddo.views.adapters.ActivityDateAdapter
@@ -154,9 +154,9 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
 
         runOnUiThread {
             val messageRes = if (activityDate.isNew)
-                R.string.toast_create_activity_date
-            else
-                R.string.toast_modify_activity_memo
+                                R.string.toast_create_activity_date
+                             else
+                                R.string.toast_modify_activity_memo
 
             showToast(getActivity(), messageRes, Toast.LENGTH_SHORT)
 
@@ -167,6 +167,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         getActivity()?.setResult(Activity.RESULT_OK)
     }
 
+    /** {@inheritDoc} */
     override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
         v.removeOnLayoutChangeListener(this)
 
@@ -202,7 +203,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
 
     private fun showActivityDateCalendar() {
         if (mListView.getAdapter().isEmpty()) {
-            // TODO: トースト表示
+            showToast(getActivity(), R.string.text_no_activity_date, Toast.LENGTH_SHORT)
             return
         }
         val activityDate = DummyContent.DETAIL_ITEMS as ArrayList<ActivityDate>

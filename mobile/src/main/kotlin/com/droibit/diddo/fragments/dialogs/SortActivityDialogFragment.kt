@@ -40,7 +40,7 @@ public class SortActivityDialogFragment : DialogFragment() {
      * ソートの種類が選択された時に呼ばれるコールバック
      */
     trait Callbacks {
-        fun onSortChoiced(sort: Int)
+        fun onSortChoiced(order: Int)
     }
 
     private var mCallbacks: Callbacks = sDummyCallbacks

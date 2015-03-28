@@ -24,10 +24,10 @@ import com.droibit.easycreator.intent
  * <p/>
  * The activity makes heavy use of fragments. The list of items is a
  * [ItemListFragment] and the item details
- * (if present) is a {@link ItemDetailFragment}.
+ * (if present) is a [ItemDetailFragment].
  * <p/>
  * This activity also implements the required
- * {@link ItemListFragment.Callbacks} interface
+ * [ItemListFragment.Callbacks] interface
  * to listen for item selections.
  */
 public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callbacks {

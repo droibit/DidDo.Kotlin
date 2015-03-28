@@ -25,4 +25,5 @@
     <string name="text_elapsed_format">%1$s日前</string>
     <string name="title_open_source">オープンソースライセンス</string>
     <string name="title_source_code">ソースコード</string>
+    <string name="text_no_activity_date">カレンダーに表示できる活動日がありません</string>
 </resources>

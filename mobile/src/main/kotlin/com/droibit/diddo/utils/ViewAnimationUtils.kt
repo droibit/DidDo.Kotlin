@@ -34,7 +34,7 @@ final class ViewAnimationUtils private() {
         }
 
         /**
-         * 0.0 ~ 1.0 のスケールアニメーションをする。
+         * 0.0 ~ 1.0 の倍率でスケールアニメーションする。
          */
         public fun animationScaleUp(view: View, durationMillis: Long) {
             view.setVisibility(View.VISIBLE)

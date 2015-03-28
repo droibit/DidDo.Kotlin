@@ -15,7 +15,7 @@ import com.droibit.diddo.extension.bindView
  */
 
 public class UserActivityView(context: Context, attrs: AttributeSet): RelativeLayout(context, attrs) {
-    val passedView: TextView by bindView(R.id.passed)
+    val elapsedView: TextView by bindView(R.id.passed)
     val nameView: TextView by bindView(android.R.id.text1)
     val dateView: TextView by bindView(android.R.id.text2)
 }

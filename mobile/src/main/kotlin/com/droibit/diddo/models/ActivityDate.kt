@@ -28,8 +28,6 @@ public data class ActivityDate : Model(), Serializable {
         val ACTIVITY = "activity"
         val DATE = "date"
         val MEMO = "memo"
-
-        val DAYS_LIMIT = 99L
     }
 
     /** 活動日 */
@@ -62,7 +60,7 @@ public data class ActivityDate : Model(), Serializable {
                     context.getString(R.string.text_today)
                } else {
                     // 100日超えたら+表示にする。
-                    if (count > DAYS_LIMIT) {
+                    if (count > UserActivity.DAYS_LIMIT) {
                         context.getString(R.string.text_elapsed_format, context.getString(R.string.text_over))
                     } else {
                         context.getString(R.string.text_elapsed_format, count.toString())

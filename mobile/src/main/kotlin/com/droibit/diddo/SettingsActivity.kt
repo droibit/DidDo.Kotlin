@@ -8,8 +8,7 @@ import android.preference.Preference
 import android.preference.PreferenceActivity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import com.droibit.diddo.extension.ViewById
-import com.droibit.diddo.extension.ViewByKey
+import com.droibit.diddo.extension.bindView
 import android.support.v7.widget.Toolbar
 import com.droibit.diddo.fragments.dialogs.LicenseDialogFragment
 
@@ -75,18 +74,3 @@ public class SettingsActivity : PreferenceActivity() {
     }
 }
 
-/**
- * [Preference] をViewInjectionするための拡張メソッド
- */
-public fun <T: Preference>PreferenceActivity.bindView(resId: Int): ViewByKey<T> = object: ViewByKey<T> {
-
-    private var pref: T? = null
-
-    [suppress("UNCHECKED_CAST")]
-    override fun get(thisRef: Any, prop: PropertyMetadata): T {
-        if (pref == null) {
-            pref = findPreference(getString(resId)) as T
-        }
-        return pref!!
-    }
-}

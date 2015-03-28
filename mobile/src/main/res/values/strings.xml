@@ -42,4 +42,7 @@
     <string name="url_twitter" translatable="false">https://twitter.com/droibit</string>
     <string name="url_github" translatable="false">https://github.com/droibit/diddo.kotlin</string>
     <string name="version_format">Ver %1$s</string>
+    <string name="text_no_activity_date">No activity date to be displayed in the calendar</string>
+    <string name="text_elapsed_zero" translatable="false">0</string>
+    <string name="text_elapsed_format_short" translatable="false">+%1$s</string>
 </resources>
