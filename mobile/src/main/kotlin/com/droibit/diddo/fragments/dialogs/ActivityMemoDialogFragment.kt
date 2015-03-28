@@ -16,6 +16,7 @@ import android.text.TextUtils
 import com.droibit.diddo.models.newActivityDate
 import java.util.Date
 import com.droibit.easycreator.alertDialog
+import com.droibit.easycreator.compat.fragment
 
 /**
  * アクティビティの活動日の作成及び編集をするためのダイアログ
@@ -23,41 +24,45 @@ import com.droibit.easycreator.alertDialog
  * @auther kumagai
  * @since 15/03/15
  */
-public class ActivityDateDialogFragment: DialogFragment() {
-    class object {
-        private val TAG = javaClass<ActivityDateDialogFragment>().getSimpleName()
-        private val ARG_SRC = "src"
+public class ActivityMemoDialogFragment : DialogFragment() {
 
-        /**
-         * アクティビティ名が入力された時に呼ばれるコールバック
-         */
-        trait Callbacks {
-            fun onActivityDateEnterd(activityDate: ActivityDate)
+    companion object {
+        private val TAG = javaClass<ActivityMemoDialogFragment>().getSimpleName()
+        private val ARG_SRC = "src"
+        private val sDummyCallbacks = object: Callbacks {
+            override fun onActivityDateEnterd(activityDate: ActivityDate) {
+            }
         }
 
         /**
          * 新しいインスタンスを作成する
          */
-        fun newInstance(activityDate: ActivityDate?): ActivityDateDialogFragment {
-            val args = Bundle(1)
-            if (activityDate != null) {
-                args.putSerializable(ARG_SRC, activityDate)
+        fun newInstance(activityDate: ActivityDate?): ActivityMemoDialogFragment {
+            return fragment { args ->
+                if (activityDate != null) {
+                    args.putSerializable(ARG_SRC, activityDate)
+                }
             }
-
-            val f = ActivityDateDialogFragment()
-            f.setArguments(args)
-            return f
         }
     }
 
+    /**
+     * アクティビティ名が入力された時に呼ばれるコールバック
+     */
+    trait Callbacks {
+        fun onActivityDateEnterd(activityDate: ActivityDate)
+    }
+
     private var mMemoEdit: EditText? = null
-    private var mCallbacks: Callbacks? = null
+    private var mCallbacks: Callbacks = sDummyCallbacks
 
     /** {@inheritDoc} */
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
 
-        mCallbacks = getTargetFragment() as? Callbacks
+        if (getTargetFragment() is Callbacks) {
+            mCallbacks = getTargetFragment() as Callbacks
+        }
     }
 
     /** {@inheritDoc} */
@@ -76,7 +81,7 @@ public class ActivityDateDialogFragment: DialogFragment() {
         val dialog = alertDialog(getActivity()) {
                 setTitle(titleRes)
                 setView(view)
-                setPositiveButton(positiveRes) { (dialog, whitch) -> onDialogOk() }
+                setPositiveButton(positiveRes) { dialog, whitch -> onDialogOk() }
                 setNegativeButton(android.R.string.cancel, null)
         }
         // ダイアログを表示した際にキーボード表示する。
@@ -88,7 +93,7 @@ public class ActivityDateDialogFragment: DialogFragment() {
         val srcActivityDate = getArguments().getSerializable(ARG_SRC) as? ActivityDate
         if (srcActivityDate != null) {
             srcActivityDate.memo = mMemoEdit!!.getText().toString()
-            mCallbacks?.onActivityDateEnterd(srcActivityDate)
+            mCallbacks.onActivityDateEnterd(srcActivityDate)
             return
         }
 
@@ -96,6 +101,6 @@ public class ActivityDateDialogFragment: DialogFragment() {
             memo = mMemoEdit!!.getText().toString()
             date = Date()
         }
-        mCallbacks?.onActivityDateEnterd(newActivityDate)
+        mCallbacks.onActivityDateEnterd(newActivityDate)
     }
 }

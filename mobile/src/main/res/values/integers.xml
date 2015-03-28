@@ -2,4 +2,6 @@
 <resources>
     <integer name="max_acitivity_length">20</integer>
     <integer name="database_version">1</integer>
+    <integer name="medium_animation_millis">750</integer>
+    <integer name="short_animation_millis">300</integer>
 </resources>

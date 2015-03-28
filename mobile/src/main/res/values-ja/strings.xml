@@ -21,4 +21,9 @@
     <string name="toast_modify_activity_memo">活動日のメモを編集しました</string>
     <string name="toast_delete_activity">アクティビティを削除しました</string>
     <string name="action_settings">設定</string>
+    <string name="text_today">今日</string>
+    <string name="text_elapsed_format">%1$s日前</string>
+    <string name="title_open_source">オープンソースライセンス</string>
+    <string name="title_source_code">ソースコード</string>
+    <string name="text_no_activity_date">カレンダーに表示できる活動日がありません</string>
 </resources>

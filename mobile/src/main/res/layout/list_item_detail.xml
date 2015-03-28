@@ -1,28 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="@dimen/item_height"
-              android:orientation="vertical"
-              android:gravity="center_vertical"
-              android:paddingLeft="@dimen/side_space"
-              android:paddingRight="@dimen/side_space"
-              android:minHeight="?android:attr/listPreferredItemHeightSmall">
+<com.droibit.diddo.views.ActivityDateView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height"
+    android:paddingLeft="@dimen/side_space"
+    android:paddingRight="@dimen/side_space"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall">
 
-    <TextView android:id="@android:id/text2"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/dummy_date"
-              android:textSize="@dimen/text_size_xlarge"
-              android:singleLine="true"
-              android:ellipsize="end" />
+    <ImageView android:id="@+id/check"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentLeft="true"
+               android:layout_alignParentStart="true"
+               android:layout_marginRight="@dimen/side_long_spce"
+               android:layout_centerVertical="true"
+               android:background="@drawable/ic_check" />
 
-    <TextView android:id="@android:id/text1"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="2dp"
-              android:text="@string/empty_memo"
-              android:textSize="@dimen/text_size_large"
-              android:ellipsize="end"
-              android:singleLine="true"
-              android:fontFamily="sans-serif-light"/>
-</LinearLayout>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:layout_centerVertical="true"
+                  android:layout_toRightOf="@id/check"
+                  android:gravity="center_vertical">
+
+        <TextView android:id="@android:id/text1"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  tools:text="@string/dummy_date"
+                  android:textSize="@dimen/text_size_xlarge"
+                  android:singleLine="true"
+                  android:ellipsize="end" />
+
+        <TextView android:id="@android:id/text2"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="2dp"
+                  tools:text="@string/empty_text"
+                  android:textSize="@dimen/text_size_large"
+                  android:singleLine="true"
+                  android:fontFamily="sans-serif-light"/>
+    </LinearLayout>
+
+</com.droibit.diddo.views.ActivityDateView >

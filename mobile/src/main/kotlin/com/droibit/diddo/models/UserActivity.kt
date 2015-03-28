@@ -1,11 +1,14 @@
 package com.droibit.diddo.models
 
+import android.content.Context
 import com.activeandroid.Model
 import com.activeandroid.annotation.Column
 import com.activeandroid.annotation.Table
+import com.droibit.diddo.R
 import java.util.Date
 import java.io.Serializable
 import java.util.Comparator
+import java.util.concurrent.TimeUnit
 
 /**
  * ユーザ定義の活動情報を格納するクラス
@@ -14,9 +17,9 @@ import java.util.Comparator
  * @since 15/03/07
  */
 Table(name = UserActivity.TABLE)
-public class UserActivity(): Model(), Serializable {
+public data class UserActivity(): Model(), Serializable {
 
-    class object {
+    companion object {
         val TABLE = "activity";
         val NAME = "name";
         val RECENTLY_DATE = "recently_date";
@@ -24,6 +27,7 @@ public class UserActivity(): Model(), Serializable {
         val SORT_NAME = 0
         val SORT_ACTIVITY_DATE = 1
 
+        val DAYS_LIMIT = 99L
 
         /**
          * アクティビティ名でソートする
@@ -57,6 +61,9 @@ public class UserActivity(): Model(), Serializable {
     /** 最新の活動日 */
     Column(name = RECENTLY_DATE)
     public var recentlyDate: Date = Date()
+    /** 最新の活動日をミリ秒で取得する */
+    public val recentlyDateMillis: Long
+    get() = recentlyDate.getTime()
 
     /** 新規作成されたアクティビティかどうか */
     public val isNew: Boolean
@@ -64,7 +71,26 @@ public class UserActivity(): Model(), Serializable {
 
     /** 活動の詳細情報を取得する */
     public val details: List<ActivityDate>
-    get() = getMany(javaClass<ActivityDate>(), ActivityDate.ACTIVITY)
+        get() = getMany(javaClass<ActivityDate>(), ActivityDate.ACTIVITY)
+
+    /**
+     * 現在から活動日までの経過日を取得する
+     */
+    public fun getElapsedDateFromNow(context: Context): String {
+        val duration = System.currentTimeMillis() - recentlyDate.getTime()
+        val count = duration / TimeUnit.DAYS.toMillis(1)
+
+        return if (count == 0L) {
+            context.getString(R.string.text_elapsed_zero)
+        } else {
+            // 100日超えたら+表示にする。
+            if (count > DAYS_LIMIT) {
+                context.getString(R.string.text_over)
+            } else {
+                context.getString(R.string.text_elapsed_format_short, count.toString())
+            }
+        }
+    }
 
     /** {@inheritDoc} */
     override fun toString(): String {
@@ -84,9 +110,9 @@ public fun newUserActivity(init: UserActivity.() -> Unit): UserActivity {
 /**
  * ダミー用の[ActivityDate]インスタンスを作成する。
  */
-public fun dummyActivity(name: String): UserActivity {
+public fun dummyActivity(name: String, date: Date = Date()): UserActivity {
     return newUserActivity {
         this.name = name
-        this.recentlyDate = Date()
+        this.recentlyDate = date
     }
 }

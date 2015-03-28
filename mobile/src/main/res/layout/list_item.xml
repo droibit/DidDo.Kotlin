@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.droibit.diddo.views.UserActivityView
+              xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="@dimen/item_height"
               android:paddingLeft="@dimen/side_space"
@@ -7,12 +8,14 @@
               android:background="?android:attr/activatedBackgroundIndicator"
               android:minHeight="?android:attr/listPreferredItemHeightSmall">
 
-    <TextView android:id="@+id/elapsed"
+    <TextView android:id="@+id/passed"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_centerVertical="true"
               android:layout_alignParentLeft="true"
+              android:layout_alignParentStart="true"
               android:layout_marginRight="@dimen/side_space"
+              android:layout_marginEnd="@dimen/side_space"
               android:gravity="center"
               android:background="@drawable/circle_background"
               android:text="50d"
@@ -24,7 +27,7 @@
                   android:layout_height="match_parent"
                   android:orientation="vertical"
                   android:layout_centerVertical="true"
-                  android:layout_toRightOf="@id/elapsed"
+                  android:layout_toRightOf="@id/passed"
                   android:gravity="center_vertical">
 
         <TextView android:id="@android:id/text1"
@@ -39,10 +42,11 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginTop="2dp"
+                  android:transitionName="@string/transition_date"
                   android:text="@string/dummy_date"
                   android:textSize="@dimen/text_size_large"
                   android:singleLine="true"
                   android:fontFamily="sans-serif-light"/>
     </LinearLayout>
 
-</RelativeLayout>
+</com.droibit.diddo.views.UserActivityView>

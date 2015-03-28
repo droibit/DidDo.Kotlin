@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import com.droibit.diddo.fragments.ActivityDetailFragment
-import com.droibit.easycreator.activity.compat.navigateUpTo
+import com.droibit.easycreator.compat.navigateUpTo
 
 
 /**

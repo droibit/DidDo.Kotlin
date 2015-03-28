@@ -10,8 +10,9 @@
         <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
 
         <item name="windowActionBar">false</item>
+    </style>
 
-        <!--<item name="android:alertDialogTheme">@style/AppTheme.Dialog</item>-->
+    <style name="AppTheme.Detail" parent="@style/AppTheme">
     </style>
 
     <style name="AppTheme.Settings" parent="@style/AppTheme">
