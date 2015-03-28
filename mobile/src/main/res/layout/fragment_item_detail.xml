@@ -18,7 +18,7 @@
         <TextView android:id="@+id/elapsed_date"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:text="@string/app_name"
+                  tools:text="@string/app_name"
                   android:textColor="@color/accent"
                   android:textSize="@dimen/text_size_xxxxlarge" />
 
@@ -27,13 +27,13 @@
                   android:layout_height="wrap_content"
                   android:layout_marginTop="8dp"
                   android:transitionName="@string/transition_date"
-                  android:text="@string/app_name"
+                  tools:text="@string/app_name"
                   android:textSize="@dimen/text_size_xlarge"
                   android:fontFamily="sans-serif-light"/>
     </LinearLayout>
 
     <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fab_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_activity"
@@ -43,7 +43,23 @@
         android:layout_marginRight="@dimen/floating_action_margin"
         android:layout_marginEnd="@dimen/floating_action_margin"
         android:layout_marginBottom="-27dp"
-        app:fab_shadow="false"
+        app:fab_shadow="true"
+        app:fab_colorNormal="@color/primary"
+        app:fab_colorPressed="@color/primary_pressed"
+        app:fab_colorRipple="@color/primary_100" />
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_calendar"
+        android:layout_toLeftOf="@id/fab_add"
+        android:layout_alignBottom="@id/header"
+        android:layout_marginRight="@dimen/floating_action_margin"
+        android:layout_marginEnd="@dimen/floating_action_margin"
+        android:layout_marginBottom="-20dp"
+        app:fab_type="mini"
+        app:fab_shadow="true"
         app:fab_colorNormal="@color/primary"
         app:fab_colorPressed="@color/primary_pressed"
         app:fab_colorRipple="@color/primary_100" />

@@ -68,7 +68,8 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
 
     private val mElapsedDateText: TextView by bindView(R.id.elapsed_date)
     private val mDateText: TextView by bindView(R.id.date)
-    private val mActionButton: FloatingActionButton by bindView(R.id.fab)
+    private val mAddActionButton: FloatingActionButton by bindView(R.id.fab_add)
+    private val mCalendarActionButton: FloatingActionButton by bindView(R.id.fab_calendar)
     private val mListView: ListView by bindView(android.R.id.list)
     private val mEmptyView: View by bindView(android.R.id.empty)
 
@@ -120,27 +121,10 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
             showActivityMemoDialog(adapter.getItem(position))
         }
 
-        mActionButton.setOnClickListener { v ->
-            showActivityMemoDialog(null)
-        }
+        mAddActionButton.setOnClickListener { showActivityMemoDialog(null) }
+        mCalendarActionButton.setOnClickListener { showActivityDateCalendar() }
 
         updateElapsedViews()
-    }
-
-    /** {@inheritDoc} */
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.detail, menu)
-    }
-
-    /** {@inheritDoc} */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
-            R.id.action_calendar -> {
-                showActivityDateCalendar()
-                return true
-            }
-        }
-        return super<Fragment>.onOptionsItemSelected(item)
     }
 
     /** {@inheritDoc} */
@@ -171,9 +155,11 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
         v.removeOnLayoutChangeListener(this)
 
+        val res = getResources()
         val header = v.findViewById(R.id.header)
-        ViewAnimationUtils.animationCircularReveal(header, getResources().getInteger(R.integer.medium_animation_millis).toLong())
-        ViewAnimationUtils.animationScaleUp(mActionButton, getResources().getInteger(R.integer.short_animation_millis).toLong())
+        ViewAnimationUtils.animationCircularReveal(header, res.getInteger(R.integer.medium_animation_millis).toLong())
+        ViewAnimationUtils.animationScaleUp(mAddActionButton, res.getInteger(R.integer.short_animation_millis).toLong())
+        ViewAnimationUtils.animationScaleUp(mCalendarActionButton, res.getInteger(R.integer.short_animation_millis).toLong())
     }
 
     // アクティビティのメモ編集用のダイアログを表示する。

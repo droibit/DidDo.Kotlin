@@ -47,7 +47,8 @@ public class CalendarDialogFragment: DialogFragment() {
         activityDates = activityDates.sortBy { it.date }
 
         // 活動日をハイライト表示する。
-        calendar.init(activityDates.first().date, Date(System.currentTimeMillis()))
+        val now = Date(System.currentTimeMillis())
+        calendar.init(activityDates.first().date, now)
                 .withHighlightedDates(activityDates.map { it.date })
 
         // 選択されたセルが活動日の場合はトーストでメモを表示する。
