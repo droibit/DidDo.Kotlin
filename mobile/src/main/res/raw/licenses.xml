@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<notices>
+    <notice>
+        <name>FloatingActionButton</name>
+        <url>https://github.com/makovkastar/FloatingActionButton</url>
+        <copyright>Copyright (c) 2014 Oleksandr Melnykov</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>TimesSquare for Android</name>
+        <url>https://github.com/square/android-times-square</url>
+        <copyright>Copyright 2012 Square, Inc</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>LicensesDialog</name>
+        <url>https://github.com/square/android-times-square</url>
+        <copyright>Copyright 2013 Philip Schiffer</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+</notices>

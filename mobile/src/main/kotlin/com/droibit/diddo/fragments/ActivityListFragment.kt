@@ -25,6 +25,7 @@ import com.droibit.diddo.fragments.dialogs.ActivityDialogFragment
 import com.droibit.diddo.models.UserActivity
 import android.view.ContextMenu
 import com.droibit.diddo.ItemListActivity
+import com.droibit.diddo.SettingsActivity
 import com.droibit.diddo.fragments.dialogs.SortActivityDialogFragment
 import java.util.Comparator
 import com.droibit.easycreator
@@ -33,6 +34,7 @@ import com.droibit.easycreator.compat.show
 import com.droibit.diddo.extension.bindView
 import com.droibit.diddo.utils.PauseHandler
 import com.droibit.easycreator.sendMessage
+import com.droibit.easycreator.startActivity
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -184,13 +186,8 @@ public class ActivityListFragment : Fragment(),
     /** {@inheritDoc} */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.getItemId()) {
-            R.id.action_sort -> {
-                showSortDialog()
-                return true
-            }
-            R.id.action_settings -> {
-                return true
-            }
+            R.id.action_sort -> showSortDialog()
+            R.id.action_settings -> showSettings()
         }
         return super<Fragment>.onOptionsItemSelected(item)
     }
@@ -287,8 +284,14 @@ public class ActivityListFragment : Fragment(),
         showToast(getActivity(), R.string.toast_delete_activity, Toast.LENGTH_SHORT)
     }
 
-    private fun showSortDialog() {
+    private fun showSortDialog(): Boolean {
         // TODO: ソート順の保存
         SortActivityDialogFragment.newInstance(0).show(this)
+        return true
+    }
+
+    private fun showSettings(): Boolean {
+        getActivity().startActivity<SettingsActivity>()
+        return true
     }
 }

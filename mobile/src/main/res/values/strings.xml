@@ -30,4 +30,16 @@
     <string name="text_elapsed_format">%1$s days ago</string>
     <string name="transition_date" translatable="false">activity_date</string>
     <string name="tag_list" translatable="false">list</string>
+    <string name="title_developer" translatable="false">Developer</string>
+    <string name="summary_developer" translatable="false">itadakit@droibit</string>
+    <string name="title_open_source">Open Source License</string>
+    <string name="key_developer" translatable="false">developer</string>
+    <string name="key_app" translatable="false">app</string>
+    <string name="key_open_source" translatable="false">open_source</string>
+    <string name="category_app" translatable="false">App</string>
+    <string name="key_source_code" translatable="false">source_code</string>
+    <string name="title_source_code">Source Code</string>
+    <string name="url_twitter" translatable="false">https://twitter.com/droibit</string>
+    <string name="url_github" translatable="false">https://github.com/droibit/diddo.kotlin</string>
+    <string name="version_format">Ver %1$s</string>
 </resources>

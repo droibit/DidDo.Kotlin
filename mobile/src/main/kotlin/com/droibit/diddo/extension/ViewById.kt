@@ -11,6 +11,13 @@ public trait ViewById<T> {
 }
 
 /**
+ * ViewInjectionするためのインターフェース
+ */
+public trait ViewByKey<T> {
+    fun get(thisRef: Any, prop: PropertyMetadata): T
+}
+
+/**
  * [Fragment]クラスでViewInjectionするための拡張メソッド
  */
 public fun <T : View>Fragment.bindView(resId: Int): ViewById<T> = object: ViewById<T> {
@@ -20,7 +27,7 @@ public fun <T : View>Fragment.bindView(resId: Int): ViewById<T> = object: ViewBy
     [suppress("UNCHECKED_CAST")]
     override fun get(thisRef: Any, prop: PropertyMetadata): T {
         if (view == null) {
-            view = getView().findViewById(resId) as? T
+            view = getView().findViewById(resId) as T
         }
         return view!!
     }
@@ -36,7 +43,7 @@ public fun <T : View>View.bindView(resId: Int): ViewById<T> = object: ViewById<T
     [suppress("UNCHECKED_CAST")]
     override fun get(thisRef: Any, prop: PropertyMetadata): T {
         if (view == null) {
-            view = findViewById(resId) as? T
+            view = findViewById(resId) as T
         }
         return view!!
     }

@@ -23,4 +23,6 @@
     <string name="action_settings">設定</string>
     <string name="text_today">今日</string>
     <string name="text_elapsed_format">%1$s日前</string>
+    <string name="title_open_source">オープンソースライセンス</string>
+    <string name="title_source_code">ソースコード</string>
 </resources>
