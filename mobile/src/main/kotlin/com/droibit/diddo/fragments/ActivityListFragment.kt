@@ -18,7 +18,7 @@ import com.droibit.diddo
 import android.widget.ArrayAdapter
 import android.widget.AbsListView
 import com.droibit.diddo.models.dummy.DummyContent
-import com.droibit.diddo.views.adapters.ActivityAdapter
+import com.droibit.diddo.views.adapters.UserActivityAdapter
 import android.widget.Toast
 import com.droibit.diddo.R
 import com.droibit.diddo.fragments.dialogs.ActivityDialogFragment
@@ -33,6 +33,7 @@ import com.droibit.easycreator.showToast
 import com.droibit.easycreator.compat.show
 import com.droibit.diddo.extension.bindView
 import com.droibit.diddo.utils.PauseHandler
+import com.droibit.diddo.utils.SettingsUtils
 import com.droibit.easycreator.sendMessage
 import com.droibit.easycreator.startActivity
 
@@ -124,7 +125,7 @@ public class ActivityListFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super<Fragment>.onViewCreated(view, savedInstanceState)
 
-        val adapter = ActivityAdapter(getActivity())
+        val adapter = UserActivityAdapter(getActivity())
         adapter.addAll(DummyContent.ITEMS)
         mListView.setAdapter(adapter)
         mListView.setOnItemClickListener { adapterView, view, position, l ->
@@ -145,6 +146,16 @@ public class ActivityListFragment : Fragment(),
     }
 
     /** {@inheritDoc} */
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super<Fragment>.onActivityCreated(savedInstanceState)
+
+        // アクティビティが存在する場合は以前の並び順で表示する。
+        if (!mListView.getAdapter().isEmpty()) {
+            sortActivity(SettingsUtils.getOrder(getActivity()))
+        }
+    }
+
+    /** {@inheritDoc} */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode != ItemListActivity.REQUEST_ACTIVITY ||
             resultCode  != Activity.RESULT_OK) {
@@ -152,7 +163,7 @@ public class ActivityListFragment : Fragment(),
         }
 
         mPauseHandler.sendMessage() { msg ->
-            msg.obj = Runnable { (mListView.getAdapter() as ActivityAdapter).notifyDataSetChanged() }
+            msg.obj = Runnable { (mListView.getAdapter() as UserActivityAdapter).notifyDataSetChanged() }
         }
     }
 
@@ -179,9 +190,7 @@ public class ActivityListFragment : Fragment(),
     }
 
     /** {@inheritDoc} */
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(diddo.R.menu.list, menu)
-    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = inflater.inflate(diddo.R.menu.list, menu)
 
     /** {@inheritDoc} */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -189,7 +198,7 @@ public class ActivityListFragment : Fragment(),
             R.id.action_sort -> showSortDialog()
             R.id.action_settings -> showSettings()
         }
-        return super<Fragment>.onOptionsItemSelected(item)
+        return true
     }
 
     /** {@inheritDoc} */
@@ -203,7 +212,7 @@ public class ActivityListFragment : Fragment(),
     /** {@inheritDoc} */
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val menuInfo = item.getMenuInfo() as AdapterView.AdapterContextMenuInfo
-        val activity = (mListView.getAdapter() as ActivityAdapter).getItem(menuInfo.position)
+        val activity = (mListView.getAdapter() as UserActivityAdapter).getItem(menuInfo.position)
         when (item.getItemId()) {
             CONTEXT_MENU_MODIFY_ACTIVITY -> showModifyActivityDialog(activity)
             CONTEXT_MENU_DELETE_ACTIVITY -> deleteActivity(activity)
@@ -222,7 +231,7 @@ public class ActivityListFragment : Fragment(),
 
     /** {@inheritDoc} */
     override fun onActivityNameEnterd(activity: UserActivity) {
-        val adapter = mListView.getAdapter() as ActivityAdapter
+        val adapter = mListView.getAdapter() as UserActivityAdapter
         if (activity.isNew) {
             adapter.add(activity)
         } else {
@@ -238,9 +247,10 @@ public class ActivityListFragment : Fragment(),
     }
 
     /** {@inheritDoc} */
-    override fun onSortChoiced(sort: Int) {
-        val adapter = mListView.getAdapter() as ActivityAdapter
-        adapter.sort(UserActivity.getComparator(sort))
+    override fun onSortChoiced(order: Int) {
+        sortActivity(order)
+        // 並び順を復元できるように保存しておく
+        SettingsUtils.setOrder(getActivity(), order)
     }
 
     /**
@@ -266,32 +276,29 @@ public class ActivityListFragment : Fragment(),
     }
 
     // アクティビティを作成する為のダイアログを表示する。
-    private fun showNewActivityDialog() {
-        ActivityDialogFragment.newInstance(null).show(this)
-    }
+    private fun showNewActivityDialog() = ActivityDialogFragment.newInstance(null).show(this)
 
     // アクティビティ名を修正するためのダイアログを表示する。
-    private fun showModifyActivityDialog(activity: UserActivity) {
-        ActivityDialogFragment.newInstance(activity).show(this)
-    }
+    private fun showModifyActivityDialog(activity: UserActivity) = ActivityDialogFragment.newInstance(activity).show(this)
 
     // 選択されたアクティビティを削除する。
     private fun deleteActivity(activity: UserActivity) {
-        (mListView.getAdapter() as ActivityAdapter).remove(activity)
+        (mListView.getAdapter() as UserActivityAdapter).remove(activity)
 
         // TODO: DBからも削除
 
         showToast(getActivity(), R.string.toast_delete_activity, Toast.LENGTH_SHORT)
     }
 
-    private fun showSortDialog(): Boolean {
-        // TODO: ソート順の保存
-        SortActivityDialogFragment.newInstance(0).show(this)
-        return true
-    }
+    // アクティビティのソート用ダイアログを表示する。
+    private fun showSortDialog() = SortActivityDialogFragment.newInstance(SettingsUtils.getOrder(getActivity())).show(this)
 
-    private fun showSettings(): Boolean {
-        getActivity().startActivity<SettingsActivity>()
-        return true
+    // 設定画面を表示する
+    private fun showSettings() = getActivity().startActivity<SettingsActivity>()
+
+    // アクティビティリストをソートする。
+    private fun sortActivity(order: Int) {
+        val adapter = mListView.getAdapter() as UserActivityAdapter
+        adapter.sort(UserActivity.getComparator(order))
     }
 }
