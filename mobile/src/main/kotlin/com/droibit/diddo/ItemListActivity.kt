@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import com.droibit.diddo.fragments.ActivityListFragment
 import com.droibit.diddo.fragments.ActivityDetailFragment
+import com.droibit.diddo.models.UserActivity
 import com.droibit.easycreator.compat.makeSceneTransitionAnimation
 import com.droibit.easycreator.compat.startActivityForResultCompat
 import com.droibit.easycreator.intent
@@ -79,23 +80,24 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
      * Callback method from [ItemListFragment.Callbacks]
      * indicating that the item with the given ID was selected.
      */
-    override fun onItemSelected(id: String, sharedView: View) {
+    override fun onItemSelected(activity: UserActivity, sharedView: View) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            val arguments = Bundle()
-            arguments.putString(ActivityDetailFragment.ARG_ITEM_ID, id)
-            val fragment = ActivityDetailFragment()
-            fragment.setArguments(arguments)
-            getSupportFragmentManager().beginTransaction()
+            val fragment = ActivityDetailFragment.newInstance(activity.getId())
+            getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit()
             return
         }
 
         startActivityForResultCompat(
-                intent = intent<ItemDetailActivity>(this) { putExtra(ActivityDetailFragment.ARG_ITEM_ID, id) },
+                intent = intent<ItemDetailActivity>(this) {
+                            putExtra(ActivityDetailFragment.ARG_ITEM_ID, activity.getId())
+                            putExtra(ActivityDetailFragment.ARG_ITEM_TITLE, activity.name)
+                         },
                 requestCode = REQUEST_ACTIVITY,
                 options = makeSceneTransitionAnimation(sharedView, getString(R.string.transition_date))
         )
