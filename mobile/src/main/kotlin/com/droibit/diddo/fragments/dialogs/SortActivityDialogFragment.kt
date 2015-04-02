@@ -22,7 +22,7 @@ public class SortActivityDialogFragment : DialogFragment() {
         private val TAG = javaClass<SortActivityDialogFragment>().getSimpleName()
         private val ARG_POSITION = "position"
         private val sDummyCallbacks = object: Callbacks {
-            override fun onSortChoiced(sort: Int) {
+            override fun onSortChoiced(order: Int) {
             }
         }
 

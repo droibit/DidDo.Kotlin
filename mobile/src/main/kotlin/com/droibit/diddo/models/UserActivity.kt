@@ -4,6 +4,7 @@ import android.content.Context
 import com.activeandroid.Model
 import com.activeandroid.annotation.Column
 import com.activeandroid.annotation.Table
+import com.activeandroid.query.Select
 import com.droibit.diddo.R
 import java.util.Date
 import java.io.Serializable
@@ -61,16 +62,13 @@ public data class UserActivity(): Model(), Serializable {
     /** 最新の活動日 */
     Column(name = RECENTLY_DATE)
     public var recentlyDate: Date = Date()
-    /** 最新の活動日をミリ秒で取得する */
-    public val recentlyDateMillis: Long
-    get() = recentlyDate.getTime()
 
     /** 新規作成されたアクティビティかどうか */
     public val isNew: Boolean
         get() = getId() == null
 
     /** 活動の詳細情報を取得する */
-    public val details: List<ActivityDate>
+    public val details: MutableList<ActivityDate>
         get() = getMany(javaClass<ActivityDate>(), ActivityDate.ACTIVITY)
 
     /**
@@ -116,3 +114,8 @@ public fun dummyActivity(name: String, date: Date = Date()): UserActivity {
         this.recentlyDate = date
     }
 }
+
+/**
+ * アクティビティのリストを取得する。
+ */
+public fun loadUserActivities(): MutableList<UserActivity> = Select().from(javaClass<UserActivity>()).execute()
