@@ -71,13 +71,11 @@ public class ActivityMemoDialogFragment : DialogFragment() {
 
         mMemoEdit = view.findViewById(R.id.edit_memo) as EditText
 
-        val containsSrc = getArguments().containsKey(ARG_SRC)
-        if (containsSrc) {
-            mMemoEdit!!.setText(getArguments().getString(ARG_SRC))
-        }
+        val srcActivityDate = getArguments().getSerializable(ARG_SRC) as? ActivityDate
+        mMemoEdit!!.setText(srcActivityDate?.memo)
 
-        val titleRes = if (containsSrc) R.string.title_modify_activity_memo else R.string.title_new_activity_date
-        val positiveRes = if (containsSrc) R.string.button_modify else R.string.button_create
+        val titleRes = if (srcActivityDate != null) R.string.title_modify_activity_memo else R.string.title_new_activity_date
+        val positiveRes = if (srcActivityDate != null) R.string.button_modify else R.string.button_create
         val dialog = alertDialog(getActivity()) {
                 setTitle(titleRes)
                 setView(view)

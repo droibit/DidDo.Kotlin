@@ -7,4 +7,6 @@
     <color name="primary_100">#C5CAE9</color>
     <color name="darker_gray">#CFD8DC</color>
 
+    <color name="circle_background">@color/accent</color>
+
 </resources>

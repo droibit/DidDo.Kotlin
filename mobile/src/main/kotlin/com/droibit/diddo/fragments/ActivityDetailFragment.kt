@@ -28,12 +28,14 @@ import android.widget.Toast
 import android.view.ContextMenu
 import android.view.animation.AnimationUtils
 import com.activeandroid.Model
+import com.droibit.diddo.ItemListActivity
 import com.droibit.diddo.models.UserActivity
 import com.droibit.easycreator.compat.fragment
 import com.droibit.easycreator.compat.show
 import com.droibit.easycreator.showToast
 import com.droibit.diddo.extension.bindView
 import com.droibit.diddo.fragments.dialogs.CalendarDialogFragment
+import com.droibit.diddo.models.RefreshEvent
 import com.droibit.diddo.utils.ViewAnimationUtils
 import java.util.ArrayList
 
@@ -78,7 +80,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     override fun onCreate(savedInstanceState: Bundle?) {
         super<Fragment>.onCreate(savedInstanceState)
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (getArguments()?.containsKey(ARG_ITEM_ID) == true) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
@@ -127,7 +129,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         super<Fragment>.onActivityCreated(savedInstanceState)
 
         if (savedInstanceState == null) {
-            val activityDates = mUserActivity!!.details
+            val activityDates = mUserActivity?.details
             if (activityDates != null && activityDates.isNotEmpty()) {
                 (mListView.getAdapter() as ActivityDateAdapter).addAll(activityDates)
             }
@@ -140,6 +142,10 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         val adapter = mListView.getAdapter() as ActivityDateAdapter
         if (activityDate.isNew) {
             adapter.add(activityDate)
+            // 修正した場合に最新の日付を変更しないようにする。
+            mUserActivity!!.recentlyDate = activityDate.date
+            // 新規追加したことをマスタ側に通知する。
+            sendRefreshEvent(mUserActivity!!)
         } else {
             adapter.notifyDataSetChanged();
         }
@@ -149,7 +155,6 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
                         else
                             R.string.toast_modify_activity_memo
         // アクティビティの日付も更新しておく。
-        mUserActivity!!.recentlyDate = activityDate.date
         mUserActivity!!.save()
         // メッセージの都合、このタイミングでDBに保存する。
         activityDate.activity = mUserActivity
@@ -170,8 +175,15 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         val res = getResources()
         val header = v.findViewById(R.id.header)
         ViewAnimationUtils.animationCircularReveal(header, res.getInteger(R.integer.medium_animation_millis).toLong())
-        ViewAnimationUtils.animationScaleUp(mAddActionButton, res.getInteger(R.integer.short_animation_millis).toLong())
-        ViewAnimationUtils.animationScaleUp(mCalendarActionButton, res.getInteger(R.integer.short_animation_millis).toLong())
+
+        // アクティビティが存在しない場合はボタンを押せないようにしておく。
+        if (mUserActivity != null) {
+            ViewAnimationUtils.animationScaleUp(mAddActionButton, res.getInteger(R.integer.short_animation_millis).toLong())
+            ViewAnimationUtils.animationScaleUp(mCalendarActionButton, res.getInteger(R.integer.short_animation_millis).toLong())
+        } else {
+            mAddActionButton.setVisibility(View.GONE)
+            mCalendarActionButton.setVisibility(View.GONE)
+        }
     }
 
     // アクティビティのメモ編集用のダイアログを表示する。
@@ -208,5 +220,11 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         val activityDates = mUserActivity!!.details
         CalendarDialogFragment.newInstance(ArrayList(activityDates))
                 .show(this)
+    }
+
+    private fun sendRefreshEvent(userActivity: UserActivity) {
+        // 2画面表示しているならマスタ側に変更が反映されるようにする。
+        val activity = getActivity() as? ItemListActivity
+        activity?.onEventMainThread(RefreshEvent(userActivity))
     }
 }

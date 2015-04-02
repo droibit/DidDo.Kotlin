@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import com.droibit.diddo.fragments.ActivityListFragment
 import com.droibit.diddo.fragments.ActivityDetailFragment
+import com.droibit.diddo.models.RefreshEvent
 import com.droibit.diddo.models.UserActivity
 import com.droibit.easycreator.compat.makeSceneTransitionAnimation
 import com.droibit.easycreator.compat.startActivityForResultCompat
@@ -72,7 +73,7 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super<ActionBarActivity>.onActivityResult(requestCode, resultCode, data)
 
-        getSupportFragmentManager().findFragmentByTag(getString(R.string.tag_list))
+        getSupportFragmentManager().findFragmentById(R.id.item_list)
             ?.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -80,12 +81,15 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
      * Callback method from [ItemListFragment.Callbacks]
      * indicating that the item with the given ID was selected.
      */
-    override fun onItemSelected(activity: UserActivity, sharedView: View) {
+    override fun onItemSelected(activity: UserActivity?, sharedView: View?) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            val fragment = ActivityDetailFragment.newInstance(activity.getId())
+            val fragment = if (activity != null)
+                                ActivityDetailFragment.newInstance(activity.getId())
+                            else
+                                ActivityDetailFragment()
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
@@ -95,11 +99,22 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
 
         startActivityForResultCompat(
                 intent = intent<ItemDetailActivity>(this) {
-                            putExtra(ActivityDetailFragment.ARG_ITEM_ID, activity.getId())
-                            putExtra(ActivityDetailFragment.ARG_ITEM_TITLE, activity.name)
+                            putExtra(ActivityDetailFragment.ARG_ITEM_ID, activity!!.getId())
+                            putExtra(ActivityDetailFragment.ARG_ITEM_TITLE, activity!!.name)
                          },
                 requestCode = REQUEST_ACTIVITY,
-                options = makeSceneTransitionAnimation(sharedView, getString(R.string.transition_date))
+                options = makeSceneTransitionAnimation(sharedView!!, getString(R.string.transition_date))
         )
+    }
+
+    public fun onEventMainThread(event: RefreshEvent) {
+        // 2画面の場合のみ
+        if (!mTwoPane) {
+            return
+        }
+
+        val f = getSupportFragmentManager().findFragmentById(R.id.item_list)
+                as? ActivityListFragment
+        f?.onResreshEvent(event)
     }
 }
