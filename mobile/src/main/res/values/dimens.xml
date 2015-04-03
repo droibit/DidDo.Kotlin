@@ -2,6 +2,7 @@
 <resources>
     <dimen name="side_space">16dp</dimen>
     <dimen name="side_long_spce">32dp</dimen>
+    <dimen name="dialog_bottom_space">@dimen/side_space</dimen>
     <dimen name="dialog_side_space">20dp</dimen>
     <dimen name="list_header_height">48dp</dimen>
     <dimen name="item_height">72dp</dimen>

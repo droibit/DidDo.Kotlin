@@ -11,6 +11,7 @@ import android.view.View
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.view.ViewCompat
+import android.text.TextUtils
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -210,9 +211,12 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
 
     // アクティビティのメモをトーストで表示する。
     private fun showMemoToast(activityDate: ActivityDate) {
-        if (activityDate.memo != null) {
-            showToast(getActivity(), activityDate.memo!!, Toast.LENGTH_LONG)
-        }
+        val text = if (!TextUtils.isEmpty(activityDate.memo))
+                        activityDate.memo!!
+                   else
+                        getString(R.string.toast_empty_memo)
+
+        showToast(getActivity(), text, Toast.LENGTH_LONG)
     }
 
     private fun updateElapsedViews() {

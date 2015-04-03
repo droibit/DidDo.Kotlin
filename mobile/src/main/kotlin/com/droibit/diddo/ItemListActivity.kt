@@ -1,6 +1,7 @@
 package com.droibit.diddo
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -108,8 +109,11 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
                             putExtra(ActivityDetailFragment.ARG_ITEM_ID, activity!!.getId())
                             putExtra(ActivityDetailFragment.ARG_ITEM_TITLE, activity!!.name)
                          },
-                requestCode = REQUEST_ACTIVITY,
-                options = makeSceneTransitionAnimation(sharedView!!, getString(R.string.transition_date))
+                options = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                makeSceneTransitionAnimation(sharedView!!, getString(R.string.transition_date))
+                          else
+                                null,
+                requestCode = REQUEST_ACTIVITY
         )
     }
 

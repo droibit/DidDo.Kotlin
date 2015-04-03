@@ -5,7 +5,8 @@
               android:layout_height="match_parent"
               android:paddingTop="@dimen/dialog_side_space"
               android:paddingLeft="@dimen/dialog_side_space"
-              android:paddingRight="@dimen/dialog_side_space">
+              android:paddingRight="@dimen/dialog_side_space"
+              android:paddingBottom="@dimen/dialog_bottom_space">
 
     <TextView android:text="@string/title_activity_name"
               android:textAppearance="?android:attr/textAppearanceMedium"

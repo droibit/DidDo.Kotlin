@@ -26,4 +26,5 @@
     <string name="title_source_code">ソースコード</string>
     <string name="text_no_activity_date">カレンダーに表示できる活動日がありません</string>
     <string name="empty_activity">アクティビティを追加してください</string>
+    <string name="toast_empty_memo">メモはありません</string>
 </resources>
