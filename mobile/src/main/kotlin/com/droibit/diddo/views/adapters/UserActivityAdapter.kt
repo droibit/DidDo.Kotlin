@@ -41,6 +41,8 @@ public class UserActivityAdapter(context: Context): ArrayAdapter<UserActivity>(c
         val position = getPosition(activity)
         val view = listView.getChildAt(position)
 
+        // 詳細側でDBに保存してもリスト側には反映されないためここで更新する。
+        getItem(position).recentlyDate = activity.recentlyDate
         getView(position, view, listView)
     }
 }

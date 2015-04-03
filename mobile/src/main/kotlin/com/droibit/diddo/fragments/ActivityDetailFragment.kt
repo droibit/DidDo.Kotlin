@@ -105,9 +105,11 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.fragment_item_detail, container, false)
 
-        // Android5.0以上の場合はヘッダにリップルエフェクトを適用する。
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            rootView.addOnLayoutChangeListener(this)
+        if (savedInstanceState == null) {
+            // Android5.0以上の場合はヘッダにリップルエフェクトを適用する。
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                rootView.addOnLayoutChangeListener(this)
+            }
         }
         return rootView
     }
@@ -116,24 +118,26 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super<Fragment>.onViewCreated(view, savedInstanceState)
 
-        // 日付テキストをアニメーション表示する。
-        ViewCompat.setTransitionName(mDateText, getString(R.string.transition_date))
+        if (savedInstanceState == null) {
+            // 日付テキストをアニメーション表示する。
+            ViewCompat.setTransitionName(mDateText, getString(R.string.transition_date))
 
-        val adapter = ActivityDateAdapter(getActivity())
-        mListView.setAdapter(adapter)
-        mListView.setEmptyView(view.findViewById(android.R.id.empty))
+            val adapter = ActivityDateAdapter(getActivity())
+            mListView.setAdapter(adapter)
+            mListView.setEmptyView(view.findViewById(android.R.id.empty))
 
-        mListView.setOnItemClickListener { adapterView, view, position, l ->
-            // クリックされたらメモの内容をトーストで表示する。
-            showMemoToast(adapter.getItem(position))
+            mListView.setOnItemClickListener { adapterView, view, position, l ->
+                // クリックされたらメモの内容をトーストで表示する。
+                showMemoToast(adapter.getItem(position))
+            }
+            mListView.setOnItemLongClickListener { adapterView, view, position, l ->
+                // 長押しで編集用のダイアログを表示する。
+                showActivityMemoDialog(adapter.getItem(position))
+            }
+
+            mAddActionButton.setOnClickListener { showActivityMemoDialog(null) }
+            mCalendarActionButton.setOnClickListener { showActivityDateCalendar() }
         }
-        mListView.setOnItemLongClickListener { adapterView, view, position, l ->
-            // 長押しで編集用のダイアログを表示する。
-            showActivityMemoDialog(adapter.getItem(position))
-        }
-
-        mAddActionButton.setOnClickListener { showActivityMemoDialog(null) }
-        mCalendarActionButton.setOnClickListener { showActivityDateCalendar() }
     }
 
     /** {@inheritDoc} */

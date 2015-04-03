@@ -43,6 +43,6 @@
     <string name="version_format" translatable="false">Verion: %1$s</string>
     <string name="text_no_activity_date">No activity date to be displayed in the calendar</string>
     <string name="text_elapsed_zero" translatable="false">0</string>
-    <string name="text_elapsed_format_short" translatable="false">+%1$s</string>
+    <string name="text_elapsed_format_short" translatable="false">-%1$s</string>
     <string name="empty_activity">Please add the activity</string>
 </resources>
