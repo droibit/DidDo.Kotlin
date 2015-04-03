@@ -38,6 +38,7 @@ import com.droibit.diddo.fragments.dialogs.CalendarDialogFragment
 import com.droibit.diddo.models.RefreshEvent
 import com.droibit.diddo.utils.ViewAnimationUtils
 import java.util.ArrayList
+import com.droibit.easycreator.sendMessage
 
 /**
  * A fragment representing a single Item detail screen.
@@ -76,6 +77,8 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     private val mCalendarActionButton: FloatingActionButton by bindView(R.id.fab_calendar)
     private val mListView: ListView by bindView(android.R.id.list)
 
+    private var mHandler: Handler? = null
+
     /** {@inheritDoc} */
     override fun onCreate(savedInstanceState: Bundle?) {
         super<Fragment>.onCreate(savedInstanceState)
@@ -87,6 +90,15 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
             mUserActivity = Model.load(javaClass<UserActivity>(), getArguments().getLong(ARG_ITEM_ID))
         }
         setRetainInstance(true)
+    }
+
+    /** {@inheritDoc} */
+    override fun onAttach(activity: Activity) {
+        super<Fragment>.onAttach(activity)
+
+        if (activity is Handler.Callback) {
+            mHandler = Handler(activity)
+        }
     }
 
     /** {@inheritDoc} */
@@ -224,7 +236,9 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
 
     private fun sendRefreshEvent(userActivity: UserActivity) {
         // 2画面表示しているならマスタ側に変更が反映されるようにする。
-        val activity = getActivity() as? ItemListActivity
-        activity?.onEventMainThread(RefreshEvent(userActivity))
+        mHandler?.sendMessage { msg ->
+            msg.what = ItemListActivity.MESSAGE_REFRESH
+            msg.obj = RefreshEvent(userActivity)
+        }
     }
 }

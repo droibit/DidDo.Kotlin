@@ -2,10 +2,13 @@ package com.droibit.diddo
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.ActionBarActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import com.droibit.diddo.fragments.ActivityListFragment
 import com.droibit.diddo.fragments.ActivityDetailFragment
@@ -32,10 +35,13 @@ import com.droibit.easycreator.intent
  * [ItemListFragment.Callbacks] interface
  * to listen for item selections.
  */
-public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callbacks {
+public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callbacks, Handler.Callback {
 
     companion object {
+        private val TAG = javaClass<ItemListActivity>().getSimpleName()
+
         val REQUEST_ACTIVITY = 1
+        val MESSAGE_REFRESH = 1
     }
 
     /**
@@ -107,14 +113,20 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
         )
     }
 
-    public fun onEventMainThread(event: RefreshEvent) {
-        // 2画面の場合のみ
-        if (!mTwoPane) {
-            return
+    /** {@inheritDoc} */
+    override fun handleMessage(msg: Message): Boolean {
+        Log.d(TAG, "Message : ${msg.toString()}")
+
+        if (msg.what != MESSAGE_REFRESH) {
+            return false
         }
 
-        val f = getSupportFragmentManager().findFragmentById(R.id.item_list)
-                as? ActivityListFragment
-        f?.onResreshEvent(event)
+        // 2画面の場合のみ
+        if (mTwoPane) {
+            val f = getSupportFragmentManager().findFragmentById(R.id.item_list)
+                    as? ActivityListFragment
+            f?.onResreshEvent(msg.obj as RefreshEvent)
+        }
+        return true
     }
 }
