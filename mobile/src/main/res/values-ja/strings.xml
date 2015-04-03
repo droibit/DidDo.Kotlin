@@ -3,14 +3,13 @@
     <string name="action_sort">ソート</string>
     <string name="action_calendar">カレンダー</string>
     <string name="header_activity">アクティビティ</string>
-    <string name="empty_activity">活動なし</string>
+    <string name="empty_activity_date">活動日なし</string>
     <string name="title_new_activity">新しいアクティビティ</string>
     <string name="title_new_activity_date">新しい活動日</string>
     <string name="title_activity_modify">アクティビティの修正</string>
     <string name="title_delete_activity">アクティビティの削除</string>
     <string name="message_deleted_activity">アクティビティを削除しました</string>
     <string name="title_activity_name">アクティビティ名 :</string>
-    <string name="text_empty_activity">無名のアクティビティ</string>
     <string name="text_activity_memo">メモ (オプション) :</string>
     <string name="title_modify_activity_memo">メモの修正</string>
     <string name="button_create">作成</string>
@@ -26,4 +25,5 @@
     <string name="title_open_source">オープンソースライセンス</string>
     <string name="title_source_code">ソースコード</string>
     <string name="text_no_activity_date">カレンダーに表示できる活動日がありません</string>
+    <string name="empty_activity">アクティビティを追加してください</string>
 </resources>

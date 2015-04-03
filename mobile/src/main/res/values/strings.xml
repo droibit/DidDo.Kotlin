@@ -4,7 +4,7 @@
     <string name="action_sort">Sort</string>
     <string name="action_calendar">Calendar</string>
     <string name="header_activity">Activity</string>
-    <string name="empty_activity">No activity</string>
+    <string name="empty_activity_date">No activity</string>
     <string name="empty_text" translatable="false">---</string>
     <string name="title_new_activity">New Activity</string>
     <string name="title_new_activity_date">New Activity Date</string>
@@ -12,7 +12,6 @@
     <string name="title_delete_activity">Delete Activity</string>
     <string name="message_deleted_activity">Deleted the activity</string>
     <string name="title_activity_name">Activity :</string>
-    <string name="text_empty_activity">Unnamed activity</string>
     <string name="text_activity_memo">Memo (Option) :</string>
     <string name="title_modify_activity_memo">Modify Memo</string>
     <string name="dummy_date" translatable="false">2015/3/6 19:00</string>
@@ -41,8 +40,9 @@
     <string name="title_source_code">Source Code</string>
     <string name="url_twitter" translatable="false">https://twitter.com/droibit</string>
     <string name="url_github" translatable="false">https://github.com/droibit/diddo.kotlin</string>
-    <string name="version_format">Ver %1$s</string>
+    <string name="version_format" translatable="false">Verion: %1$s</string>
     <string name="text_no_activity_date">No activity date to be displayed in the calendar</string>
     <string name="text_elapsed_zero" translatable="false">0</string>
-    <string name="text_elapsed_format_short" translatable="false">+%1$s</string>
+    <string name="text_elapsed_format_short" translatable="false">-%1$s</string>
+    <string name="empty_activity">Please add the activity</string>
 </resources>

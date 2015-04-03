@@ -12,8 +12,10 @@ import com.droibit.easycreator.compat.fragment
 import com.droibit.easycreator.showToast
 import com.squareup.timessquare.CalendarPickerView
 import java.util.ArrayList
+import java.util.Calendar
 import java.util.Date
 import java.util.NoSuchElementException
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -48,7 +50,7 @@ public class CalendarDialogFragment: DialogFragment() {
 
         // 活動日をハイライト表示する。
         val now = Date(System.currentTimeMillis())
-        calendar.init(activityDates.first().date, now)
+        calendar.init(activityDates.first().date, now.nextDay())
                 .withHighlightedDates(activityDates.map { it.date })
 
         // 選択されたセルが活動日の場合はトーストでメモを表示する。
@@ -68,4 +70,8 @@ public class CalendarDialogFragment: DialogFragment() {
             setView(calendar)
         }
     }
+}
+
+private fun Date.nextDay(): Date {
+    return Date(getTime() + TimeUnit.DAYS.toMillis(1))
 }

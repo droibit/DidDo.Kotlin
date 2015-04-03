@@ -32,6 +32,8 @@ import com.droibit.easycreator
 import com.droibit.easycreator.showToast
 import com.droibit.easycreator.compat.show
 import com.droibit.diddo.extension.bindView
+import com.droibit.diddo.models.RefreshEvent
+import com.droibit.diddo.models.loadUserActivities
 import com.droibit.diddo.utils.PauseHandler
 import com.droibit.diddo.utils.SettingsUtils
 import com.droibit.easycreator.sendMessage
@@ -56,7 +58,6 @@ public class ActivityListFragment : Fragment(),
          * activated item position. Only used on tablets.
          */
         private val STATE_ACTIVATED_POSITION = "activated_position"
-        private val INVALID_POSITION = -1
         private val CONTEXT_MENU_MODIFY_ACTIVITY = 0
         private val CONTEXT_MENU_DELETE_ACTIVITY = 1
 
@@ -65,7 +66,7 @@ public class ActivityListFragment : Fragment(),
          * nothing. Used only when this fragment is not attached to an activity.
          */
         private val sDummyCallbacks = object: Callbacks {
-            override fun onItemSelected(id: String, sharedView: View) {
+            override fun onItemSelected(activity: UserActivity?, sharedView: View?) {
             }
         }
     }
@@ -79,7 +80,7 @@ public class ActivityListFragment : Fragment(),
         /**
          * Callback for when an item has been selected.
          */
-        public fun onItemSelected(id: String, sharedView: View)
+        public fun onItemSelected(activity: UserActivity?, sharedView: View?)
     }
 
     /**
@@ -91,11 +92,12 @@ public class ActivityListFragment : Fragment(),
     /**
      * The current activated item position. Only used on tablets.
      */
-    private var mActivatedPosition = INVALID_POSITION
+    private var mActivatedPosition = AdapterView.INVALID_POSITION
 
     private val mListView: ListView by bindView(android.R.id.list)
     private val mActionButton: FloatingActionButton by bindView(diddo.R.id.fab)
     private val mPauseHandler = PauseHandler()
+    private var mAdapter: UserActivityAdapter? = null
 
     /** {@inheritDoc} */
     override fun onAttach(activity: Activity) {
@@ -125,29 +127,42 @@ public class ActivityListFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super<Fragment>.onViewCreated(view, savedInstanceState)
 
-        val adapter = UserActivityAdapter(getActivity())
-        adapter.addAll(DummyContent.ITEMS)
-        mListView.setAdapter(adapter)
-        mListView.setOnItemClickListener { adapterView, view, position, l ->
-            mCallbacks.onItemSelected(position.toString(), view.findViewById(android.R.id.text2))
-        }
-        // 項目長押しでコンテキストメニューを表示する。
-        registerForContextMenu(mListView)
+        if (savedInstanceState == null) {
+            mAdapter = UserActivityAdapter(getActivity())
+            mListView.setAdapter(mAdapter!!)
+            mListView.setEmptyView(view.findViewById(android.R.id.empty))
 
-        // Restore the previously serialized activated item position.
-        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION))
-        }
+            mListView.setOnItemClickListener { adapterView, view, position, l ->
+                mCallbacks.onItemSelected(mAdapter!!.getItem(position), view.findViewById(android.R.id.text2))
+                mActivatedPosition = position
+            }
+            // 項目長押しでコンテキストメニューを表示する。
+            registerForContextMenu(mListView)
 
-        // アクションボタン押下で新規にアクティビティを作成する。
-        mActionButton.setOnClickListener { v ->
-            showNewActivityDialog()
+            // アクションボタン押下で新規にアクティビティを作成する。
+            mActionButton.setOnClickListener {
+                showNewActivityDialog()
+            }
+            return
         }
+        mListView.setAdapter(mAdapter!!)
     }
 
     /** {@inheritDoc} */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super<Fragment>.onActivityCreated(savedInstanceState)
+
+        // Restore the previously serialized activated item position.
+        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION))
+            return
+        }
+
+        // DB内にアクティビティが存在すれば表示する
+        val userActivities = loadUserActivities()
+        if (userActivities.isNotEmpty()) {
+            mAdapter?.addAll(userActivities)
+        }
 
         // アクティビティが存在する場合は以前の並び順で表示する。
         if (!mListView.getAdapter().isEmpty()) {
@@ -163,15 +178,8 @@ public class ActivityListFragment : Fragment(),
         }
 
         mPauseHandler.sendMessage() { msg ->
-            msg.obj = Runnable { (mListView.getAdapter() as UserActivityAdapter).notifyDataSetChanged() }
+            msg.obj = Runnable { mAdapter?.notifyDataSetChanged() }
         }
-    }
-
-    /** {@inheritDoc} */
-    override fun onResume() {
-        super<Fragment>.onResume()
-
-        mPauseHandler.resume()
     }
 
     /** {@inheritDoc} */
@@ -212,7 +220,7 @@ public class ActivityListFragment : Fragment(),
     /** {@inheritDoc} */
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val menuInfo = item.getMenuInfo() as AdapterView.AdapterContextMenuInfo
-        val activity = (mListView.getAdapter() as UserActivityAdapter).getItem(menuInfo.position)
+        val activity = mAdapter!!.getItem(menuInfo.position)
         when (item.getItemId()) {
             CONTEXT_MENU_MODIFY_ACTIVITY -> showModifyActivityDialog(activity)
             CONTEXT_MENU_DELETE_ACTIVITY -> deleteActivity(activity)
@@ -223,26 +231,25 @@ public class ActivityListFragment : Fragment(),
     /** {@inheritDoc} */
     override fun onSaveInstanceState(outState: Bundle) {
         super<Fragment>.onSaveInstanceState(outState)
-        if (mActivatedPosition != INVALID_POSITION) {
-            // Serialize and persist the activated item position.
-            outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition)
-        }
+        // Serialize and persist the activated item position.
+        outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition)
     }
 
     /** {@inheritDoc} */
     override fun onActivityNameEnterd(activity: UserActivity) {
-        val adapter = mListView.getAdapter() as UserActivityAdapter
         if (activity.isNew) {
-            adapter.add(activity)
+            mAdapter?.add(activity)
         } else {
-            adapter.notifyDataSetChanged();
+            mAdapter?.notifyDataSetChanged();
         }
 
         val messageRes = if (activity.isNew)
-                            R.string.toast_create_activity
-                        else
-                            R.string.toast_modify_activity
-        
+            R.string.toast_create_activity
+        else
+            R.string.toast_modify_activity
+        // メッセージの都合、このタイミングで値を保存する
+        activity.save()
+
         showToast(getActivity(), messageRes, Toast.LENGTH_SHORT)
     }
 
@@ -267,7 +274,7 @@ public class ActivityListFragment : Fragment(),
     }
 
     private fun setActivatedPosition(position: Int) {
-        if (position == INVALID_POSITION) {
+        if (position == AdapterView.INVALID_POSITION) {
             mListView.setItemChecked(mActivatedPosition, false)
         } else {
             mListView.setItemChecked(position, true)
@@ -283,9 +290,19 @@ public class ActivityListFragment : Fragment(),
 
     // 選択されたアクティビティを削除する。
     private fun deleteActivity(activity: UserActivity) {
-        (mListView.getAdapter() as UserActivityAdapter).remove(activity)
+        // 2画面表示されている状態で鮮太されているアクティビティを削除した場合（※スマホは呼ばれない）
+        if (mListView.getChoiceMode() == AbsListView.CHOICE_MODE_SINGLE) {
+            if (mAdapter?.getPosition(activity) == mListView.getCheckedItemPosition()) {
+                // 詳細画面の表示をクリアしておく
+                mCallbacks.onItemSelected(null, null)
+            }
+        }
+        mAdapter?.remove(activity)
 
-        // TODO: DBからも削除
+        // トランザクションはまぁいっか…。量もそんなに多くないだろう…。
+        val activityDates = activity.details
+        activityDates.forEach { it.delete() }
+        activity.delete()
 
         showToast(getActivity(), R.string.toast_delete_activity, Toast.LENGTH_SHORT)
     }
@@ -298,7 +315,13 @@ public class ActivityListFragment : Fragment(),
 
     // アクティビティリストをソートする。
     private fun sortActivity(order: Int) {
-        val adapter = mListView.getAdapter() as UserActivityAdapter
-        adapter.sort(UserActivity.getComparator(order))
+        if (mAdapter?.isEmpty() == false) {
+            mAdapter!!.sort(UserActivity.getComparator(order))
+        }
+    }
+
+    // 更新イベントが呼ばれた時の処理
+    public fun onResreshEvent(event: RefreshEvent) {
+        mAdapter?.updateRow(mListView, event.activity)
     }
 }

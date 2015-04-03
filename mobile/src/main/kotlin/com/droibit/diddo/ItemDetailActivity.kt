@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import com.droibit.diddo.fragments.ActivityDetailFragment
+import com.droibit.diddo.models.UserActivity
 import com.droibit.easycreator.compat.navigateUpTo
 
 
@@ -32,6 +33,12 @@ public class ItemDetailActivity : ActionBarActivity() {
         setSupportActionBar(toolbar)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true)
 
+        // ツールバーのタイトルにはアクティビティ名を表示する。
+        val title = getIntent()?.getStringExtra(ActivityDetailFragment.ARG_ITEM_TITLE)
+        if (title != null) {
+            getSupportActionBar().setTitle(title)
+        }
+
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -42,13 +49,14 @@ public class ItemDetailActivity : ActionBarActivity() {
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
+            val id = getIntent().getLongExtra(ActivityDetailFragment.ARG_ITEM_ID, -1L)
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            val arguments = Bundle()
-            arguments.putString(ActivityDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(ActivityDetailFragment.ARG_ITEM_ID))
-            val fragment = ActivityDetailFragment()
-            fragment.setArguments(arguments)
-            getSupportFragmentManager().beginTransaction().add(R.id.item_detail_container, fragment).commit()
+            val fragment = ActivityDetailFragment.newInstance(id)
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.item_detail_container, fragment)
+                    .commit()
         }
     }
 

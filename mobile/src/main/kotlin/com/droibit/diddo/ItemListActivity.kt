@@ -2,13 +2,18 @@ package com.droibit.diddo
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.ActionBarActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import com.droibit.diddo.fragments.ActivityListFragment
 import com.droibit.diddo.fragments.ActivityDetailFragment
+import com.droibit.diddo.models.RefreshEvent
+import com.droibit.diddo.models.UserActivity
 import com.droibit.easycreator.compat.makeSceneTransitionAnimation
 import com.droibit.easycreator.compat.startActivityForResultCompat
 import com.droibit.easycreator.intent
@@ -30,10 +35,13 @@ import com.droibit.easycreator.intent
  * [ItemListFragment.Callbacks] interface
  * to listen for item selections.
  */
-public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callbacks {
+public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callbacks, Handler.Callback {
 
     companion object {
+        private val TAG = javaClass<ItemListActivity>().getSimpleName()
+
         val REQUEST_ACTIVITY = 1
+        val MESSAGE_REFRESH = 1
     }
 
     /**
@@ -71,7 +79,7 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super<ActionBarActivity>.onActivityResult(requestCode, resultCode, data)
 
-        getSupportFragmentManager().findFragmentByTag(getString(R.string.tag_list))
+        getSupportFragmentManager().findFragmentById(R.id.item_list)
             ?.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -79,25 +87,46 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
      * Callback method from [ItemListFragment.Callbacks]
      * indicating that the item with the given ID was selected.
      */
-    override fun onItemSelected(id: String, sharedView: View) {
+    override fun onItemSelected(activity: UserActivity?, sharedView: View?) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            val arguments = Bundle()
-            arguments.putString(ActivityDetailFragment.ARG_ITEM_ID, id)
-            val fragment = ActivityDetailFragment()
-            fragment.setArguments(arguments)
-            getSupportFragmentManager().beginTransaction()
+            val fragment = if (activity != null)
+                                ActivityDetailFragment.newInstance(activity.getId())
+                            else
+                                ActivityDetailFragment()
+            getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit()
             return
         }
 
         startActivityForResultCompat(
-                intent = intent<ItemDetailActivity>(this) { putExtra(ActivityDetailFragment.ARG_ITEM_ID, id) },
+                intent = intent<ItemDetailActivity>(this) {
+                            putExtra(ActivityDetailFragment.ARG_ITEM_ID, activity!!.getId())
+                            putExtra(ActivityDetailFragment.ARG_ITEM_TITLE, activity!!.name)
+                         },
                 requestCode = REQUEST_ACTIVITY,
-                options = makeSceneTransitionAnimation(sharedView, getString(R.string.transition_date))
+                options = makeSceneTransitionAnimation(sharedView!!, getString(R.string.transition_date))
         )
+    }
+
+    /** {@inheritDoc} */
+    override fun handleMessage(msg: Message): Boolean {
+        Log.d(TAG, "Message : ${msg.toString()}")
+
+        if (msg.what != MESSAGE_REFRESH) {
+            return false
+        }
+
+        // 2画面の場合のみ
+        if (mTwoPane) {
+            val f = getSupportFragmentManager().findFragmentById(R.id.item_list)
+                    as? ActivityListFragment
+            f?.onResreshEvent(msg.obj as RefreshEvent)
+        }
+        return true
     }
 }

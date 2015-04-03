@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:paddingTop="@dimen/dialog_side_space"
-              android:paddingLeft="@dimen/dialog_side_space"
-              android:paddingRight="@dimen/dialog_side_space">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:text="@string/text_activity_memo"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@android:id/text1"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="8dp"
-        android:textSize="@dimen/text_size_xlarge"
-        android:fontFamily="sans-serif-light"/>
+    <!-- メモが複数行入力できるためスクロールビューを親にする必要あり -->
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:paddingTop="@dimen/dialog_side_space"
+                  android:paddingLeft="@dimen/dialog_side_space"
+                  android:paddingRight="@dimen/dialog_side_space">
 
-    <EditText
-        android:id="@+id/edit_memo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_xlarge"
-        android:fontFamily="sans-serif-light"
-        android:inputType="textMultiLine"
-        android:lines="4"
-        android:minLines="1"
-        android:scrollHorizontally="false"
-        android:scrollbars="vertical"
-        android:singleLine="false"
-        android:maxLength="70" />
-</LinearLayout>
+        <TextView
+            android:text="@string/text_activity_memo"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@android:id/text1"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="@dimen/text_size_xlarge"
+            android:fontFamily="sans-serif-light"/>
+
+        <EditText
+            android:id="@+id/edit_memo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_xlarge"
+            android:selectAllOnFocus="true"
+            android:fontFamily="sans-serif-light"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:minLines="1"
+            android:scrollHorizontally="false"
+            android:scrollbars="vertical"
+            android:singleLine="false"
+            android:maxLength="70" />
+    </LinearLayout>
+</ScrollView>
