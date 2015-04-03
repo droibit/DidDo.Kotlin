@@ -50,7 +50,7 @@ public class CalendarDialogFragment: DialogFragment() {
 
         // 活動日をハイライト表示する。
         val now = Date(System.currentTimeMillis())
-        calendar.init(activityDates.first().date.beforeDay(), now)
+        calendar.init(activityDates.first().date, now.nextDay())
                 .withHighlightedDates(activityDates.map { it.date })
 
         // 選択されたセルが活動日の場合はトーストでメモを表示する。
@@ -72,6 +72,6 @@ public class CalendarDialogFragment: DialogFragment() {
     }
 }
 
-private fun Date.beforeDay(): Date {
-    return Date(getTime() - TimeUnit.DAYS.toMillis(1))
+private fun Date.nextDay(): Date {
+    return Date(getTime() + TimeUnit.DAYS.toMillis(1))
 }
