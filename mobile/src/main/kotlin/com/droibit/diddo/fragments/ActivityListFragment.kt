@@ -104,7 +104,6 @@ public class ActivityListFragment : Fragment(),
         super<Fragment>.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
-        setRetainInstance(true)
     }
 
     /** {@inheritDoc} */
@@ -116,36 +115,27 @@ public class ActivityListFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super<Fragment>.onViewCreated(view, savedInstanceState)
 
-        if (savedInstanceState == null) {
-            mAdapter = UserActivityAdapter(getActivity())
-            mListView.setAdapter(mAdapter!!)
-            mListView.setEmptyView(view.findViewById(android.R.id.empty))
-
-            mListView.setOnItemClickListener { adapterView, view, position, l ->
-                mCallbacks.onItemSelected(mAdapter!!.getItem(position), view.findViewById(android.R.id.text2))
-                mActivatedPosition = position
-            }
-            // 項目長押しでコンテキストメニューを表示する。
-            registerForContextMenu(mListView)
-
-            // アクションボタン押下で新規にアクティビティを作成する。
-            mActionButton.setOnClickListener {
-                showNewActivityDialog()
-            }
-            return
-        }
+        mAdapter = UserActivityAdapter(getActivity())
         mListView.setAdapter(mAdapter!!)
+        mListView.setEmptyView(view.findViewById(android.R.id.empty))
+
+        mListView.setOnItemClickListener { adapterView, view, position, l ->
+            mCallbacks.onItemSelected(mAdapter!!.getItem(position), view.findViewById(android.R.id.text2))
+            mActivatedPosition = position
+        }
+        // 項目長押しでコンテキストメニューを表示する。
+        registerForContextMenu(mListView)
+
+        // アクションボタン押下で新規にアクティビティを作成する。
+        mActionButton.setOnClickListener {
+            showNewActivityDialog()
+        }
+
     }
 
     /** {@inheritDoc} */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super<Fragment>.onActivityCreated(savedInstanceState)
-
-        // Restore the previously serialized activated item position.
-        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION))
-            return
-        }
 
         // DB内にアクティビティが存在すれば表示する
         val userActivities = loadUserActivities()
@@ -156,6 +146,11 @@ public class ActivityListFragment : Fragment(),
         // アクティビティが存在する場合は以前の並び順で表示する。
         if (!mListView.getAdapter().isEmpty()) {
             sortActivity(SettingsUtils.getOrder(getActivity()))
+        }
+
+        // Restore the previously serialized activated item position.
+        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION))
         }
     }
 

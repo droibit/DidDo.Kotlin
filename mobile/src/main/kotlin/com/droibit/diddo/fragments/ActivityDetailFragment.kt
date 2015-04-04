@@ -81,7 +81,6 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
             // to load content from a content provider.
             mUserActivity = Model.load(javaClass<UserActivity>(), getArguments().getLong(ARG_ITEM_ID))
         }
-        setRetainInstance(true)
     }
 
     /** {@inheritDoc} */
@@ -97,11 +96,9 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.fragment_item_detail, container, false)
 
-        if (savedInstanceState == null) {
-            // Android5.0以上の場合はヘッダにリップルエフェクトを適用する。
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                rootView.addOnLayoutChangeListener(this)
-            }
+        // Android5.0以上の場合はヘッダにリップルエフェクトを適用する。
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            rootView.addOnLayoutChangeListener(this)
         }
         return rootView
     }
@@ -110,37 +107,33 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super<Fragment>.onViewCreated(view, savedInstanceState)
 
-        if (savedInstanceState == null) {
-            // 日付テキストをアニメーション表示する。
-            ViewCompat.setTransitionName(mDateText, getString(R.string.transition_date))
+        // 日付テキストをアニメーション表示する。
+        ViewCompat.setTransitionName(mDateText, getString(R.string.transition_date))
 
-            val adapter = ActivityDateAdapter(getActivity())
-            mListView.setAdapter(adapter)
-            mListView.setEmptyView(view.findViewById(android.R.id.empty))
+        val adapter = ActivityDateAdapter(getActivity())
+        mListView.setAdapter(adapter)
+        mListView.setEmptyView(view.findViewById(android.R.id.empty))
 
-            mListView.setOnItemClickListener { adapterView, view, position, l ->
-                // クリックされたらメモの内容をトーストで表示する。
-                showMemoToast(adapter.getItem(position))
-            }
-            mListView.setOnItemLongClickListener { adapterView, view, position, l ->
-                // 長押しで編集用のダイアログを表示する。
-                showActivityMemoDialog(adapter.getItem(position))
-            }
-
-            mAddActionButton.setOnClickListener { showActivityMemoDialog(null) }
-            mCalendarActionButton.setOnClickListener { showActivityDateCalendar() }
+        mListView.setOnItemClickListener { adapterView, view, position, l ->
+            // クリックされたらメモの内容をトーストで表示する。
+            showMemoToast(adapter.getItem(position))
         }
+        mListView.setOnItemLongClickListener { adapterView, view, position, l ->
+            // 長押しで編集用のダイアログを表示する。
+            showActivityMemoDialog(adapter.getItem(position))
+        }
+
+        mAddActionButton.setOnClickListener { showActivityMemoDialog(null) }
+        mCalendarActionButton.setOnClickListener { showActivityDateCalendar() }
     }
 
     /** {@inheritDoc} */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super<Fragment>.onActivityCreated(savedInstanceState)
 
-        if (savedInstanceState == null) {
-            val activityDates = mUserActivity?.details
-            if (activityDates != null && activityDates.isNotEmpty()) {
-                (mListView.getAdapter() as ActivityDateAdapter).addAll(activityDates)
-            }
+        val activityDates = mUserActivity?.details
+        if (activityDates != null && activityDates.isNotEmpty()) {
+            (mListView.getAdapter() as ActivityDateAdapter).addAll(activityDates)
         }
         updateElapsedViews()
     }
@@ -219,7 +212,10 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
 
         val recentlyActivityDate = (mListView.getAdapter() as ActivityDateAdapter).getLastItem()!!
         mElapsedDateText.setText(recentlyActivityDate.getElapsedDateFromNow(getActivity()))
-        mDateText.setText(DateFormat.getDateFormat(getActivity()).format(recentlyActivityDate.date))
+
+        val date = DateFormat.getDateFormat(getActivity()).format(recentlyActivityDate.date)
+        val hour = DateFormat.getTimeFormat(getActivity()).format(recentlyActivityDate.date)
+        mDateText.setText("${date} ${hour}")
     }
 
     private fun showActivityDateCalendar() {

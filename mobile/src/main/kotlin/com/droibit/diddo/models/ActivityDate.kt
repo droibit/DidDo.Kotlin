@@ -6,6 +6,7 @@ import com.activeandroid.annotation.Column
 import com.activeandroid.annotation.Table
 import com.droibit.diddo.R
 import java.io.Serializable
+import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -49,18 +50,26 @@ public data class ActivityDate : Model(), Serializable {
      * 現在から活動日までの経過日を取得する
      */
     public fun getElapsedDateFromNow(context: Context): String {
-        val duration = System.currentTimeMillis() - date.getTime()
+        val now = Date(System.currentTimeMillis())
+        val duration = now.getTime() - date.getTime()
         val count = duration / TimeUnit.DAYS.toMillis(1)
 
         return if (count == 0L) {
-                    context.getString(R.string.text_today)
+                    val nc = Calendar.getInstance()
+                    val dc = Calendar.getInstance()
+                    nc.setTime(now)
+                    dc.setTime(date)
+                    // 日をまたいでも1日経過していない場合
+                    if (nc.get(Calendar.DAY_OF_WEEK) == dc.get(Calendar.DAY_OF_WEEK))
+                        context.getString(R.string.text_today)
+                    else
+                        context.getString(R.string.text_next_day)
                } else {
                     // 100日超えたら+表示にする。
-                    if (count > UserActivity.DAYS_LIMIT) {
+                    if (count > UserActivity.DAYS_LIMIT)
                         context.getString(R.string.text_elapsed_format, context.getString(R.string.text_over))
-                    } else {
+                    else
                         context.getString(R.string.text_elapsed_format, count.toString())
-                    }
                }
     }
 }

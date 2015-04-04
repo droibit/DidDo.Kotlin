@@ -46,4 +46,5 @@
     <string name="text_elapsed_format_short" translatable="false">-%1$s</string>
     <string name="empty_activity">Please add the activity</string>
     <string name="toast_empty_memo">No memo</string>
+    <string name="text_next_day">Next Day</string>
 </resources>
