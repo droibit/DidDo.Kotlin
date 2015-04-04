@@ -3,8 +3,6 @@ package com.droibit.diddo.utils
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AnimationUtils
-import android.view.animation.AnticipateInterpolator
 import android.view.animation.ScaleAnimation
 
 

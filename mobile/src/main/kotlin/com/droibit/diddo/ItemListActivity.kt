@@ -5,14 +5,12 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.app.FragmentActivity
 import android.support.v7.app.ActionBarActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
-import com.droibit.diddo.fragments.ActivityListFragment
 import com.droibit.diddo.fragments.ActivityDetailFragment
+import com.droibit.diddo.fragments.ActivityListFragment
 import com.droibit.diddo.models.RefreshEvent
 import com.droibit.diddo.models.UserActivity
 import com.droibit.easycreator.compat.makeSceneTransitionAnimation

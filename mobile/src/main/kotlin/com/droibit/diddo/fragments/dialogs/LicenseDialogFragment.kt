@@ -2,12 +2,9 @@ package com.droibit.diddo.fragments.dialogs
 
 import android.app.Dialog
 import android.app.DialogFragment
-import android.content.DialogInterface
 import android.os.Bundle
 import com.droibit.easycreator.fragment
 import de.psdev.licensesdialog.LicensesDialog
-import de.psdev.licensesdialog.NoticesHtmlBuilder
-import de.psdev.licensesdialog.NoticesXmlParser
 
 /**
  * オープンソースライセンスを表示するためのダイアログ

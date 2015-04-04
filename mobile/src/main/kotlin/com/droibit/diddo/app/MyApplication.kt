@@ -1,7 +1,7 @@
 package com.droibit.diddo.app
 
-import com.activeandroid.app.Application
 import com.activeandroid.ActiveAndroid
+import com.activeandroid.app.Application
 
 /**
  * ActiveAndroidを初期化するために使用する。

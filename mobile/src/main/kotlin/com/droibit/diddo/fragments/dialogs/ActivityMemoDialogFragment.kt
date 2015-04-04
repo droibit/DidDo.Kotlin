@@ -1,22 +1,18 @@
 package com.droibit.diddo.fragments.dialogs
 
-import android.support.v4.app.DialogFragment
-import android.os.Bundle
-import com.droibit.diddo.models.ActivityDate
-import android.widget.Button
-import android.widget.EditText
 import android.app.Activity
 import android.app.Dialog
+import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.view.View
-import com.droibit.diddo.R
-import android.app.AlertDialog
 import android.view.WindowManager
-import android.support.v4.app.Fragment
-import android.text.TextUtils
+import android.widget.EditText
+import com.droibit.diddo.R
+import com.droibit.diddo.models.ActivityDate
 import com.droibit.diddo.models.newActivityDate
-import java.util.Date
 import com.droibit.easycreator.alertDialog
 import com.droibit.easycreator.compat.fragment
+import java.util.Date
 
 /**
  * アクティビティの活動日の作成及び編集をするためのダイアログ

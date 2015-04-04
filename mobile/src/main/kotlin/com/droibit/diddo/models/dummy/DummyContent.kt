@@ -1,12 +1,10 @@
 package com.droibit.diddo.models.dummy
 
-import java.util.ArrayList
-import java.util.HashMap
+import com.droibit.diddo.models.ActivityDate
 import com.droibit.diddo.models.UserActivity
 import com.droibit.diddo.models.dummyActivity
-import com.droibit.diddo.models.ActivityDate
-import java.util.Date
 import com.droibit.diddo.models.dummyActivityDate
+import java.util.Date
 
 /**
  * Helper class for providing sample content for user interfaces created by

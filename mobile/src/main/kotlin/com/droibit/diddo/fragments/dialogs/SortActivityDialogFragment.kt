@@ -1,12 +1,10 @@
 package com.droibit.diddo.fragments.dialogs
 
-import android.support.v4.app.DialogFragment
-import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.app.Dialog
-import android.app.AlertDialog
-import com.droibit.diddo.R
 import android.app.Activity
+import android.app.Dialog
+import android.os.Bundle
+import android.support.v4.app.DialogFragment
+import com.droibit.diddo.R
 import com.droibit.easycreator.alertDialog
 import com.droibit.easycreator.compat.fragment
 

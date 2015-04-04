@@ -1,43 +1,32 @@
 package com.droibit.diddo.fragments
 
-import android.support.v4.app.Fragment
-import android.widget.AdapterView
-import android.widget.ListView
-import com.melnykov.fab.FloatingActionButton
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.view.View
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.widget.Adapter
-import com.droibit.diddo
-import android.widget.ArrayAdapter
+import android.support.v4.app.Fragment
+import android.view.*
 import android.widget.AbsListView
-import com.droibit.diddo.models.dummy.DummyContent
-import com.droibit.diddo.views.adapters.UserActivityAdapter
+import android.widget.AdapterView
+import android.widget.ListView
 import android.widget.Toast
-import com.droibit.diddo.R
-import com.droibit.diddo.fragments.dialogs.ActivityDialogFragment
-import com.droibit.diddo.models.UserActivity
-import android.view.ContextMenu
+import com.droibit.diddo
 import com.droibit.diddo.ItemListActivity
+import com.droibit.diddo.R
 import com.droibit.diddo.SettingsActivity
-import com.droibit.diddo.fragments.dialogs.SortActivityDialogFragment
-import java.util.Comparator
-import com.droibit.easycreator
-import com.droibit.easycreator.showToast
-import com.droibit.easycreator.compat.show
 import com.droibit.diddo.extension.bindView
+import com.droibit.diddo.fragments.dialogs.ActivityDialogFragment
+import com.droibit.diddo.fragments.dialogs.SortActivityDialogFragment
 import com.droibit.diddo.models.RefreshEvent
+import com.droibit.diddo.models.UserActivity
 import com.droibit.diddo.models.loadUserActivities
 import com.droibit.diddo.utils.PauseHandler
 import com.droibit.diddo.utils.SettingsUtils
+import com.droibit.diddo.views.adapters.UserActivityAdapter
+import com.droibit.easycreator.compat.show
 import com.droibit.easycreator.sendMessage
+import com.droibit.easycreator.showToast
 import com.droibit.easycreator.startActivity
+import com.melnykov.fab.FloatingActionButton
 
 /**
  * A list fragment representing a list of Items. This fragment

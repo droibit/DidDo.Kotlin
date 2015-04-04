@@ -1,8 +1,8 @@
 package com.droibit.diddo.views
 
-import android.widget.RelativeLayout
-import android.util.AttributeSet
 import android.content.Context
+import android.util.AttributeSet
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.droibit.diddo.R
 import com.droibit.diddo.extension.bindView

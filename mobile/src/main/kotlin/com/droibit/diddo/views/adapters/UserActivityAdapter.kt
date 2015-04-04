@@ -1,16 +1,14 @@
 package com.droibit.diddo.views.adapters
 
 import android.content.Context
-import android.widget.ArrayAdapter
-import com.droibit.diddo.R
-import com.droibit.diddo.models.UserActivity
+import android.text.format.DateFormat
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.view.LayoutInflater
-import android.text.format.DateUtils
-import android.text.format.DateFormat
+import android.widget.ArrayAdapter
 import android.widget.ListView
+import com.droibit.diddo.R
+import com.droibit.diddo.models.UserActivity
 import com.droibit.diddo.views.UserActivityView
 import java.util.ArrayList
 

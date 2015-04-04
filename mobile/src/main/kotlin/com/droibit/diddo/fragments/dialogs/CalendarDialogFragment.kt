@@ -12,7 +12,6 @@ import com.droibit.easycreator.compat.fragment
 import com.droibit.easycreator.showToast
 import com.squareup.timessquare.CalendarPickerView
 import java.util.ArrayList
-import java.util.Calendar
 import java.util.Date
 import java.util.NoSuchElementException
 import java.util.concurrent.TimeUnit

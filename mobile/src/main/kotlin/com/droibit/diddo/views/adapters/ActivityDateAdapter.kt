@@ -1,15 +1,15 @@
 package com.droibit.diddo.views.adapters
 
 import android.content.Context
+import android.text.TextUtils
+import android.text.format.DateFormat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.droibit.diddo.R
 import com.droibit.diddo.models.ActivityDate
-import android.view.View
-import android.view.ViewGroup
-import android.view.LayoutInflater
 import com.droibit.diddo.views.ActivityDateView
-import android.text.format.DateFormat
-import android.text.TextUtils
 
 /**
  * 活動日をリストに表示するためのアダプタ。

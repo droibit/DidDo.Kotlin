@@ -1,16 +1,12 @@
 package com.droibit.diddo.models
 
 import android.content.Context
-import android.os.SystemClock
-import android.text.format.DateUtils
 import com.activeandroid.Model
+import com.activeandroid.annotation.Column
+import com.activeandroid.annotation.Table
+import com.droibit.diddo.R
 import java.io.Serializable
 import java.util.Date
-import com.activeandroid.annotation.Table
-import com.activeandroid.annotation.Column
-import com.droibit.diddo.R
-import java.util.Calendar
-import java.util.Calendar.DAY_OF_YEAR
 import java.util.concurrent.TimeUnit
 
 /**

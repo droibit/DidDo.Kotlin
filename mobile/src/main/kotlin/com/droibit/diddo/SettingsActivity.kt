@@ -6,10 +6,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceActivity
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.droibit.diddo.extension.bindView
-import android.support.v7.widget.Toolbar
 import com.droibit.diddo.fragments.dialogs.LicenseDialogFragment
 
 /**
