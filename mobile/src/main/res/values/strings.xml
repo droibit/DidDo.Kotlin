@@ -30,7 +30,7 @@
     <string name="transition_date" translatable="false">activity_date</string>
     <string name="tag_list" translatable="false">list</string>
     <string name="title_developer" translatable="false">Developer</string>
-    <string name="summary_developer" translatable="false">itadakit@droibit</string>
+    <string name="summary_developer" translatable="false">"@"droibit</string>
     <string name="title_open_source">Open Source License</string>
     <string name="key_developer" translatable="false">developer</string>
     <string name="key_app" translatable="false">app</string>

@@ -31,7 +31,7 @@ public class SettingsActivity : PreferenceActivity() {
 
         addPreferencesFromResource(R.xml.settings)
 
-        mAppPref.setSummary(getAppVersion())
+        mAppPref.setSummary(BuildConfig.VERSION_NAME)
 
         mDeveloperPref.setOnPreferenceClickListener { launchUrl(R.string.url_twitter) }
         mSourceCodePref.setOnPreferenceClickListener { launchUrl(R.string.url_github) }
@@ -57,20 +57,6 @@ public class SettingsActivity : PreferenceActivity() {
         LicenseDialogFragment.newInstance(R.raw.licenses)
                 .show(getFragmentManager(), "")
         return true
-    }
-
-    private fun getAppVersion(): String {
-        val pm = getPackageManager();
-
-        try {
-            val packageInfo = pm.getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES);
-            return getString(R.string.version_format, packageInfo.versionName);
-        } catch (e: PackageManager.NameNotFoundException) {
-            if (BuildConfig.DEBUG) {
-                e.printStackTrace();
-            }
-        }
-        return getString(R.string.empty_text)
     }
 }
 

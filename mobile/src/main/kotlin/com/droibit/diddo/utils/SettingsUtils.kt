@@ -10,10 +10,9 @@ import com.droibit.easycreator.getDefaultSharedPreferences
  * @auther kumagai
  * @since 15/03/28
  */
-public final class SettingsUtils private() {
+final class SettingsUtils private constructor() {
 
     companion object {
-
         private val KEY_ORDER = "order"
 
         /**

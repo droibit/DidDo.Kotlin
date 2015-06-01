@@ -27,6 +27,7 @@ import com.droibit.easycreator.sendMessage
 import com.droibit.easycreator.showToast
 import com.droibit.easycreator.startActivity
 import com.melnykov.fab.FloatingActionButton
+import kotlin.properties.Delegates
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -65,7 +66,7 @@ public class ActivityListFragment : Fragment(),
      * implement. This mechanism allows activities to be notified of item
      * selections.
      */
-    public trait Callbacks {
+    interface Callbacks {
         /**
          * Callback for when an item has been selected.
          */
@@ -86,14 +87,14 @@ public class ActivityListFragment : Fragment(),
     private val mListView: ListView by bindView(android.R.id.list)
     private val mActionButton: FloatingActionButton by bindView(diddo.R.id.fab)
     private val mPauseHandler = PauseHandler()
-    private var mAdapter: UserActivityAdapter? = null
+    private var mAdapter: UserActivityAdapter by Delegates.notNull()
 
     /** {@inheritDoc} */
     override fun onAttach(activity: Activity) {
         super<Fragment>.onAttach(activity)
 
         // Activities containing this fragment must implement its callbacks.
-        if (!(activity is Callbacks)) {
+        if (activity !is Callbacks) {
             throw IllegalStateException("Activity must implement fragment's callbacks.")
         }
         mCallbacks = activity
@@ -116,11 +117,11 @@ public class ActivityListFragment : Fragment(),
         super<Fragment>.onViewCreated(view, savedInstanceState)
 
         mAdapter = UserActivityAdapter(getActivity())
-        mListView.setAdapter(mAdapter!!)
+        mListView.setAdapter(mAdapter)
         mListView.setEmptyView(view.findViewById(android.R.id.empty))
 
         mListView.setOnItemClickListener { adapterView, view, position, l ->
-            mCallbacks.onItemSelected(mAdapter!!.getItem(position), view.findViewById(android.R.id.text2))
+            mCallbacks.onItemSelected(mAdapter.getItem(position), view.findViewById(android.R.id.text2))
             mActivatedPosition = position
         }
         // 項目長押しでコンテキストメニューを表示する。
@@ -140,7 +141,7 @@ public class ActivityListFragment : Fragment(),
         // DB内にアクティビティが存在すれば表示する
         val userActivities = loadUserActivities()
         if (userActivities.isNotEmpty()) {
-            mAdapter?.addAll(userActivities)
+            mAdapter.addAll(userActivities)
         }
 
         // アクティビティが存在する場合は以前の並び順で表示する。
@@ -161,9 +162,16 @@ public class ActivityListFragment : Fragment(),
             return
         }
 
-        mPauseHandler.sendMessage() { msg ->
-            msg.obj = Runnable { mAdapter?.notifyDataSetChanged() }
+        mPauseHandler.sendMessage() {
+            obj = Runnable { mAdapter.notifyDataSetChanged() }
         }
+    }
+
+    /** {@inheritDoc} */
+    override fun onResume() {
+        super<Fragment>.onResume()
+
+        mPauseHandler.resume()
     }
 
     /** {@inheritDoc} */
@@ -204,7 +212,7 @@ public class ActivityListFragment : Fragment(),
     /** {@inheritDoc} */
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val menuInfo = item.getMenuInfo() as AdapterView.AdapterContextMenuInfo
-        val activity = mAdapter!!.getItem(menuInfo.position)
+        val activity = mAdapter.getItem(menuInfo.position)
         when (item.getItemId()) {
             CONTEXT_MENU_MODIFY_ACTIVITY -> showModifyActivityDialog(activity)
             CONTEXT_MENU_DELETE_ACTIVITY -> deleteActivity(activity)
@@ -220,17 +228,17 @@ public class ActivityListFragment : Fragment(),
     }
 
     /** {@inheritDoc} */
-    override fun onActivityNameEnterd(activity: UserActivity) {
+    override fun onActivityNameEntered(activity: UserActivity) {
         if (activity.isNew) {
-            mAdapter?.add(activity)
+            mAdapter.add(activity)
         } else {
-            mAdapter?.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
         }
 
         val messageRes = if (activity.isNew)
-            R.string.toast_create_activity
-        else
-            R.string.toast_modify_activity
+                            R.string.toast_create_activity
+                        else
+                            R.string.toast_modify_activity
         // メッセージの都合、このタイミングで値を保存する
         activity.save()
 
@@ -238,7 +246,7 @@ public class ActivityListFragment : Fragment(),
     }
 
     /** {@inheritDoc} */
-    override fun onSortChoiced(order: Int) {
+    override fun onSortChose(order: Int) {
         sortActivity(order)
         // 並び順を復元できるように保存しておく
         SettingsUtils.setOrder(getActivity(), order)
@@ -276,12 +284,12 @@ public class ActivityListFragment : Fragment(),
     private fun deleteActivity(activity: UserActivity) {
         // 2画面表示されている状態で鮮太されているアクティビティを削除した場合（※スマホは呼ばれない）
         if (mListView.getChoiceMode() == AbsListView.CHOICE_MODE_SINGLE) {
-            if (mAdapter?.getPosition(activity) == mListView.getCheckedItemPosition()) {
+            if (mAdapter.getPosition(activity) == mListView.getCheckedItemPosition()) {
                 // 詳細画面の表示をクリアしておく
                 mCallbacks.onItemSelected(null, null)
             }
         }
-        mAdapter?.remove(activity)
+        mAdapter.remove(activity)
 
         // トランザクションはまぁいっか…。量もそんなに多くないだろう…。
         val activityDates = activity.details
@@ -299,13 +307,13 @@ public class ActivityListFragment : Fragment(),
 
     // アクティビティリストをソートする。
     private fun sortActivity(order: Int) {
-        if (mAdapter?.isEmpty() == false) {
-            mAdapter!!.sort(UserActivity.getComparator(order))
+        if (!mAdapter.isEmpty()) {
+            mAdapter.sort(UserActivity.getComparator(order))
         }
     }
 
     // 更新イベントが呼ばれた時の処理
     public fun onResreshEvent(event: RefreshEvent) {
-        mAdapter?.updateRow(mListView, event.activity)
+        mAdapter.updateRow(mListView, event.activity)
     }
 }

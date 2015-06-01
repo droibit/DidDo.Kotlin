@@ -11,13 +11,13 @@ import java.util.Date
 import java.util.concurrent.TimeUnit
 
 /**
- * [[UserActivity]]の詳細情報。
+ * [UserActivity]の詳細情報。
  * 活動記録とそのコメント情報を格納する。
  *
  * @auther kumagai
  * @since 15/03/07
  */
-Table(name = ActivityDate.TABLE)
+@Table(name = ActivityDate.TABLE)
 public data class ActivityDate : Model(), Serializable {
 
     companion object {
@@ -28,13 +28,13 @@ public data class ActivityDate : Model(), Serializable {
     }
 
     /** 活動日 */
-    Column(name = DATE)
+    @Column(name = DATE)
     public var date: Date = Date()
     /** 活動のメモ */
-    Column(name = MEMO)
+    @Column(name = MEMO)
     public var memo: String? = null
     /** 親のアクティビティ */
-    Column(name = ACTIVITY)
+    @Column(name = ACTIVITY)
     public var activity: UserActivity? = null
 
     /** 新規作成された活動日かどうか */
@@ -42,9 +42,7 @@ public data class ActivityDate : Model(), Serializable {
         get() = getId() == null
 
     /** {@inheritDoc} */
-    override fun toString(): String {
-        return memo ?: "---"
-    }
+    override fun toString(): String = memo ?: "---"
 
     /**
      * 現在から活動日までの経過日を取得する
@@ -75,7 +73,7 @@ public data class ActivityDate : Model(), Serializable {
 }
 
 /**
- * 新しい[[ActivityDate]]インスタンスを作成するためのヘルパー関数。
+ * 新しい[ActivityDate]インスタンスを作成するためのヘルパー関数。
  */
 public fun newActivityDate(init: ActivityDate.() -> Unit): ActivityDate {
     val activityDate = ActivityDate()
@@ -84,7 +82,7 @@ public fun newActivityDate(init: ActivityDate.() -> Unit): ActivityDate {
 }
 
 /**
- * ダミー用の[[ActivityDate]]インスタンスを作成するためのヘルパー関数。
+ * ダミー用の[ActivityDate]インスタンスを作成するためのヘルパー関数。
  */
 public fun dummyActivityDate(date: Date): ActivityDate {
     return newActivityDate {

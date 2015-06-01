@@ -1,11 +1,11 @@
 package com.droibit.diddo.fragments.dialogs
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v7.app.AlertDialog;
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -16,7 +16,6 @@ import android.widget.EditText
 import com.droibit.diddo.R
 import com.droibit.diddo.models.UserActivity
 import com.droibit.diddo.models.newUserActivity
-import com.droibit.easycreator.alertDialog
 import com.droibit.easycreator.compat.fragment
 
 /**
@@ -28,10 +27,9 @@ import com.droibit.easycreator.compat.fragment
 public class ActivityDialogFragment: DialogFragment() {
 
     companion object {
-        private val TAG = javaClass<ActivityDialogFragment>().getSimpleName()
         private val ARG_SRC = "src"
         private val sDummyCallbacks = object: Callbacks {
-            override fun onActivityNameEnterd(activity: UserActivity) {
+            override fun onActivityNameEntered(activity: UserActivity) {
             }
         }
 
@@ -50,8 +48,8 @@ public class ActivityDialogFragment: DialogFragment() {
     /**
      * アクティビティ名が入力された時に呼ばれるコールバック
      */
-    trait Callbacks {
-        fun onActivityNameEnterd(activity: UserActivity)
+    interface Callbacks {
+        fun onActivityNameEntered(activity: UserActivity)
     }
 
     private var mPositiveButton: Button? = null
@@ -95,12 +93,12 @@ public class ActivityDialogFragment: DialogFragment() {
 
         val titleRes = if (containsSrc) R.string.title_activity_modify else R.string.title_new_activity
         val positiveRes = if (containsSrc) R.string.button_modify else R.string.button_create
-        val dialog = alertDialog(getActivity()) {
-                setTitle(titleRes)
-                setView(view)
-                setPositiveButton(positiveRes) { dialog, whitch -> onDialogOk() }
-                setNegativeButton(android.R.string.cancel, null)
-        }
+        val dialog = AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog)
+                .setTitle(titleRes)
+                .setView(view)
+                .setPositiveButton(positiveRes) { dialog, which -> onDialogOk() }
+                .setNegativeButton(android.R.string.cancel, null)
+                .create()
 
         // ダイアログを表示した際にキーボード表示する。
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
@@ -120,14 +118,14 @@ public class ActivityDialogFragment: DialogFragment() {
         val srcActivity = getArguments().getSerializable(ARG_SRC) as? UserActivity
         if (srcActivity != null) {
             srcActivity.name = mNameEdit!!.getText().toString()
-            mCallbacks.onActivityNameEnterd(srcActivity)
+            mCallbacks.onActivityNameEntered(srcActivity)
             return
         }
 
         val newActivity = newUserActivity {
             name = mNameEdit!!.getText().toString()
         }
-        mCallbacks.onActivityNameEnterd(newActivity)
+        mCallbacks.onActivityNameEntered(newActivity)
 
     }
 }

@@ -2,7 +2,7 @@ package com.droibit.diddo
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.ActionBarActivity
+import android.support.v7.app.AppCompatActivity
 import android.support.v4.app.NavUtils
 import android.view.MenuItem
 import android.support.v7.widget.Toolbar
@@ -21,7 +21,7 @@ import com.droibit.easycreator.compat.navigateUpTo
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link ItemDetailFragment}.
  */
-public class ItemDetailActivity : ActionBarActivity() {
+public class ItemDetailActivity : AppCompatActivity() {
 
     /** {@inheritDoc} */
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +71,7 @@ public class ItemDetailActivity : ActionBarActivity() {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(javaClass<ItemListActivity>())
+            navigateUpTo<ItemListActivity>()
             return true
         }
         return super.onOptionsItemSelected(item)

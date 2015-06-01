@@ -26,11 +26,13 @@ import com.droibit.diddo.models.UserActivity
 import com.droibit.diddo.utils.ViewAnimationUtils
 import com.droibit.diddo.views.adapters.ActivityDateAdapter
 import com.droibit.easycreator.compat.fragment
+import com.droibit.easycreator.compat.getInteger
 import com.droibit.easycreator.compat.show
 import com.droibit.easycreator.sendMessage
 import com.droibit.easycreator.showToast
 import com.melnykov.fab.FloatingActionButton
 import java.util.ArrayList
+import kotlin.properties.Delegates
 
 /**
  * A fragment representing a single Item detail screen.
@@ -61,8 +63,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     /**
      * The dummy content this fragment is presenting.
      */
-    private var mUserActivity: UserActivity? = null
-
+    private var mUserActivity: UserActivity by Delegates.notNull()
     private val mElapsedDateText: TextView by bindView(R.id.elapsed_date)
     private val mDateText: TextView by bindView(R.id.date)
     private val mAddActionButton: FloatingActionButton by bindView(R.id.fab_add)
@@ -97,7 +98,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         val rootView = inflater.inflate(R.layout.fragment_item_detail, container, false)
 
         // Android5.0以上の場合はヘッダにリップルエフェクトを適用する。
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= 21) {//Build.VERSION_CODES.LOLLIPOP) {
             rootView.addOnLayoutChangeListener(this)
         }
         return rootView
@@ -131,24 +132,24 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super<Fragment>.onActivityCreated(savedInstanceState)
 
-        val activityDates = mUserActivity?.details
-        if (activityDates != null && activityDates.isNotEmpty()) {
+        val activityDates = mUserActivity.details
+        if (activityDates.isNotEmpty()) {
             (mListView.getAdapter() as ActivityDateAdapter).addAll(activityDates)
         }
         updateElapsedViews()
     }
 
     /** {@inheritDoc} */
-    override fun onActivityDateEnterd(activityDate: ActivityDate) {
+    override fun onActivityDateEntered(activityDate: ActivityDate) {
         val adapter = mListView.getAdapter() as ActivityDateAdapter
         if (activityDate.isNew) {
             adapter.add(activityDate)
             // 修正した場合に最新の日付を変更しないようにする。
-            mUserActivity!!.recentlyDate = activityDate.date
+            mUserActivity.recentlyDate = activityDate.date
             // 新規追加したことをマスタ側に通知する。
-            sendRefreshEvent(mUserActivity!!)
+            sendRefreshEvent(mUserActivity)
         } else {
-            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged()
         }
 
         val messageRes = if (activityDate.isNew)
@@ -156,7 +157,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
                         else
                             R.string.toast_modify_activity_memo
         // アクティビティの日付も更新しておく。
-        mUserActivity!!.save()
+        mUserActivity.save()
         // メッセージの都合、このタイミングでDBに保存する。
         activityDate.activity = mUserActivity
         activityDate.save()
@@ -173,18 +174,11 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
     override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
         v.removeOnLayoutChangeListener(this)
 
-        val res = getResources()
         val header = v.findViewById(R.id.header)
-        ViewAnimationUtils.animationCircularReveal(header, res.getInteger(R.integer.medium_animation_millis).toLong())
+        ViewAnimationUtils.animationCircularReveal(header, getInteger(R.integer.medium_animation_millis).toLong())
 
-        // アクティビティが存在しない場合はボタンを押せないようにしておく。
-        if (mUserActivity != null) {
-            ViewAnimationUtils.animationScaleUp(mAddActionButton, res.getInteger(R.integer.short_animation_millis).toLong())
-            ViewAnimationUtils.animationScaleUp(mCalendarActionButton, res.getInteger(R.integer.short_animation_millis).toLong())
-        } else {
-            mAddActionButton.setVisibility(View.GONE)
-            mCalendarActionButton.setVisibility(View.GONE)
-        }
+        ViewAnimationUtils.animationScaleUp(mAddActionButton, getInteger(R.integer.short_animation_millis).toLong())
+        ViewAnimationUtils.animationScaleUp(mCalendarActionButton, getInteger(R.integer.short_animation_millis).toLong())
     }
 
     // アクティビティのメモ編集用のダイアログを表示する。
@@ -224,16 +218,16 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
             return
         }
 
-        val activityDates = mUserActivity!!.details
+        val activityDates = mUserActivity.details
         CalendarDialogFragment.newInstance(ArrayList(activityDates))
                 .show(this)
     }
 
     private fun sendRefreshEvent(userActivity: UserActivity) {
         // 2画面表示しているならマスタ側に変更が反映されるようにする。
-        mHandler?.sendMessage { msg ->
-            msg.what = ItemListActivity.MESSAGE_REFRESH
-            msg.obj = RefreshEvent(userActivity)
+        mHandler?.sendMessage {
+            what = ItemListActivity.MESSAGE_REFRESH
+            obj = RefreshEvent(userActivity)
         }
     }
 }

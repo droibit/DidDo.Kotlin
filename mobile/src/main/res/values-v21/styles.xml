@@ -10,19 +10,16 @@
         <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
 
         <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
 
         <item name="android:windowContentTransitions">true</item>
-        <item name="android:alertDialogTheme">@style/Theme.AlertDialog</item>
-
-        <!--<item name="android:alertDialogTheme">@style/AppTheme.Dialog</item>-->
     </style>
 
     <style name="AppTheme.Detail" parent="@style/AppTheme">
     </style>
 
-    <style name="Theme.AlertDialog" parent="android:Theme.Material.Light.Dialog.Alert">
-        <item name="android:colorPrimary">@color/primary</item>
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="android:colorAccent">@color/primary</item>
+    <style name="AppTheme.Settings" parent="@style/AppTheme">
+        <item name="colorAccent">@color/primary</item>
     </style>
+
 </resources>

@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit
 public class CalendarDialogFragment: DialogFragment() {
 
     companion object {
-
         private val ARG_DATES = "activity_dates"
 
         /**

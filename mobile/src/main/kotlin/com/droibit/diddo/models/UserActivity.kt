@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
  * @auther kumagai
  * @since 15/03/07
  */
-Table(name = UserActivity.TABLE)
+@Table(name = UserActivity.TABLE)
 public data class UserActivity(): Model(), Serializable {
 
     companion object {
@@ -51,16 +51,16 @@ public data class UserActivity(): Model(), Serializable {
             when (type) {
                 SORT_NAME          -> return NameComarator()
                 SORT_ACTIVITY_DATE -> return DateComarator()
-                else               -> return null
+                else               -> return throw IllegalArgumentException()
             }
         }
     }
 
     /** 活動名 */
-    Column(name = NAME)
+    @Column(name = NAME)
     public var name: String? = null
     /** 最新の活動日 */
-    Column(name = RECENTLY_DATE)
+    @Column(name = RECENTLY_DATE)
     public var recentlyDate: Date = Date()
 
     /** 新規作成されたアクティビティかどうか */
@@ -79,21 +79,19 @@ public data class UserActivity(): Model(), Serializable {
         val count = duration / TimeUnit.DAYS.toMillis(1)
 
         return if (count == 0L) {
-            context.getString(R.string.text_elapsed_zero)
-        } else {
-            // 100日超えたら+表示にする。
-            if (count > DAYS_LIMIT) {
-                context.getString(R.string.text_over)
-            } else {
-                context.getString(R.string.text_elapsed_format_short, count.toString())
-            }
-        }
+                    context.getString(R.string.text_elapsed_zero)
+                } else {
+                    // 100日超えたら+表示にする。
+                    if (count > DAYS_LIMIT) {
+                        context.getString(R.string.text_over)
+                    } else {
+                        context.getString(R.string.text_elapsed_format_short, count.toString())
+                    }
+                }
     }
 
     /** {@inheritDoc} */
-    override fun toString(): String {
-        return name ?: ""
-    }
+    override fun toString(): String = name ?: ""
 }
 
 /**

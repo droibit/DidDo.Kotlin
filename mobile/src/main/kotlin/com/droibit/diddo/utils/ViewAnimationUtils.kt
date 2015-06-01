@@ -9,7 +9,7 @@ import android.view.animation.ScaleAnimation
 /**
  * ビューをアニメーションするためのユーティリティクラス
  */
-final class ViewAnimationUtils private() {
+final class ViewAnimationUtils private constructor() {
 
     companion object {
 

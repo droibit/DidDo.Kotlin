@@ -2,6 +2,7 @@ package com.droibit.diddo.utils
 
 import android.os.Handler
 import android.os.Message
+import com.droibit.diddo.BuildConfig
 import java.util.ArrayList
 
 /**
@@ -12,10 +13,10 @@ import java.util.ArrayList
  *
  * @author kumagai
  */
-public open class PauseHandler: Handler() {
+open class PauseHandler: Handler() {
 
     private val mMessageQueue = ArrayList<Message>()
-    private var mPaused: Boolean = false
+    private var mPaused = false
 
     /**
      * ライフサイクルのレジュームの際にメッセージがあれば処理する。
@@ -54,9 +55,7 @@ public open class PauseHandler: Handler() {
     /**
      * レジューム時に処理する[Message]を保持するかどうか。
      */
-    open fun storeMessage(msg: Message): Boolean {
-        return true
-    }
+    open fun storeMessage(msg: Message): Boolean = true
 
     /**
      * レジューム時に保持していたメッセージを処理する。
@@ -65,7 +64,9 @@ public open class PauseHandler: Handler() {
         try {
             (msg.obj as Runnable).run()
         } catch (e: ClassCastException) {
-            e.printStackTrace()
+            if (BuildConfig.DEBUG) {
+                e.printStackTrace()
+            }
         }
     }
 }

@@ -4,8 +4,8 @@ import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v7.app.AlertDialog
 import com.droibit.diddo.R
-import com.droibit.easycreator.alertDialog
 import com.droibit.easycreator.compat.fragment
 
 /**
@@ -17,10 +17,9 @@ import com.droibit.easycreator.compat.fragment
 public class SortActivityDialogFragment : DialogFragment() {
 
     companion  object {
-        private val TAG = javaClass<SortActivityDialogFragment>().getSimpleName()
         private val ARG_POSITION = "position"
         private val sDummyCallbacks = object: Callbacks {
-            override fun onSortChoiced(order: Int) {
+            override fun onSortChose(order: Int) {
             }
         }
 
@@ -37,8 +36,8 @@ public class SortActivityDialogFragment : DialogFragment() {
     /**
      * ソートの種類が選択された時に呼ばれるコールバック
      */
-    trait Callbacks {
-        fun onSortChoiced(order: Int)
+    interface Callbacks {
+        fun onSortChose(order: Int)
     }
 
     private var mCallbacks: Callbacks = sDummyCallbacks
@@ -55,11 +54,12 @@ public class SortActivityDialogFragment : DialogFragment() {
     /** {@inheritDoc} */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
         val position = getArguments().getInt(ARG_POSITION)
-        return alertDialog(getActivity()) {
-                setSingleChoiceItems(R.array.sort_activity_labels, position) { d, which ->
-                    mCallbacks.onSortChoiced(which)
-                    dismiss()
-                }
-            }
+        return AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog)
+                          .setSingleChoiceItems(R.array.sort_activity_labels, position) { d, which ->
+                                                    mCallbacks.onSortChose(which)
+                                                    dismiss()
+                                                }
+                          .create()
+
     }
 }

@@ -8,7 +8,8 @@
                   android:layout_height="match_parent"
                   android:orientation="vertical">
 
-        <TextView android:layout_width="match_parent"
+        <android.support.v7.widget.AppCompatTextView
+                  android:layout_width="match_parent"
                   android:layout_height="@dimen/list_header_height"
                   android:paddingLeft="@dimen/side_space"
                   android:gravity="center_vertical"
@@ -23,7 +24,8 @@
                   android:scrollbars="vertical"
                   android:visibility="visible" />
 
-        <TextView android:id="@android:id/empty"
+        <android.support.v7.widget.AppCompatTextView
+                  android:id="@android:id/empty"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:gravity="center"

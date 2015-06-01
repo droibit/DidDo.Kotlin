@@ -8,7 +8,8 @@
               android:paddingRight="@dimen/dialog_side_space"
               android:paddingBottom="@dimen/dialog_bottom_space">
 
-    <TextView android:text="@string/title_activity_name"
+    <android.support.v7.widget.AppCompatTextView
+              android:text="@string/title_activity_name"
               android:textAppearance="?android:attr/textAppearanceMedium"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -19,7 +20,8 @@
               android:textSize="@dimen/text_size_xlarge"
               android:fontFamily="sans-serif-light" />
 
-    <EditText android:layout_width="match_parent"
+    <android.support.v7.widget.AppCompatEditText
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:id="@+id/edit_activity"
               android:selectAllOnFocus="true"
@@ -28,6 +30,6 @@
               android:maxLength="@integer/max_acitivity_length"
               android:singleLine="true">
               <requestFocus />
-    </EditText>
+    </android.support.v7.widget.AppCompatEditText>
 
 </LinearLayout>

@@ -24,7 +24,7 @@
                   android:layout_toRightOf="@id/check"
                   android:gravity="center_vertical">
 
-        <TextView android:id="@android:id/text1"
+        <android.support.v7.widget.AppCompatTextView android:id="@android:id/text1"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   tools:text="@string/dummy_date"
@@ -32,7 +32,8 @@
                   android:singleLine="true"
                   android:ellipsize="end" />
 
-        <TextView android:id="@android:id/text2"
+        <android.support.v7.widget.AppCompatTextView
+                  android:id="@android:id/text2"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginTop="2dp"

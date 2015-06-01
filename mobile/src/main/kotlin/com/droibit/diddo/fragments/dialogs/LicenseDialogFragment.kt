@@ -15,7 +15,6 @@ import de.psdev.licensesdialog.LicensesDialog
 public class LicenseDialogFragment: DialogFragment() {
 
     companion object {
-
         private val ARG_NOTICES = "notices"
 
         /**
@@ -26,7 +25,6 @@ public class LicenseDialogFragment: DialogFragment() {
                 args.putInt(ARG_NOTICES, noticesId)
             }
         }
-
     }
 
     /** {@inheritDoc} */

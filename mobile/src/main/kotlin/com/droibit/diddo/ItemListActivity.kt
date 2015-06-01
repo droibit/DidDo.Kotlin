@@ -5,7 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.v7.app.ActionBarActivity
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
@@ -34,7 +34,7 @@ import com.droibit.easycreator.intent
  * [ItemListFragment.Callbacks] interface
  * to listen for item selections.
  */
-public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callbacks, Handler.Callback {
+public class ItemListActivity : AppCompatActivity(), ActivityListFragment.Callbacks, Handler.Callback {
 
     companion object {
         private val TAG = javaClass<ItemListActivity>().getSimpleName()
@@ -47,11 +47,11 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private var mTwoPane: Boolean = false
+    private var mTwoPane = false
 
     /** {@inheritDoc} */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super<ActionBarActivity>.onCreate(savedInstanceState)
+        super<AppCompatActivity>.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
@@ -76,7 +76,7 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
 
     /** {@inheritDoc} */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super<ActionBarActivity>.onActivityResult(requestCode, resultCode, data)
+        super<AppCompatActivity>.onActivityResult(requestCode, resultCode, data)
 
         getSupportFragmentManager().findFragmentById(R.id.item_list)
             ?.onActivityResult(requestCode, resultCode, data)
@@ -102,22 +102,26 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
             return
         }
 
-        startActivityForResultCompat(
-                intent = intent<ItemDetailActivity>(this) {
-                            putExtra(ActivityDetailFragment.ARG_ITEM_ID, activity!!.getId())
-                            putExtra(ActivityDetailFragment.ARG_ITEM_TITLE, activity!!.name)
-                         },
-                options = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                                makeSceneTransitionAnimation(sharedView!!, getString(R.string.transition_date))
-                          else
+        if (activity != null && sharedView != null) {
+            startActivityForResultCompat(
+                    intent = intent<ItemDetailActivity>(this) {
+                        putExtra(ActivityDetailFragment.ARG_ITEM_ID, activity.getId())
+                        putExtra(ActivityDetailFragment.ARG_ITEM_TITLE, activity.name)
+                    },
+                    options = if (Build.VERSION.SDK_INT >= 21)//Build.VERSION_CODES.LOLLIPOP)
+                                makeSceneTransitionAnimation(sharedView, getString(R.string.transition_date))
+                            else
                                 null,
-                requestCode = REQUEST_ACTIVITY
-        )
+                    requestCode = REQUEST_ACTIVITY
+            )
+        }
     }
 
     /** {@inheritDoc} */
     override fun handleMessage(msg: Message): Boolean {
-        Log.d(TAG, "Message : ${msg.toString()}")
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "Message : ${msg.toString()}")
+        }
 
         if (msg.what != MESSAGE_REFRESH) {
             return false
@@ -125,8 +129,7 @@ public class ItemListActivity : ActionBarActivity(), ActivityListFragment.Callba
 
         // 2画面の場合のみ
         if (mTwoPane) {
-            val f = getSupportFragmentManager().findFragmentById(R.id.item_list)
-                    as? ActivityListFragment
+            val f = getSupportFragmentManager().findFragmentById(R.id.item_list) as? ActivityListFragment
             f?.onResreshEvent(msg.obj as RefreshEvent)
         }
         return true
