@@ -27,7 +27,6 @@ public fun <T : View>Fragment.bindView(resId: Int): ViewById<T> = object: ViewBy
 
     private var view: T? = null
 
-    @suppress("UNCHECKED_CAST")
     override fun get(thisRef: Any, prop: PropertyMetadata): T {
         if (view == null) {
             view = getView().findViewById(resId) as T
@@ -43,7 +42,6 @@ public fun <T : View>View.bindView(resId: Int): ViewById<T> = object: ViewById<T
 
     private var view: T? = null
 
-    @suppress("UNCHECKED_CAST")
     override fun get(thisRef: Any, prop: PropertyMetadata): T {
         if (view == null) {
             view = findViewById(resId) as T
@@ -59,7 +57,6 @@ public fun <T: Preference>PreferenceActivity.bindView(resId: Int): ViewByKey<T> 
 
     private var pref: T? = null
 
-    @suppress("UNCHECKED_CAST")
     override fun get(thisRef: Any, prop: PropertyMetadata): T {
         if (pref == null) {
             pref = findPreference(getString(resId)) as T

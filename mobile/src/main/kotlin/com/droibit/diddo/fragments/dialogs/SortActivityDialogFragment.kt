@@ -12,12 +12,12 @@ import com.droibit.easycreator.compat.fragment
  * アクティビティをソートするためのダイアログ
  *
  * @auther kumagai
- * @since 15/03/15
  */
 public class SortActivityDialogFragment : DialogFragment() {
 
     companion  object {
-        private val ARG_POSITION = "position"
+        const private val ARG_POSITION = "position"
+
         private val sDummyCallbacks = object: Callbacks {
             override fun onSortChose(order: Int) {
             }
@@ -46,15 +46,15 @@ public class SortActivityDialogFragment : DialogFragment() {
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
 
-        if (getTargetFragment() is Callbacks) {
-            mCallbacks = getTargetFragment() as Callbacks
+        if (targetFragment is Callbacks) {
+            mCallbacks = targetFragment as Callbacks
         }
     }
 
     /** {@inheritDoc} */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
-        val position = getArguments().getInt(ARG_POSITION)
-        return AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog)
+        val position = arguments.getInt(ARG_POSITION)
+        return AlertDialog.Builder(context, R.style.AppTheme_Dialog)
                           .setSingleChoiceItems(R.array.sort_activity_labels, position) { d, which ->
                                                     mCallbacks.onSortChose(which)
                                                     dismiss()

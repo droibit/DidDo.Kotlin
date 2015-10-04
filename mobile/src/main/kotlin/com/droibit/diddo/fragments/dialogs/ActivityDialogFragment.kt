@@ -22,12 +22,11 @@ import com.droibit.easycreator.compat.fragment
  * アクティビティの作成および編集をするためのダイアログ
  *
  * @auther kumagai
- * @since 15/03/07
  */
 public class ActivityDialogFragment: DialogFragment() {
 
     companion object {
-        private val ARG_SRC = "src"
+        const private val ARG_SRC = "src"
         private val sDummyCallbacks = object: Callbacks {
             override fun onActivityNameEntered(activity: UserActivity) {
             }
@@ -56,7 +55,7 @@ public class ActivityDialogFragment: DialogFragment() {
     private var mNameEdit: EditText? = null
     private var mCallbacks: Callbacks = sDummyCallbacks
 
-    private val mNameWather: TextWatcher = object: TextWatcher {
+    private val mNameWatcher: TextWatcher = object: TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         }
 
@@ -65,7 +64,7 @@ public class ActivityDialogFragment: DialogFragment() {
 
         // アクティビティ名が空の時はOK
         override fun afterTextChanged(s: Editable?) {
-            mPositiveButton?.setEnabled(!TextUtils.isEmpty(s?.toString()))
+            mPositiveButton?.isEnabled = !TextUtils.isEmpty(s?.toString())
         }
     }
 
@@ -73,35 +72,35 @@ public class ActivityDialogFragment: DialogFragment() {
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
 
-        if (getTargetFragment() is Callbacks) {
-            mCallbacks = getTargetFragment() as Callbacks
+        if (targetFragment is Callbacks) {
+            mCallbacks = targetFragment as Callbacks
         }
     }
 
     /** {@inheritDoc} */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = View.inflate(getActivity(), R.layout.dialog_activity, null)
+        val view = View.inflate(context, R.layout.dialog_activity, null)
 
         mNameEdit = view.findViewById(R.id.edit_activity) as EditText
-        mNameEdit!!.addTextChangedListener(mNameWather)
-        val containsSrc = getArguments().containsKey(ARG_SRC)
+        mNameEdit!!.addTextChangedListener(mNameWatcher)
+        val containsSrc = arguments.containsKey(ARG_SRC)
         if (containsSrc) {
-            val srcActivity = getArguments().getSerializable(ARG_SRC) as UserActivity
+            val srcActivity = arguments.getSerializable(ARG_SRC) as UserActivity
             mNameEdit!!.setText(srcActivity.name)
             mNameEdit!!.selectAll();
         }
 
         val titleRes = if (containsSrc) R.string.title_activity_modify else R.string.title_new_activity
         val positiveRes = if (containsSrc) R.string.button_modify else R.string.button_create
-        val dialog = AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog)
-                .setTitle(titleRes)
-                .setView(view)
-                .setPositiveButton(positiveRes) { dialog, which -> onDialogOk() }
-                .setNegativeButton(android.R.string.cancel, null)
-                .create()
+        val dialog = AlertDialog.Builder(context, R.style.AppTheme_Dialog)
+                                .setTitle(titleRes)
+                                .setView(view)
+                                .setPositiveButton(positiveRes) { dialog, which -> onDialogOk() }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create()
 
         // ダイアログを表示した際にキーボード表示する。
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         return dialog
     }
 
@@ -109,21 +108,21 @@ public class ActivityDialogFragment: DialogFragment() {
     override fun onResume() {
         super.onResume()
 
-        val dialog = getDialog() as AlertDialog
+        val dialog = dialog as AlertDialog
         mPositiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-        mPositiveButton?.setEnabled(!TextUtils.isEmpty(mNameEdit!!.getText()))
+        mPositiveButton?.isEnabled = !TextUtils.isEmpty(mNameEdit!!.text)
     }
 
     private fun onDialogOk() {
-        val srcActivity = getArguments().getSerializable(ARG_SRC) as? UserActivity
+        val srcActivity = arguments.getSerializable(ARG_SRC) as? UserActivity
         if (srcActivity != null) {
-            srcActivity.name = mNameEdit!!.getText().toString()
+            srcActivity.name = mNameEdit!!.text.toString()
             mCallbacks.onActivityNameEntered(srcActivity)
             return
         }
 
         val newActivity = newUserActivity {
-            name = mNameEdit!!.getText().toString()
+            name = mNameEdit!!.text.toString()
         }
         mCallbacks.onActivityNameEntered(newActivity)
 

@@ -8,7 +8,6 @@ import com.droibit.easycreator.getDefaultSharedPreferences
  * アプリの設定を読み書きするためのユーティリティクラス。
  *
  * @auther kumagai
- * @since 15/03/28
  */
 final class SettingsUtils private constructor() {
 

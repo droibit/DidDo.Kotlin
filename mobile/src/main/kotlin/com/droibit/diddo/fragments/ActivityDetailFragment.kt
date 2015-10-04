@@ -47,8 +47,8 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
          * The fragment argument representing the item ID that this fragment
          * represents.
          */
-        val ARG_ITEM_ID = "item_id"
-        val ARG_ITEM_TITLE = "item_title"
+        const val ARG_ITEM_ID = "item_id"
+        const val ARG_ITEM_TITLE = "item_title"
 
         /**
          * 新しいインスタンスを作成する。
@@ -74,19 +74,19 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
 
     /** {@inheritDoc} */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super<Fragment>.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
-        if (getArguments()?.containsKey(ARG_ITEM_ID) == true) {
+        if (arguments?.containsKey(ARG_ITEM_ID) == true) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mUserActivity = Model.load(javaClass<UserActivity>(), getArguments().getLong(ARG_ITEM_ID))
+            mUserActivity = Model.load(UserActivity::class.java, arguments.getLong(ARG_ITEM_ID))
         }
     }
 
     /** {@inheritDoc} */
     override fun onAttach(activity: Activity) {
-        super<Fragment>.onAttach(activity)
+        super.onAttach(activity)
 
         if (activity is Handler.Callback) {
             mHandler = Handler(activity)
@@ -98,7 +98,7 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         val rootView = inflater.inflate(R.layout.fragment_item_detail, container, false)
 
         // Android5.0以上の場合はヘッダにリップルエフェクトを適用する。
-        if (Build.VERSION.SDK_INT >= 21) {//Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             rootView.addOnLayoutChangeListener(this)
         }
         return rootView
@@ -106,14 +106,14 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
 
     /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super<Fragment>.onViewCreated(view, savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
 
         // 日付テキストをアニメーション表示する。
         ViewCompat.setTransitionName(mDateText, getString(R.string.transition_date))
 
         val adapter = ActivityDateAdapter(getActivity())
-        mListView.setAdapter(adapter)
-        mListView.setEmptyView(view.findViewById(android.R.id.empty))
+        mListView.adapter = adapter
+        mListView.emptyView = view.findViewById(android.R.id.empty)
 
         mListView.setOnItemClickListener { adapterView, view, position, l ->
             // クリックされたらメモの内容をトーストで表示する。
@@ -130,18 +130,18 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
 
     /** {@inheritDoc} */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super<Fragment>.onActivityCreated(savedInstanceState)
+        super.onActivityCreated(savedInstanceState)
 
         val activityDates = mUserActivity.details
         if (activityDates.isNotEmpty()) {
-            (mListView.getAdapter() as ActivityDateAdapter).addAll(activityDates)
+            (mListView.adapter as ActivityDateAdapter).addAll(activityDates)
         }
         updateElapsedViews()
     }
 
     /** {@inheritDoc} */
     override fun onActivityDateEntered(activityDate: ActivityDate) {
-        val adapter = mListView.getAdapter() as ActivityDateAdapter
+        val adapter = mListView.adapter as ActivityDateAdapter
         if (activityDate.isNew) {
             adapter.add(activityDate)
             // 修正した場合に最新の日付を変更しないようにする。
@@ -162,12 +162,12 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
         activityDate.activity = mUserActivity
         activityDate.save()
 
-        showToast(getActivity(), messageRes, Toast.LENGTH_SHORT)
+        showToast(context, messageRes, Toast.LENGTH_SHORT)
         // 日をまたいで活動日を追加した場合のために画面を更新する。
         updateElapsedViews()
 
         // TODO: 削除した時も
-        getActivity()?.setResult(Activity.RESULT_OK)
+        activity?.setResult(Activity.RESULT_OK)
     }
 
     /** {@inheritDoc} */
@@ -194,27 +194,27 @@ public class ActivityDetailFragment : Fragment(), ActivityMemoDialogFragment.Cal
                    else
                         getString(R.string.toast_empty_memo)
 
-        showToast(getActivity(), text, Toast.LENGTH_LONG)
+        showToast(context, text, Toast.LENGTH_LONG)
     }
 
     private fun updateElapsedViews() {
-        if (mListView.getAdapter().isEmpty()) {
+        if (mListView.adapter.isEmpty) {
             mElapsedDateText.setText(R.string.empty_text)
             mDateText.setText(R.string.empty_text)
             return
         }
 
-        val recentlyActivityDate = (mListView.getAdapter() as ActivityDateAdapter).getLastItem()!!
-        mElapsedDateText.setText(recentlyActivityDate.getElapsedDateFromNow(getActivity()))
+        val recentlyActivityDate = (mListView.adapter as ActivityDateAdapter).getLastItem()!!
+        mElapsedDateText.text = recentlyActivityDate.getElapsedDateFromNow(context)
 
-        val date = DateFormat.getDateFormat(getActivity()).format(recentlyActivityDate.date)
-        val hour = DateFormat.getTimeFormat(getActivity()).format(recentlyActivityDate.date)
-        mDateText.setText("${date} ${hour}")
+        val date = DateFormat.getDateFormat(context).format(recentlyActivityDate.date)
+        val hour = DateFormat.getTimeFormat(context).format(recentlyActivityDate.date)
+        mDateText.text = "$date $hour"
     }
 
     private fun showActivityDateCalendar() {
-        if (mListView.getAdapter().isEmpty()) {
-            showToast(getActivity(), R.string.text_no_activity_date, Toast.LENGTH_SHORT)
+        if (mListView.adapter.isEmpty) {
+            showToast(context, R.string.text_no_activity_date, Toast.LENGTH_SHORT)
             return
         }
 

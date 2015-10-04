@@ -18,12 +18,11 @@ import java.util.Date
  * アクティビティの活動日の作成及び編集をするためのダイアログ
  *
  * @auther kumagai
- * @since 15/03/15
  */
 public class ActivityMemoDialogFragment : DialogFragment() {
 
     companion object {
-        private val ARG_SRC = "src"
+        const private val ARG_SRC = "src"
         private val sDummyCallbacks = object: Callbacks {
             override fun onActivityDateEntered(activityDate: ActivityDate) {
             }
@@ -55,44 +54,44 @@ public class ActivityMemoDialogFragment : DialogFragment() {
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
 
-        if (getTargetFragment() is Callbacks) {
-            mCallbacks = getTargetFragment() as Callbacks
+        if (targetFragment is Callbacks) {
+            mCallbacks = targetFragment as Callbacks
         }
     }
 
     /** {@inheritDoc} */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = View.inflate(getActivity(), R.layout.dialog_activity_date, null)
+        val view = View.inflate(context, R.layout.dialog_activity_date, null)
 
         mMemoEdit = view.findViewById(R.id.edit_memo) as EditText
 
-        val srcActivityDate = getArguments().getSerializable(ARG_SRC) as? ActivityDate
+        val srcActivityDate = arguments.getSerializable(ARG_SRC) as? ActivityDate
         mMemoEdit!!.setText(srcActivityDate?.memo)
 
         val titleRes = if (srcActivityDate != null) R.string.title_modify_activity_memo else R.string.title_new_activity_date
         val positiveRes = if (srcActivityDate != null) R.string.button_modify else R.string.button_create
-        val dialog = AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog)
-                .setTitle(titleRes)
-                .setView(view)
-                .setPositiveButton(positiveRes) { dialog, which -> onDialogOk() }
-                .setNegativeButton(android.R.string.cancel, null)
-                .create()
+        val dialog = AlertDialog.Builder(context, R.style.AppTheme_Dialog)
+                                .setTitle(titleRes)
+                                .setView(view)
+                                .setPositiveButton(positiveRes) { dialog, which -> onDialogOk() }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create()
 
         // ダイアログを表示した際にキーボード表示する。
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         return dialog
     }
 
     private fun onDialogOk() {
-        val srcActivityDate = getArguments().getSerializable(ARG_SRC) as? ActivityDate
+        val srcActivityDate = arguments.getSerializable(ARG_SRC) as? ActivityDate
         if (srcActivityDate != null) {
-            srcActivityDate.memo = mMemoEdit!!.getText().toString()
+            srcActivityDate.memo = mMemoEdit!!.text.toString()
             mCallbacks.onActivityDateEntered(srcActivityDate)
             return
         }
 
         val newActivityDate = newActivityDate {
-            memo = mMemoEdit!!.getText().toString()
+            memo = mMemoEdit!!.text.toString()
             date = Date()
         }
         mCallbacks.onActivityDateEntered(newActivityDate)

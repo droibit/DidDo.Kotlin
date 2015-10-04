@@ -15,16 +15,15 @@ import java.util.concurrent.TimeUnit
  * 活動記録とそのコメント情報を格納する。
  *
  * @auther kumagai
- * @since 15/03/07
  */
 @Table(name = ActivityDate.TABLE)
-public data class ActivityDate : Model(), Serializable {
+public class ActivityDate : Model(), Serializable {
 
     companion object {
-        val TABLE = "activity_detail"
-        val ACTIVITY = "activity"
-        val DATE = "date"
-        val MEMO = "memo"
+        const val TABLE = "activity_detail"
+        const val ACTIVITY = "activity"
+        const val DATE = "date"
+        const val MEMO = "memo"
     }
 
     /** 活動日 */
@@ -55,8 +54,8 @@ public data class ActivityDate : Model(), Serializable {
         return if (count == 0L) {
                     val nc = Calendar.getInstance()
                     val dc = Calendar.getInstance()
-                    nc.setTime(now)
-                    dc.setTime(date)
+                    nc.time = now
+                    dc.time = date
                     // 日をまたいでも1日経過していない場合
                     if (nc.get(Calendar.DAY_OF_WEEK) == dc.get(Calendar.DAY_OF_WEEK))
                         context.getString(R.string.text_today)

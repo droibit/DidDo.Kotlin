@@ -21,12 +21,11 @@ import java.util.concurrent.TimeUnit
  * アクティビティの作成および編集をするためのダイアログ
  *
  * @auther kumagai
- * @since 15/03/07
  */
 public class CalendarDialogFragment: DialogFragment() {
 
     companion object {
-        private val ARG_DATES = "activity_dates"
+        const private val ARG_DATES = "activity_dates"
 
         /**
          * 新しいインスタンスを作成する。
@@ -40,11 +39,11 @@ public class CalendarDialogFragment: DialogFragment() {
 
     /** {@inheritDoc} */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
-        val calendar = View.inflate(getActivity(), R.layout.dialog_calendar, null) as CalendarPickerView
+        val calendar = View.inflate(context, R.layout.dialog_calendar, null) as CalendarPickerView
 
         // FIXME: 本来はソート済み
-        var activityDates = getArguments().getSerializable(ARG_DATES) as List<ActivityDate>
-        activityDates = activityDates.sortBy { it.date }
+        var activityDates = arguments.getSerializable(ARG_DATES) as List<ActivityDate>
+        activityDates = activityDates.sortedBy { it.date }
 
         // 活動日をハイライト表示する。
         val now = Date(System.currentTimeMillis())
@@ -56,7 +55,7 @@ public class CalendarDialogFragment: DialogFragment() {
             try {
                 val hit = activityDates.first { it.date.equals(date) }
                 if (hit.memo != null) {
-                    showToast(getActivity(), hit.memo!!, Toast.LENGTH_SHORT)
+                    showToast(context, hit.memo!!, Toast.LENGTH_SHORT)
                 }
             } catch (e: NoSuchElementException) {
                 e.printStackTrace()
@@ -64,12 +63,12 @@ public class CalendarDialogFragment: DialogFragment() {
             true
         }
 
-        return alertDialog(getActivity()) {
+        return alertDialog(context) {
             setView(calendar)
         }
     }
 }
 
 private fun Date.nextDay(): Date {
-    return Date(getTime() + TimeUnit.DAYS.toMillis(1))
+    return Date(time + TimeUnit.DAYS.toMillis(1))
 }

@@ -37,10 +37,10 @@ import com.droibit.easycreator.intent
 public class ItemListActivity : AppCompatActivity(), ActivityListFragment.Callbacks, Handler.Callback {
 
     companion object {
-        private val TAG = javaClass<ItemListActivity>().getSimpleName()
+        private val TAG = ItemListActivity::class.java.simpleName
 
-        val REQUEST_ACTIVITY = 1
-        val MESSAGE_REFRESH = 1
+        const val REQUEST_ACTIVITY = 1
+        const val MESSAGE_REFRESH = 1
     }
 
     /**
@@ -51,11 +51,11 @@ public class ItemListActivity : AppCompatActivity(), ActivityListFragment.Callba
 
     /** {@inheritDoc} */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super<AppCompatActivity>.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
-        toolbar.getBackground().setAlpha(255)
+        toolbar.background.alpha = 255
         setSupportActionBar(toolbar)
 
         if (findViewById(R.id.item_detail_container) != null) {
@@ -67,7 +67,7 @@ public class ItemListActivity : AppCompatActivity(), ActivityListFragment.Callba
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            (getSupportFragmentManager().findFragmentById(R.id.item_list) as ActivityListFragment)
+            (supportFragmentManager.findFragmentById(R.id.item_list) as ActivityListFragment)
                     .setActivateOnItemClick(true)
         }
 
@@ -76,9 +76,9 @@ public class ItemListActivity : AppCompatActivity(), ActivityListFragment.Callba
 
     /** {@inheritDoc} */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super<AppCompatActivity>.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
 
-        getSupportFragmentManager().findFragmentById(R.id.item_list)
+        supportFragmentManager.findFragmentById(R.id.item_list)
             ?.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -92,10 +92,10 @@ public class ItemListActivity : AppCompatActivity(), ActivityListFragment.Callba
             // adding or replacing the detail fragment using a
             // fragment transaction.
             val fragment = if (activity != null)
-                                ActivityDetailFragment.newInstance(activity.getId())
+                                ActivityDetailFragment.newInstance(activity.id)
                             else
                                 ActivityDetailFragment()
-            getSupportFragmentManager()
+            supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit()
@@ -105,10 +105,10 @@ public class ItemListActivity : AppCompatActivity(), ActivityListFragment.Callba
         if (activity != null && sharedView != null) {
             startActivityForResultCompat(
                     intent = intent<ItemDetailActivity>(this) {
-                        putExtra(ActivityDetailFragment.ARG_ITEM_ID, activity.getId())
+                        putExtra(ActivityDetailFragment.ARG_ITEM_ID, activity.id)
                         putExtra(ActivityDetailFragment.ARG_ITEM_TITLE, activity.name)
                     },
-                    options = if (Build.VERSION.SDK_INT >= 21)//Build.VERSION_CODES.LOLLIPOP)
+                    options = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                                 makeSceneTransitionAnimation(sharedView, getString(R.string.transition_date))
                             else
                                 null,
@@ -129,8 +129,8 @@ public class ItemListActivity : AppCompatActivity(), ActivityListFragment.Callba
 
         // 2画面の場合のみ
         if (mTwoPane) {
-            val f = getSupportFragmentManager().findFragmentById(R.id.item_list) as? ActivityListFragment
-            f?.onResreshEvent(msg.obj as RefreshEvent)
+            val f = supportFragmentManager.findFragmentById(R.id.item_list) as? ActivityListFragment
+            f?.onRefreshEvent(msg.obj as RefreshEvent)
         }
         return true
     }

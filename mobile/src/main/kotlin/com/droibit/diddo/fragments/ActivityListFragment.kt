@@ -9,7 +9,6 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.Toast
-import com.droibit.diddo
 import com.droibit.diddo.ItemListActivity
 import com.droibit.diddo.R
 import com.droibit.diddo.SettingsActivity
@@ -47,9 +46,9 @@ public class ActivityListFragment : Fragment(),
          * The serialization (saved instance state) Bundle key representing the
          * activated item position. Only used on tablets.
          */
-        private val STATE_ACTIVATED_POSITION = "activated_position"
-        private val CONTEXT_MENU_MODIFY_ACTIVITY = 0
-        private val CONTEXT_MENU_DELETE_ACTIVITY = 1
+        const private val STATE_ACTIVATED_POSITION = "activated_position"
+        const private val CONTEXT_MENU_MODIFY_ACTIVITY = 0
+        const private val CONTEXT_MENU_DELETE_ACTIVITY = 1
 
         /**
          * A dummy implementation of the [Callbacks] interface that does
@@ -85,13 +84,13 @@ public class ActivityListFragment : Fragment(),
     private var mActivatedPosition = AdapterView.INVALID_POSITION
 
     private val mListView: ListView by bindView(android.R.id.list)
-    private val mActionButton: FloatingActionButton by bindView(diddo.R.id.fab)
+    private val mActionButton: FloatingActionButton by bindView(R.id.fab)
     private val mPauseHandler = PauseHandler()
     private var mAdapter: UserActivityAdapter by Delegates.notNull()
 
     /** {@inheritDoc} */
     override fun onAttach(activity: Activity) {
-        super<Fragment>.onAttach(activity)
+        super.onAttach(activity)
 
         // Activities containing this fragment must implement its callbacks.
         if (activity !is Callbacks) {
@@ -102,23 +101,23 @@ public class ActivityListFragment : Fragment(),
 
     /** {@inheritDoc} */
     override fun onCreate(savedInstanceState: Bundle?) {
-        super<Fragment>.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
     }
 
     /** {@inheritDoc} */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(diddo.R.layout.fragment_item, container, false)
+        return inflater.inflate(R.layout.fragment_item, container, false)
     }
 
     /** {@inheritDoc} */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super<Fragment>.onViewCreated(view, savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
 
         mAdapter = UserActivityAdapter(getActivity())
-        mListView.setAdapter(mAdapter)
-        mListView.setEmptyView(view.findViewById(android.R.id.empty))
+        mListView.adapter = mAdapter
+        mListView.emptyView = view.findViewById(android.R.id.empty)
 
         mListView.setOnItemClickListener { adapterView, view, position, l ->
             mCallbacks.onItemSelected(mAdapter.getItem(position), view.findViewById(android.R.id.text2))
@@ -136,7 +135,7 @@ public class ActivityListFragment : Fragment(),
 
     /** {@inheritDoc} */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super<Fragment>.onActivityCreated(savedInstanceState)
+        super.onActivityCreated(savedInstanceState)
 
         // DB内にアクティビティが存在すれば表示する
         val userActivities = loadUserActivities()
@@ -145,8 +144,8 @@ public class ActivityListFragment : Fragment(),
         }
 
         // アクティビティが存在する場合は以前の並び順で表示する。
-        if (!mListView.getAdapter().isEmpty()) {
-            sortActivity(SettingsUtils.getOrder(getActivity()))
+        if (!mListView.adapter.isEmpty) {
+            sortActivity(SettingsUtils.getOrder(activity))
         }
 
         // Restore the previously serialized activated item position.
@@ -169,33 +168,33 @@ public class ActivityListFragment : Fragment(),
 
     /** {@inheritDoc} */
     override fun onResume() {
-        super<Fragment>.onResume()
+        super.onResume()
 
         mPauseHandler.resume()
     }
 
     /** {@inheritDoc} */
     override fun onPause() {
-        super<Fragment>.onPause()
+        super.onPause()
 
         mPauseHandler.pause()
     }
 
     /** {@inheritDoc} */
     override fun onDetach() {
-        super<Fragment>.onDetach()
+        super.onDetach()
 
         // Reset the active callbacks interface to the dummy implementation.
         mCallbacks = sDummyCallbacks
     }
 
     /** {@inheritDoc} */
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = inflater.inflate(diddo.R.menu.list, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = inflater.inflate(R.menu.list, menu)
 
     /** {@inheritDoc} */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
-            R.id.action_sort -> showSortDialog()
+        when (item.itemId) {
+            R.id.action_sort     -> showSortDialog()
             R.id.action_settings -> showSettings()
         }
         return true
@@ -203,7 +202,7 @@ public class ActivityListFragment : Fragment(),
 
     /** {@inheritDoc} */
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo) {
-        super<Fragment>.onCreateContextMenu(menu, v, menuInfo)
+        super.onCreateContextMenu(menu, v, menuInfo)
 
         menu.add(Menu.NONE, CONTEXT_MENU_MODIFY_ACTIVITY, Menu.NONE, R.string.title_activity_modify)
         menu.add(Menu.NONE, CONTEXT_MENU_DELETE_ACTIVITY, Menu.NONE, R.string.title_delete_activity)
@@ -211,18 +210,18 @@ public class ActivityListFragment : Fragment(),
 
     /** {@inheritDoc} */
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val menuInfo = item.getMenuInfo() as AdapterView.AdapterContextMenuInfo
+        val menuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
         val activity = mAdapter.getItem(menuInfo.position)
-        when (item.getItemId()) {
+        when (item.itemId) {
             CONTEXT_MENU_MODIFY_ACTIVITY -> showModifyActivityDialog(activity)
             CONTEXT_MENU_DELETE_ACTIVITY -> deleteActivity(activity)
         }
-        return super<Fragment>.onContextItemSelected(item)
+        return super.onContextItemSelected(item)
     }
 
     /** {@inheritDoc} */
     override fun onSaveInstanceState(outState: Bundle) {
-        super<Fragment>.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState)
         // Serialize and persist the activated item position.
         outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition)
     }
@@ -232,7 +231,7 @@ public class ActivityListFragment : Fragment(),
         if (activity.isNew) {
             mAdapter.add(activity)
         } else {
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged()
         }
 
         val messageRes = if (activity.isNew)
@@ -249,7 +248,7 @@ public class ActivityListFragment : Fragment(),
     override fun onSortChose(order: Int) {
         sortActivity(order)
         // 並び順を復元できるように保存しておく
-        SettingsUtils.setOrder(getActivity(), order)
+        SettingsUtils.setOrder(context, order)
     }
 
     /**
@@ -259,10 +258,10 @@ public class ActivityListFragment : Fragment(),
     public fun setActivateOnItemClick(activateOnItemClick: Boolean) {
         // When setting CHOICE_MODE_SINGLE, ListView will automatically
         // give items the 'activated' state when touched.
-        mListView.setChoiceMode(if (activateOnItemClick)
+        mListView.choiceMode = if (activateOnItemClick)
                                     AbsListView.CHOICE_MODE_SINGLE
                                 else
-                                    AbsListView.CHOICE_MODE_NONE)
+                                    AbsListView.CHOICE_MODE_NONE
     }
 
     private fun setActivatedPosition(position: Int) {
@@ -283,8 +282,8 @@ public class ActivityListFragment : Fragment(),
     // 選択されたアクティビティを削除する。
     private fun deleteActivity(activity: UserActivity) {
         // 2画面表示されている状態で鮮太されているアクティビティを削除した場合（※スマホは呼ばれない）
-        if (mListView.getChoiceMode() == AbsListView.CHOICE_MODE_SINGLE) {
-            if (mAdapter.getPosition(activity) == mListView.getCheckedItemPosition()) {
+        if (mListView.choiceMode == AbsListView.CHOICE_MODE_SINGLE) {
+            if (mAdapter.getPosition(activity) == mListView.checkedItemPosition) {
                 // 詳細画面の表示をクリアしておく
                 mCallbacks.onItemSelected(null, null)
             }
@@ -300,20 +299,20 @@ public class ActivityListFragment : Fragment(),
     }
 
     // アクティビティのソート用ダイアログを表示する。
-    private fun showSortDialog() = SortActivityDialogFragment.newInstance(SettingsUtils.getOrder(getActivity())).show(this)
+    private fun showSortDialog() = SortActivityDialogFragment.newInstance(SettingsUtils.getOrder(activity)).show(this)
 
     // 設定画面を表示する
-    private fun showSettings() = getActivity().startActivity<SettingsActivity>()
+    private fun showSettings() = activity.startActivity<SettingsActivity>()
 
     // アクティビティリストをソートする。
     private fun sortActivity(order: Int) {
-        if (!mAdapter.isEmpty()) {
+        if (!mAdapter.isEmpty) {
             mAdapter.sort(UserActivity.getComparator(order))
         }
     }
 
     // 更新イベントが呼ばれた時の処理
-    public fun onResreshEvent(event: RefreshEvent) {
+    public fun onRefreshEvent(event: RefreshEvent) {
         mAdapter.updateRow(mListView, event.activity)
     }
 }

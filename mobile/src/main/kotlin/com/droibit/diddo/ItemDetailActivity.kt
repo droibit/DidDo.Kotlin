@@ -1,14 +1,10 @@
 package com.droibit.diddo
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v4.app.NavUtils
-import android.view.MenuItem
 import android.support.v7.widget.Toolbar
-import android.view.Menu
+import android.view.MenuItem
 import com.droibit.diddo.fragments.ActivityDetailFragment
-import com.droibit.diddo.models.UserActivity
 import com.droibit.easycreator.compat.navigateUpTo
 
 
@@ -31,12 +27,12 @@ public class ItemDetailActivity : AppCompatActivity() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         toolbar.setBackgroundResource(R.drawable.toolbar_shadow)
         setSupportActionBar(toolbar)
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true)
+        supportActionBar.setDisplayHomeAsUpEnabled(true)
 
         // ツールバーのタイトルにはアクティビティ名を表示する。
-        val title = getIntent()?.getStringExtra(ActivityDetailFragment.ARG_ITEM_TITLE)
+        val title = intent?.getStringExtra(ActivityDetailFragment.ARG_ITEM_TITLE)
         if (title != null) {
-            getSupportActionBar().setTitle(title)
+            supportActionBar.title = title
         }
 
         // savedInstanceState is non-null when there is fragment state
@@ -49,11 +45,11 @@ public class ItemDetailActivity : AppCompatActivity() {
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
-            val id = getIntent().getLongExtra(ActivityDetailFragment.ARG_ITEM_ID, -1L)
+            val id = intent.getLongExtra(ActivityDetailFragment.ARG_ITEM_ID, -1L)
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             val fragment = ActivityDetailFragment.newInstance(id)
-            getSupportFragmentManager()
+            supportFragmentManager
                     .beginTransaction()
                     .add(R.id.item_detail_container, fragment)
                     .commit()
@@ -62,7 +58,7 @@ public class ItemDetailActivity : AppCompatActivity() {
 
     /** {@inheritDoc} */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.getItemId()
+        val id = item.itemId
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this
             // activity, the Up button is shown. Use NavUtils to allow users

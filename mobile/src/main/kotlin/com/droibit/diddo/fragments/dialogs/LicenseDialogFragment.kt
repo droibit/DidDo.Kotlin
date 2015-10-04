@@ -10,12 +10,11 @@ import de.psdev.licensesdialog.LicensesDialog
  * オープンソースライセンスを表示するためのダイアログ
  *
  * @auther kumagai
- * @since 15/03/28
  */
 public class LicenseDialogFragment: DialogFragment() {
 
     companion object {
-        private val ARG_NOTICES = "notices"
+        const private val ARG_NOTICES = "notices"
 
         /**
          * 新しいインスタンスを作成する
@@ -29,8 +28,8 @@ public class LicenseDialogFragment: DialogFragment() {
 
     /** {@inheritDoc} */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val noticesId = getArguments().getInt(ARG_NOTICES)
-        val dialog = LicensesDialog.Builder(getActivity())
+        val noticesId = arguments.getInt(ARG_NOTICES)
+        val dialog = LicensesDialog.Builder(context)
                                    .setNotices(noticesId)
                                    .setShowFullLicenseText(true)
                                    .setCloseText(android.R.string.ok)

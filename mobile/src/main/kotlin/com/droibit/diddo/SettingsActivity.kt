@@ -31,7 +31,7 @@ public class SettingsActivity : PreferenceActivity() {
 
         addPreferencesFromResource(R.xml.settings)
 
-        mAppPref.setSummary(BuildConfig.VERSION_NAME)
+        mAppPref.summary = BuildConfig.VERSION_NAME
 
         mDeveloperPref.setOnPreferenceClickListener { launchUrl(R.string.url_twitter) }
         mSourceCodePref.setOnPreferenceClickListener { launchUrl(R.string.url_github) }
@@ -42,7 +42,7 @@ public class SettingsActivity : PreferenceActivity() {
     override protected fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState);
 
-        val root = findViewById(android.R.id.list).getParent().getParent().getParent() as LinearLayout
+        val root = findViewById(android.R.id.list).parent.parent.parent as LinearLayout
         val toolbar = LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false) as Toolbar
         root.addView(toolbar, 0); // insert at top
         toolbar.setNavigationOnClickListener { finish() }
@@ -55,7 +55,7 @@ public class SettingsActivity : PreferenceActivity() {
 
     private fun showLicenseDialog(): Boolean {
         LicenseDialogFragment.newInstance(R.raw.licenses)
-                .show(getFragmentManager(), "")
+                .show(fragmentManager, "")
         return true
     }
 }

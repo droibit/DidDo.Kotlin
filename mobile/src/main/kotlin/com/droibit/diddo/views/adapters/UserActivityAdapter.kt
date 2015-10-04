@@ -16,21 +16,20 @@ import java.util.ArrayList
  * アクティビティをリストに表示するためのアダプタ。
  *
  * @auther kumagai
- * @since 15/03/07
  */
 public class UserActivityAdapter(context: Context): ArrayAdapter<UserActivity>(context, R.layout.list_item, android.R.id.text1) {
 
     /** {@inheritDoc} */
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = if (convertView == null)
-                        LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false) as UserActivityView
+                        LayoutInflater.from(context).inflate(R.layout.list_item, parent, false) as UserActivityView
                    else
                         convertView as UserActivityView
 
         val item = getItem(position)
-        view.elapsedView.setText(item.getElapsedDateFromNow(getContext()))
-        view.nameView.setText(item.name)
-        view.dateView.setText(DateFormat.getDateFormat(getContext()).format(item.recentlyDate))
+        view.elapsedView.text = item.getElapsedDateFromNow(context)
+        view.nameView.text = item.name
+        view.dateView.text = DateFormat.getDateFormat(context).format(item.recentlyDate)
 
         return view
     }
@@ -49,13 +48,13 @@ public class ArrayAdapterIterator<T>(val adapter: ArrayAdapter<T>) {
     private var index = 0
 
     fun next() = adapter.getItem(index++)
-    fun hasNext() = index < adapter.getCount()
+    fun hasNext() = index < adapter.count
 }
 
 public fun <T>ArrayAdapter<T>.iterator(): ArrayAdapterIterator<T> = ArrayAdapterIterator(this)
 
 public fun <T>ArrayAdapter<T>.getItems(): List<T> {
-    val items = ArrayList<T>(getCount())
+    val items = ArrayList<T>(count)
     for (item in this) {
         items.add(item)
     }

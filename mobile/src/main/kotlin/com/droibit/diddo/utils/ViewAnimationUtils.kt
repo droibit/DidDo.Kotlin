@@ -18,16 +18,16 @@ final class ViewAnimationUtils private constructor() {
          */
         public fun animationCircularReveal(view: View, durationMillis: Long) {
             // get the center for the clipping circle
-            val cx = (view.getLeft() + view.getRight()) / 2
-            val cy = (view.getTop() + view.getBottom()) / 2
+            val cx = (view.left + view.right) / 2
+            val cy = (view.top + view.bottom) / 2
 
             // get the final radius for the clipping circle
-            val finalRadius = Math.max(view.getWidth(), view.getHeight()).toFloat()
+            val finalRadius = Math.max(view.width, view.height).toFloat()
 
-            view.setVisibility(View.VISIBLE)
+            view.visibility = View.VISIBLE
             val animation = ViewAnimationUtils.createCircularReveal(view, cx, cy, 0f, finalRadius)
                 .setDuration(durationMillis)
-            animation.setInterpolator(AccelerateDecelerateInterpolator())
+            animation.interpolator = AccelerateDecelerateInterpolator()
             animation.start()
         }
 
@@ -35,12 +35,12 @@ final class ViewAnimationUtils private constructor() {
          * 0.0 ~ 1.0 の倍率でスケールアニメーションする。
          */
         public fun animationScaleUp(view: View, durationMillis: Long) {
-            view.setVisibility(View.VISIBLE)
+            view.visibility = View.VISIBLE
 
-            val animation = ScaleAnimation(0f, 1f, 0f, 1f, (view.getWidth() / 2f), (view.getHeight() / 2f))
-            animation.setDuration(durationMillis)
-            animation.setInterpolator(AccelerateDecelerateInterpolator())
-            animation.setFillAfter(true)
+            val animation = ScaleAnimation(0f, 1f, 0f, 1f, (view.width / 2f), (view.height / 2f))
+            animation.duration = durationMillis
+            animation.interpolator = AccelerateDecelerateInterpolator()
+            animation.fillAfter = true
 
             view.startAnimation(animation)
         }

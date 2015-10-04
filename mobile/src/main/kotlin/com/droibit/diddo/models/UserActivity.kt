@@ -18,29 +18,29 @@ import java.util.concurrent.TimeUnit
  * @since 15/03/07
  */
 @Table(name = UserActivity.TABLE)
-public data class UserActivity(): Model(), Serializable {
+public class UserActivity(): Model(), Serializable {
 
     companion object {
-        val TABLE = "activity";
-        val NAME = "name";
-        val RECENTLY_DATE = "recently_date";
+        const val TABLE = "activity";
+        const val NAME = "name";
+        const val RECENTLY_DATE = "recently_date";
 
-        val SORT_NAME = 0
-        val SORT_ACTIVITY_DATE = 1
+        const val SORT_NAME = 0
+        const val SORT_ACTIVITY_DATE = 1
 
-        val DAYS_LIMIT = 99L
+        const val DAYS_LIMIT = 99L
 
         /**
          * アクティビティ名でソートする
          */
-        class NameComarator: Comparator<UserActivity> {
+        class NameComparator : Comparator<UserActivity> {
             override fun compare(lhs: UserActivity, rhs: UserActivity): Int = lhs.name!!.compareTo(rhs.name!!)
         }
 
         /**
          * 日付でソートする
          */
-        class DateComarator: Comparator<UserActivity> {
+        class DateComparator : Comparator<UserActivity> {
             override fun compare(lhs: UserActivity, rhs: UserActivity): Int = lhs.recentlyDate.compareTo(rhs.recentlyDate)
         }
 
@@ -49,9 +49,9 @@ public data class UserActivity(): Model(), Serializable {
          */
         fun getComparator(type: Int): Comparator<UserActivity>? {
             when (type) {
-                SORT_NAME          -> return NameComarator()
-                SORT_ACTIVITY_DATE -> return DateComarator()
-                else               -> return throw IllegalArgumentException()
+                SORT_NAME          -> return NameComparator()
+                SORT_ACTIVITY_DATE -> return DateComparator()
+                else               -> throw IllegalArgumentException()
             }
         }
     }
@@ -65,17 +65,17 @@ public data class UserActivity(): Model(), Serializable {
 
     /** 新規作成されたアクティビティかどうか */
     public val isNew: Boolean
-        get() = getId() == null
+        get() = id == null
 
     /** 活動の詳細情報を取得する */
     public val details: MutableList<ActivityDate>
-        get() = getMany(javaClass<ActivityDate>(), ActivityDate.ACTIVITY)
+        get() = getMany(ActivityDate::class.java, ActivityDate.ACTIVITY)
 
     /**
      * 現在から活動日までの経過日を取得する
      */
     public fun getElapsedDateFromNow(context: Context): String {
-        val duration = System.currentTimeMillis() - recentlyDate.getTime()
+        val duration = System.currentTimeMillis() - recentlyDate.time
         val count = duration / TimeUnit.DAYS.toMillis(1)
 
         return if (count == 0L) {
@@ -116,4 +116,4 @@ public fun dummyActivity(name: String, date: Date = Date()): UserActivity {
 /**
  * アクティビティのリストを取得する。
  */
-public fun loadUserActivities(): MutableList<UserActivity> = Select().from(javaClass<UserActivity>()).execute()
+public fun loadUserActivities(): MutableList<UserActivity> = Select().from(UserActivity::class.java).execute()
